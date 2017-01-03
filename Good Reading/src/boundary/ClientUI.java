@@ -17,6 +17,7 @@ import i_book.GeneralUser;
 
 public class ClientUI extends Application {
 	
+	/*this is the primary stage*/
 	public static Stage primaryStage;
 
 	@Override
