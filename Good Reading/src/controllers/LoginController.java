@@ -1,32 +1,80 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import org.orm.*;
+
+import boundary.ClientUI;
+import client.Client;
+import common.Message;
+
+import java.io.Serializable;
+
 import org.hibernate.*;
 
-public class LoginController {
+public class LoginController extends AbstractController{
 	
-	@FXML private Button loginButton;
-	@FXML private TextField idField;
-	@FXML private PasswordField passField;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public static LoginController instance;
+	final public static int DEFAULT_PORT = 5555;
+	
+	@FXML public TextField hostField;
+	@FXML public Button loginButton;
+	@FXML public TextField idField;
+	@FXML public PasswordField passField;
+	@FXML public ImageView idx;
+	@FXML public ImageView passx;
+	
+	public LoginController(){
+		instance=this;
+	}
 	
 	public void loginOnClick(ActionEvent event) throws Exception{
+		Client client;
+		String host = hostField.getText();
 		String id = idField.getText();
 		String pass = passField.getText();
-		PersistentSession session = IBookIncPersistentManager.instance().getSession();
-		GeneralUser u =GeneralUser.loadGeneralUserByORMID(session,id);
-		if(u.getPassword().equals(pass)){
-			loginButton.setText("hi "+u.getFname());
+		GeneralUser u = new GeneralUser();
+		if(Client.instance == null){
+			client=new Client(host,DEFAULT_PORT);
 		}
-
-		session.close();
+		else{
+			client = Client.instance;
+		}
+		u.setID(id);
+		u.setPassword(pass);  
+		Message msg =  new Message(1,u);
+		AbstractController.instance = this;
+		client.sendToServer(msg);
 	}
+
+	@Override
+	public void handleMessage(Message msg) {
+		// TODO Auto-generated method stub
+		if(msg.getMsg().equals("wrong username")) idx.setVisible(true);
+		else if(msg.getMsg().equals("wrong password")) passx.setVisible(true);
+		else ClientUI.setScene("userHomepage.fxml");
+	}
+	
+	@Override
+	public String toString(){
+		return "Login Controller";
+	}
+	
+	
+	
+	
+
+	
 
 }

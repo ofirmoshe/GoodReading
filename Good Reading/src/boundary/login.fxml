@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.canvas.*?>
@@ -7,19 +11,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import controllers.LoginController?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="266.0" prefWidth="394.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <children>
-      <ImageView fitHeight="100.0" fitWidth="96.0" layoutX="149.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Graphics/icon.png" />
-         </image>
-      </ImageView>
-      <PasswordField fx:id="passField" layoutX="123.0" layoutY="158.0" />
-      <TextField fx:id="idField" layoutX="123.0" layoutY="125.0" />
-      <Button fx:id="loginButton" layoutX="174.0" layoutY="195.0" mnemonicParsing="false" onAction="#loginOnClick" text="Login" />
-      <Label layoutX="82.0" layoutY="129.0" text="ID" />
-      <Label layoutX="63.0" layoutY="162.0" text="Password" />
+      <AnchorPane layoutX="1.0" layoutY="-1.0" prefHeight="573.0" prefWidth="714.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="96.0" layoutX="313.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Graphics/icon.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="idField" layoutX="294.0" layoutY="312.0" />
+            <PasswordField fx:id="passField" layoutX="294.0" layoutY="345.0" />
+            <Label layoutX="234.0" layoutY="349.0" text="Password" />
+            <Label layoutX="245.0" layoutY="280.0" text="Host" />
+            <Label layoutX="253.0" layoutY="316.0" text="ID" />
+            <TextField fx:id="hostField" layoutX="294.0" layoutY="276.0" />
+            <Button fx:id="loginButton" layoutX="345.0" layoutY="382.0" mnemonicParsing="false" onAction="#loginOnClick" text="Login" />
+            <ImageView fx:id="idx" fitHeight="17.0" fitWidth="18.0" layoutX="449.0" layoutY="316.0" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../../Graphics/red%20x.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="passx" fitHeight="17.0" fitWidth="18.0" layoutX="449.0" layoutY="349.0" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../../../Graphics/red%20x.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
