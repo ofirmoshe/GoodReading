@@ -1,4 +1,3 @@
-/IBookInc.ddl
 /Server.class
 /boundary/
 /client/
@@ -6,4 +5,3 @@
 /controllers/
 /i_book/
 /ocsf/
-/ormmapping/

@@ -18,7 +18,7 @@
          <children>
             <ImageView fitHeight="100.0" fitWidth="96.0" layoutX="313.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../Graphics/icon.png" />
+                  <Image url="@../../Graphics/icon.png" />
                </image>
             </ImageView>
             <TextField fx:id="idField" layoutX="294.0" layoutY="312.0" />
@@ -30,12 +30,12 @@
             <Button fx:id="loginButton" layoutX="345.0" layoutY="382.0" mnemonicParsing="false" onAction="#loginOnClick" text="Login" />
             <ImageView fx:id="idx" fitHeight="17.0" fitWidth="18.0" layoutX="449.0" layoutY="316.0" preserveRatio="true" visible="false">
                <image>
-                  <Image url="@../../../Graphics/red%20x.png" />
+                  <Image url="@../../Graphics/red%20x.png" />
                </image>
             </ImageView>
             <ImageView fx:id="passx" fitHeight="17.0" fitWidth="18.0" layoutX="449.0" layoutY="349.0" preserveRatio="true" visible="false">
                <image>
-                  <Image url="@../../../Graphics/red%20x.png" />
+                  <Image url="@../../Graphics/red%20x.png" />
                </image>
             </ImageView>
          </children>

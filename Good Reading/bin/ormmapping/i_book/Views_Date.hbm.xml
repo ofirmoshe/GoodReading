@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.Views_Date" table="Views_Date" lazy="false">
+		<composite-id>
+			<key-property name="date" column="`Date`" type="date"/>
+			<key-many-to-one name="ORM_Book" column="BookID" class="i_book.Book">
+			</key-many-to-one>
+		</composite-id>
+		<property name="viewCount" column="ViewCount" type="integer" length="11" not-null="true" lazy="false"/>
+	</class>
+</hibernate-mapping>

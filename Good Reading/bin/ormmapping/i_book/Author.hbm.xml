@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.Author" table="Author" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="name" column="Name" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="ORM_Book" table="Author_Book" lazy="true" cascade="save-update,lock">
+			<key column="AuthorID" not-null="true"/>
+			<many-to-many column="BookID" class="i_book.Book">
+			</many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

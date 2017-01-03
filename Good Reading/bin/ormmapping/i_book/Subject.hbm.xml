@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.Subject" table="Subject" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="sub" column="Sub" type="string" length="255" not-null="false" lazy="false"/>
+		<many-to-one name="field" cascade="lock" column="FieldID" class="i_book.Field" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<set name="ORM_Book" table="Book_Subject" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="SubjectID" not-null="true"/>
+			<many-to-many column="BookID" class="i_book.Book">
+			</many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

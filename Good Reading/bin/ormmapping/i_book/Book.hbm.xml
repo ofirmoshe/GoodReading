@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.Book" table="Book" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="title" column="Title" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="language" column="Language" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="summary" column="Summary" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="table_of_contents" column="Table_of_contents" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="pdf" column="Pdf" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="doc" column="Doc" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="fb2" column="Fb2" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="price" column="Price" type="float" not-null="true" lazy="false"/>
+		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="ORM_View" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="BookID" not-null="true"/>
+			<one-to-many class="i_book.Views_Date"/>
+		</set>
+		<set name="ORM_User_Books" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="BookID" not-null="true"/>
+			<one-to-many class="i_book.User_Book"/>
+		</set>
+		<set name="ORM_Author" table="Author_Book" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="BookID" not-null="true"/>
+			<many-to-many column="AuthorID" class="i_book.Author">
+			</many-to-many>
+		</set>
+		<set name="ORM_Keyword" table="Keyword_Book" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="BookID" not-null="true"/>
+			<many-to-many column="KeywordID" class="i_book.Keyword">
+			</many-to-many>
+		</set>
+		<set name="ORM_Field" table="Book_Field" lazy="true" cascade="save-update,lock">
+			<key column="BookID" not-null="true"/>
+			<many-to-many column="FieldID" class="i_book.Field">
+			</many-to-many>
+		</set>
+		<set name="ORM_Subject" table="Book_Subject" lazy="true" cascade="save-update,lock">
+			<key column="BookID" not-null="true"/>
+			<many-to-many column="SubjectID" class="i_book.Subject">
+			</many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.User_Book" table="User_Book" lazy="false">
+		<composite-id>
+			<key-many-to-one name="ORM_Book" column="BookID" class="i_book.Book">
+			</key-many-to-one>
+			<key-many-to-one name="ORM_User" column="GeneralUserID" class="i_book.User">
+			</key-many-to-one>
+		</composite-id>
+		<property name="pDate" column="PDate" type="date" not-null="false" lazy="false"/>
+		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="ORM_Review" lazy="true" cascade="save-update,lock" inverse="true">
+			<key not-null="true">
+				<column name="User_BookBookID"/>
+				<column name="User_BookGeneralUserID"/>
+			</key>
+			<one-to-many class="i_book.Review"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.PaymentRequest" table="PaymentRequest" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="user" cascade="lock" column="GeneralUserID" class="i_book.User" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<property name="date" column="`Date`" type="date" not-null="false" lazy="false"/>
+		<property name="paymentInfo" column="PaymentInfo" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

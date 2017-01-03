@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.User_Membership" table="User_Membership" lazy="false">
+		<composite-id>
+			<key-property name="s_date" column="S_date" type="date"/>
+			<key-many-to-one name="ORM_Membership" column="MembershipID" class="i_book.Membership">
+			</key-many-to-one>
+			<key-many-to-one name="ORM_User" column="GeneralUserID" class="i_book.User">
+			</key-many-to-one>
+		</composite-id>
+		<property name="e_date" column="E_date" type="date" not-null="false" lazy="false"/>
+		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

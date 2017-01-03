@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.Review" table="Review" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="text" column="Text" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
+		<many-to-one name="usersbook" cascade="lock" class="i_book.User_Book" not-null="true" lazy="proxy" access="field">
+			<column name="User_BookBookID"/>
+			<column name="User_BookGeneralUserID"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>
