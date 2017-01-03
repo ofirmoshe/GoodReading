@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+ "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+   	<!-- properties -->
+		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mysql://localhost:3306/i-book</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password">Braude</property>
+		<property name="show_sql">false</property>
+		<property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
+		<!-- mapping files -->
+		<mapping resource="ormmapping/i_book/Author.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Book.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Field.hbm.xml" />
+		<mapping resource="ormmapping/i_book/GeneralUser.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Keyword.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Membership.hbm.xml" />
+		<mapping resource="ormmapping/i_book/PaymentRequest.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Review.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Subject.hbm.xml" />
+		<mapping resource="ormmapping/i_book/User_Book.hbm.xml" />
+		<mapping resource="ormmapping/i_book/User_Membership.hbm.xml" />
+		<mapping resource="ormmapping/i_book/Views_Date.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>

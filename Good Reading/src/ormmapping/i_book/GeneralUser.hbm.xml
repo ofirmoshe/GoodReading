@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: Ort Braude College
+License Type: Academic
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="i_book.GeneralUser" table="GeneralUser" lazy="false" discriminator-value="GeneralUser">
+		<id name="ID" column="ID" type="string">
+			<generator class="assigned">
+			</generator>
+		</id>
+		<discriminator column="Discriminator" type="string"/>
+		<property name="Fname" column="Fname" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="Lname" column="Lname" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="password" column="Password" type="string" length="255" not-null="false" lazy="false"/>
+		<subclass name="i_book.Employee" discriminator-value="Employee" lazy="false">
+			<property name="em_num" column="Em_num" type="integer" length="11" not-null="false" lazy="false"/>
+			<property name="email" column="Email" type="string" length="255" not-null="false" lazy="false"/>
+			<property name="dep" column="Dep" type="string" length="255" not-null="false" lazy="false"/>
+			<property name="position" column="Position" type="string" length="255" not-null="false" lazy="false"/>
+		</subclass>
+		<subclass name="i_book.User" discriminator-value="User" lazy="false">
+			<property name="paymentInfo" column="PaymentInfo" type="string" length="255" not-null="false" lazy="false"/>
+			<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
+			<set name="ORM_User_Books" lazy="true" cascade="save-update,lock" inverse="true">
+				<key column="GeneralUserID" not-null="true"/>
+				<one-to-many class="i_book.User_Book"/>
+			</set>
+			<set name="ORM_User_Memberships" lazy="true" cascade="save-update,lock" inverse="true">
+				<key column="GeneralUserID" not-null="true"/>
+				<one-to-many class="i_book.User_Membership"/>
+			</set>
+			<set name="ORM_Paymentrequest" lazy="true" cascade="save-update,lock" inverse="true">
+				<key column="GeneralUserID" not-null="true"/>
+				<one-to-many class="i_book.PaymentRequest"/>
+			</set>
+		</subclass>
+	</class>
+</hibernate-mapping>
