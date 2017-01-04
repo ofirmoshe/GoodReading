@@ -19,12 +19,14 @@ public class ClientUI extends Application {
 	
 	/*this is the primary stage*/
 	public static Stage primaryStage;
+	public static Parent lastRoot;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		this.primaryStage= primaryStage;
 		primaryStage.setTitle("I-Book - Good Reading");
 		Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+		lastRoot=root;
 		Scene scene = new Scene(root,700,600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -36,11 +38,16 @@ public class ClientUI extends Application {
 	
 	public static void setScene(String fxml){
 		try {
+			lastRoot = primaryStage.getScene().getRoot();
 			Parent root = FXMLLoader.load(ClientUI.class.getResource(fxml));
 			primaryStage.getScene().setRoot(root);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Can't load fxml.");
 		}
+	}
+	
+	public static void goBack(){
+		primaryStage.getScene().setRoot(lastRoot);
 	}
 }

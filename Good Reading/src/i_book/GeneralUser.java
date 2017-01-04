@@ -78,7 +78,7 @@ public class GeneralUser implements Serializable  {
 			return (GeneralUser) session.load(i_book.GeneralUser.class, ID);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}

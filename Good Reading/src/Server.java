@@ -34,7 +34,7 @@ public class Server extends AbstractServer {
 			GeneralUser u = login;
 			try {
 				u = GeneralUser.loadGeneralUserByORMID(session,login.getID());
-			} catch (Exception e) {
+			} catch (PersistentException e) {
 				// TODO Auto-generated catch block
 				sendToAllClients("wrong username");
 			}

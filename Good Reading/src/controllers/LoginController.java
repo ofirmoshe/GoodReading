@@ -15,6 +15,7 @@ import boundary.ClientUI;
 import client.Client;
 import common.Message;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import org.hibernate.*;
@@ -47,6 +48,7 @@ public class LoginController extends AbstractController{
 		GeneralUser u = new GeneralUser();
 		if(Client.instance == null){
 			client=new Client(host,DEFAULT_PORT);
+			Client.instance=client;
 		}
 		else{
 			client = Client.instance;
@@ -61,7 +63,17 @@ public class LoginController extends AbstractController{
 	@Override
 	public void handleMessage(Message msg) {
 		// TODO Auto-generated method stub
-		if(msg.getMsg().equals("wrong username")) idx.setVisible(true);
+		if(msg.getMsg().equals("wrong username")){
+			try {
+				Client.instance.closeConnection();
+				Client.instance=new Client(hostField.getText(),DEFAULT_PORT);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			idx.setVisible(true);
+		}
 		else if(msg.getMsg().equals("wrong password")) passx.setVisible(true);
 		else ClientUI.setScene("userHomepage.fxml");
 	}
