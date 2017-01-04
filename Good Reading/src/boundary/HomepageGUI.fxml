@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserHomepageController">
+   <children>
+      <ImageView>
+         <image>
+            <Image url="@../graphics/hp_bg.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="userLabel" alignment="CENTER" layoutX="-42.0" layoutY="65.0" prefHeight="36.0" prefWidth="205.0" text="User" textFill="#5b5b5b">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="36.0" fitWidth="42.0" layoutX="42.0" layoutY="34.0" preserveRatio="true">
+         <image>
+            <Image url="@../graphics/user.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="20.0" layoutX="50.0" layoutY="102.0" onMouseClicked="#goBackOnClick" opacity="0.28" preserveRatio="true">
+         <image>
+            <Image url="@../graphics/logout.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ScrollPane hbarPolicy="NEVER" layoutX="-3.0" layoutY="161.0" prefHeight="440.0" prefWidth="906.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="773.0" prefWidth="886.0">
+               <children>
+                  <Circle fill="DODGERBLUE" layoutX="464.0" layoutY="121.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Ellipse fill="DODGERBLUE" layoutX="242.0" layoutY="245.0" radiusX="100.0" radiusY="80.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Ellipse fill="DODGERBLUE" layoutX="474.0" layoutY="591.0" radiusX="100.0" radiusY="80.0" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <AnchorPane fx:id="menuAnchor" layoutX="-182.0" layoutY="220.0" prefHeight="139.0" prefWidth="182.0">
+         <children>
+            <AnchorPane fx:id="searchBookButton" layoutX="1.0">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="173.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/blue_book.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="43.0" layoutY="8.0" text="Search Book">
+                     <font>
+                        <Font name="Book Antiqua" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="searchReviewButton" layoutY="36.0">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="188.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/brown_book.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="36.0" layoutY="8.0" text="Search Review">
+                     <font>
+                        <Font name="Book Antiqua" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="membershipButton" layoutX="1.0" layoutY="72.0" prefHeight="36.0" prefWidth="173.0">
+               <children>
+                  <ImageView fitHeight="61.0" fitWidth="173.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/red_book.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="38.0" layoutY="8.0" text="Memberships">
+                     <font>
+                        <Font name="Book Antiqua" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a13f1c" height="21.0" layoutX="1.0" layoutY="108.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="173.0" />
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane fx:id="toggleMenuAnchor" layoutY="165.0" onMouseEntered="#toggleMenuOnHover" onMouseExited="#toggleMenuOffHover" onMouseMoved="#toggleMenuOnHover" prefHeight="434.0" prefWidth="65.0">
+         <children>
+            <AnchorPane fx:id="searchBookClick" layoutY="55.0" onMouseClicked="#searchBookOnClick" prefHeight="36.0" prefWidth="65.0" visible="false">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="searchReviewClick" layoutX="-1.0" layoutY="90.0" onMouseClicked="#searchReviewOnClick" prefHeight="36.0" prefWidth="65.0" visible="false">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="membershipClick" layoutX="-1.0" layoutY="125.0" onMouseClicked="#membershipOnClick" prefHeight="36.0" prefWidth="65.0" visible="false">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+         </children></AnchorPane>
+   </children>
+</AnchorPane>

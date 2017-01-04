@@ -1,3 +1,5 @@
+package server;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,24 +30,47 @@ public class Server extends AbstractServer {
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		// TODO Auto-generated method stub
-		Message m = (Message)msg;
-		if(m.getFunc()==1){
-			GeneralUser login =(GeneralUser) m.getMsg();
+		Message m = (Message) msg;
+		switch (m.getCont()) {
+		case "login":
+			loginMessageHandler(m);
+			break;
+		}
+		if (m.getFunc() == 1) {
+			GeneralUser login = (GeneralUser) m.getMsg();
 			GeneralUser u = login;
 			try {
-				u = GeneralUser.loadGeneralUserByORMID(session,login.getID());
+				u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
 			} catch (PersistentException e) {
 				// TODO Auto-generated catch block
 				sendToAllClients("wrong username");
 			}
-			if(u.getPassword().equals(login.getPassword())){
+			if (u.getPassword().equals(login.getPassword())) {
 				sendToAllClients(u.getFname());
 				return;
 			}
 			sendToAllClients("wrong password");
 		}
 	}
-		
+	
+	public void loginMessageHandler(Message msg){
+		GeneralUser login = (GeneralUser) msg.getMsg();
+		GeneralUser u = null;
+		try {
+			u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			msg.setMsg("wrong username");
+			sendToAllClients(msg);
+		}
+		if (u.getPassword().equals(login.getPassword())) {
+			msg.setMsg(u);
+			sendToAllClients(msg);
+			return;
+		}
+		msg.setMsg("wrong password");
+		sendToAllClients(msg);
+	}
 
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
@@ -77,14 +102,14 @@ public class Server extends AbstractServer {
 		} catch (Exception ex) {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
-		
+
 		try {
 			session = IBookIncPersistentManager.instance().getSession();
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

@@ -9,10 +9,12 @@ public class Message implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private String cont;
 	private int func;
 	private Object msg;
 	
-	public Message( int f, Object m){
+	public Message( String c, int f, Object m){
+		setCont(c);
 		setFunc(f);
 		setMsg(m);
 	}
@@ -35,6 +37,14 @@ public class Message implements Serializable{
 
 	public void setMsg(Object msg) {
 		this.msg = msg;
+	}
+
+	public String getCont() {
+		return cont;
+	}
+
+	public void setCont(String cont) {
+		this.cont = cont;
 	}
 
 

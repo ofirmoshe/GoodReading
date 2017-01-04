@@ -24,8 +24,7 @@ public class Client extends AbstractClient {
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		// TODO Auto-generated method stub
-		Message m = new Message(0,msg);
-		AbstractController.instance.handleMessage(m);
+		AbstractController.instance.handleMessage((Message)msg);
 	}
 
 

@@ -17,7 +17,7 @@ public abstract class AbstractController implements Serializable{
 	
 	private Button goBackButton;
 	
-	public void goBackOnClick(ActionEvent Event){
+	public void goBackOnClick(){
 		ClientUI.goBack();
 	}
 	

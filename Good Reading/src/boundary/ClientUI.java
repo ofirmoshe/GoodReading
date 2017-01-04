@@ -20,14 +20,15 @@ public class ClientUI extends Application {
 	/*this is the primary stage*/
 	public static Stage primaryStage;
 	public static Parent lastRoot;
+	public static GeneralUser user;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		this.primaryStage= primaryStage;
 		primaryStage.setTitle("I-Book - Good Reading");
-		Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
 		lastRoot=root;
-		Scene scene = new Scene(root,700,600);
+		Scene scene = new Scene(root,900,600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
