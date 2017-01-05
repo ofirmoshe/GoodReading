@@ -13,6 +13,7 @@ import org.orm.PersistentSession;
 import org.orm.cfg.JDBCConnectionSetting;
 
 import common.Message;
+import i_book.Book;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import ocsf.server.*;
@@ -35,41 +36,45 @@ public class Server extends AbstractServer {
 		case "login":
 			loginMessageHandler(m);
 			break;
+		case "user homepage":
+			userHomepageMessageHandler(m);
+			break;
 		}
-		if (m.getFunc() == 1) {
-			GeneralUser login = (GeneralUser) m.getMsg();
-			GeneralUser u = login;
+	}
+
+	public void loginMessageHandler(Message msg) {
+		if (msg.getFunc() == 1) {
+			GeneralUser login = (GeneralUser) msg.getMsg();
+			GeneralUser u = null;
 			try {
 				u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
 			} catch (PersistentException e) {
 				// TODO Auto-generated catch block
-				sendToAllClients("wrong username");
+				msg.setMsg("wrong username");
+				sendToAllClients(msg);
 			}
 			if (u.getPassword().equals(login.getPassword())) {
-				sendToAllClients(u.getFname());
+				msg.setMsg(u);
+				sendToAllClients(msg);
 				return;
 			}
-			sendToAllClients("wrong password");
+			msg.setMsg("wrong password");
+			sendToAllClients(msg);
 		}
+
 	}
-	
-	public void loginMessageHandler(Message msg){
-		GeneralUser login = (GeneralUser) msg.getMsg();
-		GeneralUser u = null;
-		try {
-			u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
-		} catch (PersistentException e) {
-			// TODO Auto-generated catch block
-			msg.setMsg("wrong username");
-			sendToAllClients(msg);
+
+	public void userHomepageMessageHandler(Message msg) {
+		if (msg.getFunc() == 1) {
+			try {
+				Book[] books = Book.listBookByQuery("ID>0", "ID");
+				msg.setMsg(books);
+				sendToAllClients(msg);
+			} catch (PersistentException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Can't load book list.");
+			}
 		}
-		if (u.getPassword().equals(login.getPassword())) {
-			msg.setMsg(u);
-			sendToAllClients(msg);
-			return;
-		}
-		msg.setMsg("wrong password");
-		sendToAllClients(msg);
 	}
 
 	protected void serverStarted() {

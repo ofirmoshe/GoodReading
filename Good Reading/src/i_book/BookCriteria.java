@@ -24,6 +24,7 @@ public class BookCriteria extends AbstractORMCriteria {
 	public final StringExpression language;
 	public final StringExpression summary;
 	public final StringExpression table_of_contents;
+	public final StringExpression image;
 	public final StringExpression pdf;
 	public final StringExpression doc;
 	public final StringExpression fb2;
@@ -43,6 +44,7 @@ public class BookCriteria extends AbstractORMCriteria {
 		language = new StringExpression("language", this);
 		summary = new StringExpression("summary", this);
 		table_of_contents = new StringExpression("table_of_contents", this);
+		image = new StringExpression("image", this);
 		pdf = new StringExpression("pdf", this);
 		doc = new StringExpression("doc", this);
 		fb2 = new StringExpression("fb2", this);

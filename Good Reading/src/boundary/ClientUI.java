@@ -1,6 +1,8 @@
 package boundary;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Stack;
 
 import org.orm.PersistentSession;
 
@@ -14,17 +16,18 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import i_book.GeneralUser;
-
+import i_book.Book;
 public class ClientUI extends Application {
 	
 	/*this is the primary stage*/
 	public static Stage primaryStage;
 	public static Parent lastRoot;
 	public static GeneralUser user;
+	public static Stack<Parent> pageStack = new Stack<Parent>();
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		this.primaryStage= primaryStage;
+		ClientUI.primaryStage= primaryStage;
 		primaryStage.setTitle("I-Book - Good Reading");
 		Parent root = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
 		lastRoot=root;
@@ -39,16 +42,17 @@ public class ClientUI extends Application {
 	
 	public static void setScene(String fxml){
 		try {
-			lastRoot = primaryStage.getScene().getRoot();
+			pageStack.push(primaryStage.getScene().getRoot());
 			Parent root = FXMLLoader.load(ClientUI.class.getResource(fxml));
 			primaryStage.getScene().setRoot(root);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("Can't load fxml.");
+			e.printStackTrace();
 		}
 	}
 	
 	public static void goBack(){
-		primaryStage.getScene().setRoot(lastRoot);
+		primaryStage.getScene().setRoot(pageStack.pop());
+		
 	}
 }

@@ -19,6 +19,11 @@ public class Message implements Serializable{
 		setMsg(m);
 	}
 	
+	public Message( String c, int f){
+		setCont(c);
+		setFunc(f);
+	}
+	
 	public Message(int f){
 		setFunc(f);
 	}

@@ -24,6 +24,7 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final StringExpression language;
 	public final StringExpression summary;
 	public final StringExpression table_of_contents;
+	public final StringExpression image;
 	public final StringExpression pdf;
 	public final StringExpression doc;
 	public final StringExpression fb2;
@@ -43,6 +44,7 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 		language = new StringExpression("language", this.getDetachedCriteria());
 		summary = new StringExpression("summary", this.getDetachedCriteria());
 		table_of_contents = new StringExpression("table_of_contents", this.getDetachedCriteria());
+		image = new StringExpression("image", this.getDetachedCriteria());
 		pdf = new StringExpression("pdf", this.getDetachedCriteria());
 		doc = new StringExpression("doc", this.getDetachedCriteria());
 		fb2 = new StringExpression("fb2", this.getDetachedCriteria());
@@ -63,6 +65,7 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 		language = new StringExpression("language", this.getDetachedCriteria());
 		summary = new StringExpression("summary", this.getDetachedCriteria());
 		table_of_contents = new StringExpression("table_of_contents", this.getDetachedCriteria());
+		image = new StringExpression("image", this.getDetachedCriteria());
 		pdf = new StringExpression("pdf", this.getDetachedCriteria());
 		doc = new StringExpression("doc", this.getDetachedCriteria());
 		fb2 = new StringExpression("fb2", this.getDetachedCriteria());

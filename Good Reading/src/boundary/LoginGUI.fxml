@@ -27,27 +27,9 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ImageView fx:id="idx" fitHeight="17.0" fitWidth="18.0" layoutX="675.0" layoutY="422.0" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../../Graphics/red%20x.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="passx" fitHeight="17.0" fitWidth="18.0" layoutX="675.0" layoutY="455.0" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../../Graphics/red%20x.png" />
-               </image>
-            </ImageView>
             <TextField fx:id="hostField" layoutX="364.0" layoutY="271.0" prefHeight="25.0" prefWidth="195.0" />
             <TextField fx:id="idField" layoutX="364.0" layoutY="312.0" prefHeight="25.0" prefWidth="195.0" />
             <PasswordField fx:id="passField" layoutX="364.0" layoutY="354.0" prefHeight="25.0" prefWidth="195.0" />
-            <ImageView fx:id="loginButton" fitHeight="33.0" fitWidth="84.0" layoutX="420.0" layoutY="402.0" onMouseClicked="#loginOnClick" onMouseEntered="#loginOnHover" onMouseExited="#loginOffHover" preserveRatio="true">
-               <image>
-                  <Image url="@../Graphics/login_button.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
             <Label layoutX="293.0" layoutY="315.0" text="username" textFill="#656565">
                <font>
                   <Font size="14.0" />
@@ -58,6 +40,26 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <AnchorPane layoutX="420.0" layoutY="402.0" onMouseClicked="#loginOnClick" onMouseEntered="#loginOnHover" onMouseExited="#loginOffHover">
+               <children>
+                  <ImageView fx:id="loginButton" fitHeight="33.0" fitWidth="84.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/button.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <Label fx:id="loginLabel" layoutX="23.0" layoutY="3.0" prefHeight="21.0" prefWidth="59.0" text="login" textFill="WHITE">
+                     <font>
+                        <Font name="Calibri" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

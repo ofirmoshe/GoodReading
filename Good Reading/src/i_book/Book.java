@@ -16,9 +16,16 @@ package i_book;
 import org.orm.*;
 import org.hibernate.Query;
 import org.hibernate.LockMode;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Book {
+public class Book implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Book() {
 	}
 	
@@ -471,6 +478,8 @@ public class Book {
 	
 	private String table_of_contents;
 	
+	private String image;
+	
 	private String pdf;
 	
 	private String doc;
@@ -535,6 +544,14 @@ public class Book {
 	
 	public String getTable_of_contents() {
 		return table_of_contents;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	public String getImage() {
+		return image;
 	}
 	
 	public void setPdf(String value) {
@@ -672,5 +689,6 @@ public class Book {
 	public String toString() {
 		return String.valueOf(getID());
 	}
+
 	
 }

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BlurType;
@@ -13,6 +14,7 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import i_book.Book;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import org.orm.*;
@@ -29,12 +31,8 @@ import org.hibernate.*;
 
 public class LoginController extends AbstractController {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public static LoginController instance;
 	final public static int DEFAULT_PORT = 5555;
+	public static Book[] books = null;
 
 	@FXML
 	public TextField hostField;
@@ -48,19 +46,17 @@ public class LoginController extends AbstractController {
 	public ImageView idx;
 	@FXML
 	public ImageView passx;
+	@FXML
+	public Label loginLabel;
 
-	public LoginController() {
-		instance = this;
+	public void loginOnHover() {
+		loginButton.setImage(new Image(GraphicsImporter.class.getResource("button_hover.png").toString()));
 	}
 
-	public void loginOnHover(){
-		loginButton.setImage(new Image(GraphicsImporter.class.getResource("login_button_hover.png").toString()));
+	public void loginOffHover() {
+		loginButton.setImage(new Image(GraphicsImporter.class.getResource("button.png").toString()));
 	}
-	
-	public void loginOffHover(){
-		loginButton.setImage(new Image(GraphicsImporter.class.getResource("login_button.png").toString()));
-	}
-	
+
 	public void loginOnClick() throws Exception {
 		try {
 			Client client;
@@ -75,29 +71,26 @@ public class LoginController extends AbstractController {
 			Client.instance = client;
 			u.setID(id);
 			u.setPassword(pass);
-			Message msg = new Message("login",1, u);
+			Message msg = new Message("login", 1, u);
 			AbstractController.instance = this;
-			client.sendToServer(msg);
+			Client.instance.sendToServer(msg);
 		} catch (Exception e) {
 			System.out.println("Can't connect to host.");
 		}
+		
 	}
 
 	@Override
 	public void handleMessage(Message msg) {
 		// TODO Auto-generated method stub
-		if (msg.getMsg().equals("wrong username")) {
-			passx.setVisible(false);
-			idx.setVisible(true);
-		} else if (msg.getMsg().equals("wrong password")) {
-			passx.setVisible(true);
-			idx.setVisible(false);
-		} else {
-			passx.setVisible(false);
-			idx.setVisible(false);
-			ClientUI.user = (GeneralUser)msg.getMsg();
-			ClientUI.setScene("HomepageGUI.fxml");
-			
+		if (msg.getFunc() == 1) {
+			if (msg.getMsg().equals("wrong username")) {
+			} else if (msg.getMsg().equals("wrong password")) {
+			} else {
+				ClientUI.user = (GeneralUser) msg.getMsg();
+				ClientUI.setScene("HomepageGUI.fxml");
+
+			}
 		}
 	}
 

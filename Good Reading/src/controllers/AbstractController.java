@@ -5,22 +5,14 @@ import java.io.Serializable;
 import boundary.ClientUI;
 import common.Message;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
-public abstract class AbstractController implements Serializable{
+public abstract class AbstractController{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	public static AbstractController instance;
-	
-	private Button goBackButton;
-	
-	public void goBackOnClick(){
-		ClientUI.goBack();
-	}
-	
 
 	public abstract void handleMessage(Message msg);
 
