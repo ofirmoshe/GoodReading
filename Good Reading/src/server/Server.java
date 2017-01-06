@@ -56,7 +56,9 @@ public class Server extends AbstractServer {
 				PersistentTransaction t = session.beginTransaction();
 				session.update(u);
 				t.commit();
-				session.close();
+				t = session.beginTransaction();
+				session.evict(u);
+				t.commit();
 				session = IBookIncPersistentManager.instance().getSession();
 			} catch (PersistentException e) {
 				// TODO Auto-generated catch block
@@ -100,8 +102,9 @@ public class Server extends AbstractServer {
 						PersistentTransaction t = session.beginTransaction();
 						session.update(user);
 						t.commit();
-						session.close();
-						session = IBookIncPersistentManager.instance().getSession();
+						t = session.beginTransaction();
+						session.evict(user);
+						t.commit();
 					} catch (PersistentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
