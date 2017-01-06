@@ -10,12 +10,14 @@ import java.util.ArrayList;
 
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
+import org.orm.PersistentTransaction;
 import org.orm.cfg.JDBCConnectionSetting;
 
 import common.Message;
 import i_book.Book;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
+import i_book.User;
 import ocsf.server.*;
 
 public class Server extends AbstractServer {
@@ -42,38 +44,56 @@ public class Server extends AbstractServer {
 		}
 	}
 
-	public void loginMessageHandler(Message msg) {
+	public void loginMessageHandler(Message msg){
+		Object[] a = new Object[2];
 		if (msg.getFunc() == 1) {
-			GeneralUser login = (GeneralUser) msg.getMsg();
-			GeneralUser u = null;
 			try {
-				u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
-			} catch (PersistentException e) {
-				// TODO Auto-generated catch block
-				msg.setMsg("wrong username");
-				sendToAllClients(msg);
+				Book[] books = Book.listBookByQuery("ID>0", "ID");
+				a[0] = books;
+			} catch (PersistentException e1) {
+				System.out.println("Can't load book list.");
 			}
-			if (u.getPassword().equals(login.getPassword())) {
-				msg.setMsg(u);
-				sendToAllClients(msg);
-				return;
-			}
-			msg.setMsg("wrong password");
-			sendToAllClients(msg);
 		}
+		msg.setFunc(1);
+		GeneralUser login = (GeneralUser) msg.getMsg();
+		GeneralUser u = null;
+		try {
+			u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
+		} catch (PersistentException e) {
+			// TODO Auto-generated catch block
+			a[1] = "wrong username";
+			msg.setMsg(a);
+			sendToAllClients(msg);
+			return;
+		}
+		if (u.getPassword().equals(login.getPassword())) {
+			a[1] = u;
+			msg.setMsg(a);
+			sendToAllClients(msg);
+			if(u instanceof User){
+				User user = (User)u;
+				if(user.getStatus().equals("offline") || user.getStatus()==null){
+					user.setStatus("online");
+					try {
+						PersistentTransaction t = session.beginTransaction();
+						session.update(user);
+					} catch (PersistentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			return;
+		}
+		a[1] = "wrong password";
+		msg.setMsg(a);
+		sendToAllClients(msg);
 
 	}
 
 	public void userHomepageMessageHandler(Message msg) {
-		if (msg.getFunc() == 1) {
-			try {
-				Book[] books = Book.listBookByQuery("ID>0", "ID");
-				msg.setMsg(books);
-				sendToAllClients(msg);
-			} catch (PersistentException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Can't load book list.");
-			}
+		switch (msg.getFunc()) {
+		case 1:
 		}
 	}
 

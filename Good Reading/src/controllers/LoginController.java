@@ -17,6 +17,8 @@ import javafx.scene.image.ImageView;
 import i_book.Book;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
+import i_book.User;
+
 import org.orm.*;
 
 import boundary.ClientUI;
@@ -32,7 +34,6 @@ import org.hibernate.*;
 public class LoginController extends AbstractController {
 
 	final public static int DEFAULT_PORT = 5555;
-	public static Book[] books = null;
 
 	@FXML
 	public TextField hostField;
@@ -43,11 +44,17 @@ public class LoginController extends AbstractController {
 	@FXML
 	public PasswordField passField;
 	@FXML
-	public ImageView idx;
+	public ImageView wrongHost;
 	@FXML
-	public ImageView passx;
+	public ImageView wrongUser;
+	@FXML
+	public ImageView wrongPass;
 	@FXML
 	public Label loginLabel;
+
+	public void initialize() {
+		super.initialize();
+	}
 
 	public void loginOnHover() {
 		loginButton.setImage(new Image(GraphicsImporter.class.getResource("button_hover.png").toString()));
@@ -58,6 +65,9 @@ public class LoginController extends AbstractController {
 	}
 
 	public void loginOnClick() throws Exception {
+		wrongHost.setVisible(false);
+		wrongUser.setVisible(false);
+		wrongPass.setVisible(false);
 		try {
 			Client client;
 			String host = hostField.getText();
@@ -68,29 +78,64 @@ public class LoginController extends AbstractController {
 				Client.instance.closeConnection();
 			}
 			client = new Client(host, DEFAULT_PORT);
-			Client.instance = client;
 			u.setID(id);
 			u.setPassword(pass);
-			Message msg = new Message("login", 1, u);
-			AbstractController.instance = this;
+			Message msg=null;
+			if (UserHomepageController.books == null) 
+				msg = new Message("login", 1, u);
+			else 
+				msg = new Message("login", 2, u);
 			Client.instance.sendToServer(msg);
 		} catch (Exception e) {
-			System.out.println("Can't connect to host.");
+			wrongHost.setVisible(true);
 		}
-		
+
 	}
 
 	@Override
 	public void handleMessage(Message msg) {
 		// TODO Auto-generated method stub
-		if (msg.getFunc() == 1) {
-			if (msg.getMsg().equals("wrong username")) {
-			} else if (msg.getMsg().equals("wrong password")) {
-			} else {
-				ClientUI.user = (GeneralUser) msg.getMsg();
-				ClientUI.setScene("HomepageGUI.fxml");
-
+		Object[] a = (Object[]) msg.getMsg();
+		if(UserHomepageController.books==null)
+			UserHomepageController.books = (Book[]) a[0];
+		switch (msg.getFunc()) {
+		case 1:
+			if (a[1].equals("wrong username")) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						wrongUser.setVisible(true);
+					}
+				});
+				return;
 			}
+			if (a[1].equals("wrong password")) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						wrongPass.setVisible(true);
+					}
+				});
+				return;
+			}
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					loginLabel.setText("loading");
+					loginLabel.setTranslateX(loginLabel.getTranslateX() - 6);
+				}
+			});
+			ClientUI.user = (GeneralUser) a[1];
+			if(ClientUI.user instanceof User){
+				System.out.println("ins");
+				User u = (User)ClientUI.user;
+				if(u.getStatus().equals("online")|| u.getStatus().equals("banned")){
+					System.out.println(u.getStatus());
+					return;
+				}
+			}
+			ClientUI.setScene("HomepageGUI.fxml");
+			break;
 		}
 	}
 

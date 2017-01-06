@@ -6,7 +6,10 @@ import java.util.Stack;
 
 import org.orm.PersistentSession;
 
+import client.Client;
 import javafx.application.Application;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,11 +18,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import i_book.GeneralUser;
 import i_book.Book;
+
 public class ClientUI extends Application {
-	
-	/*this is the primary stage*/
+
+	/* this is the primary stage */
 	public static Stage primaryStage;
 	public static Parent lastRoot;
 	public static GeneralUser user;
@@ -27,11 +33,27 @@ public class ClientUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		ClientUI.primaryStage= primaryStage;
+		ClientUI.primaryStage = primaryStage;
 		primaryStage.setTitle("I-Book - Good Reading");
+		primaryStage.setResizable(false);
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				if (Client.instance != null) {
+					try {
+						Client.instance.closeConnection();
+						System.out.println("Connection closed.");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						System.out.println("Can't close connection.");
+					}
+				}
+				System.exit(0);
+			}
+		});
 		Parent root = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
-		lastRoot=root;
-		Scene scene = new Scene(root,900,600);
+		lastRoot = root;
+		Scene scene = new Scene(root, 900, 600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -39,8 +61,8 @@ public class ClientUI extends Application {
 	public static void main(String[] args) throws Exception {
 		launch(args);
 	}
-	
-	public static void setScene(String fxml){
+
+	public static void setScene(String fxml) {
 		try {
 			pageStack.push(primaryStage.getScene().getRoot());
 			Parent root = FXMLLoader.load(ClientUI.class.getResource(fxml));
@@ -50,9 +72,9 @@ public class ClientUI extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void goBack(){
+
+	public static void goBack() {
 		primaryStage.getScene().setRoot(pageStack.pop());
-		
+
 	}
 }

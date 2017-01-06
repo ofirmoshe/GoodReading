@@ -4,8 +4,11 @@ import boundary.ClientUI;
 import graphics.GraphicsImporter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 
 public abstract class SystemController extends AbstractController{
@@ -26,8 +29,11 @@ public abstract class SystemController extends AbstractController{
 	private AnchorPane searchReviewButton;
 	@FXML
 	private AnchorPane membershipButton;
+	@FXML
+	private ScrollPane scrollPane;
 	
 	public void initialize(){
+		super.initialize();
 		userLabel.setText(ClientUI.user.getFname() + " " + ClientUI.user.getLname());
 	}
 	
@@ -103,7 +109,7 @@ public abstract class SystemController extends AbstractController{
 	public void logoutOnClick(){
 		ClientUI.setScene("LoginGUI.fxml");
 	}
-
+	
 	
 
 }

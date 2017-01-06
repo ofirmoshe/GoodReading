@@ -16,7 +16,6 @@ public class Client extends AbstractClient {
 
 	public Client(String host, int port) throws IOException {
 		super(host, port);
-		// TODO Auto-generated constructor stub
 		instance=this;
 		openConnection();
 	}

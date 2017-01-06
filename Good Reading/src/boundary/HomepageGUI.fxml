@@ -45,9 +45,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="906.0">
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="900.0" vbarPolicy="AS_NEEDED">
          <content>
-          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="900.0" />
+          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="900.0" />
          </content>
       </ScrollPane>
       <AnchorPane fx:id="menuAnchor" layoutX="-182.0" layoutY="244.0" prefHeight="131.0" prefWidth="191.0">

@@ -45,9 +45,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="906.0">
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="900.0">
          <content>
-          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="900.0">
+          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="900.0">
                <children>
                   <ImageView fx:id="bookImage" fitHeight="243.0" fitWidth="164.0" layoutX="22.0" layoutY="21.0" preserveRatio="true">
                      <image>

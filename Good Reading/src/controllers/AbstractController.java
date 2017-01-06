@@ -13,6 +13,10 @@ import javafx.scene.layout.AnchorPane;
 public abstract class AbstractController{
 	
 	public static AbstractController instance;
+	
+	public void initialize(){
+		instance=this;
+	}
 
 	public abstract void handleMessage(Message msg);
 
