@@ -41,10 +41,32 @@ public class Server extends AbstractServer {
 		case "user homepage":
 			userHomepageMessageHandler(m);
 			break;
+		case "system":
+			systemMessageHandler(m);
+			break;
 		}
 	}
 
-	public void loginMessageHandler(Message msg){
+	public void systemMessageHandler(Message msg) {
+		switch (msg.getFunc()) {
+		case 1:
+			User u = (User)msg.getMsg();
+			u.setStatus("offline");
+			try {
+				PersistentTransaction t = session.beginTransaction();
+				session.update(u);
+				t.commit();
+				session.close();
+				session = IBookIncPersistentManager.instance().getSession();
+			} catch (PersistentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
+
+	public void loginMessageHandler(Message msg) {
 		Object[] a = new Object[2];
 		if (msg.getFunc() == 1) {
 			try {
@@ -70,13 +92,16 @@ public class Server extends AbstractServer {
 			a[1] = u;
 			msg.setMsg(a);
 			sendToAllClients(msg);
-			if(u instanceof User){
-				User user = (User)u;
-				if(user.getStatus().equals("offline") || user.getStatus()==null){
+			if (u instanceof User) {
+				User user = (User) u;
+				if (user.getStatus().equals("offline")) {
 					user.setStatus("online");
 					try {
 						PersistentTransaction t = session.beginTransaction();
 						session.update(user);
+						t.commit();
+						session.close();
+						session = IBookIncPersistentManager.instance().getSession();
 					} catch (PersistentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -127,7 +152,7 @@ public class Server extends AbstractServer {
 		} catch (Exception ex) {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
-
+		
 		try {
 			session = IBookIncPersistentManager.instance().getSession();
 		} catch (PersistentException e) {

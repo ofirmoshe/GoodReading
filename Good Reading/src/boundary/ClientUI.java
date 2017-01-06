@@ -7,6 +7,8 @@ import java.util.Stack;
 import org.orm.PersistentSession;
 
 import client.Client;
+import common.Message;
+import controllers.AbstractController;
 import javafx.application.Application;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -21,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import i_book.GeneralUser;
+import i_book.User;
 import i_book.Book;
 
 public class ClientUI extends Application {
@@ -41,6 +44,10 @@ public class ClientUI extends Application {
 			public void handle(WindowEvent event) {
 				if (Client.instance != null) {
 					try {
+						if (ClientUI.user instanceof User) {
+							Message msg = new Message("system", 1, ClientUI.user);
+							Client.instance.sendToServer(msg);
+						}
 						Client.instance.closeConnection();
 						System.out.println("Connection closed.");
 					} catch (IOException e) {

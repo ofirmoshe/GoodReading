@@ -127,8 +127,8 @@ public class LoginController extends AbstractController {
 			});
 			ClientUI.user = (GeneralUser) a[1];
 			if(ClientUI.user instanceof User){
-				System.out.println("ins");
 				User u = (User)ClientUI.user;
+				System.out.println(u.getStatus());
 				if(u.getStatus().equals("online")|| u.getStatus().equals("banned")){
 					System.out.println(u.getStatus());
 					return;
