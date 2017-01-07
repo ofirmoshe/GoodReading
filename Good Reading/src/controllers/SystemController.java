@@ -7,6 +7,9 @@ import client.Client;
 import common.Message;
 import graphics.GraphicsImporter;
 import i_book.User;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -17,7 +20,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 
 public abstract class SystemController extends AbstractController {
-	
+
 	@FXML
 	private AnchorPane toggleMenuAnchor;
 	@FXML
@@ -69,9 +72,46 @@ public abstract class SystemController extends AbstractController {
 	public void toggleMenuOnHover() {
 		arrowLabel.setVisible(false);
 		toggleMenuAnchor.setVisible(true);
-		if (menuAnchor.getLayoutX() < 0) {
-			menuAnchor.setLayoutX(menuAnchor.getLayoutX() + 15);
-		}
+		menuAnchor.setLayoutX(menuAnchor.getLayoutX() + 15);
+		moveAnchor(0, 15);
+	}
+
+	public void toggleMenuOffHover() {
+		// scrollPane.setLayoutX(0);
+		toggleMenuAnchor.setVisible(false);
+		arrowLabel.setVisible(true);
+		moveAnchor(-175,-15);
+	}
+
+	public void moveAnchor(int x, int d) {
+		Task<Void> sleeper = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+				}
+				return null;
+			}
+		};
+		sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				if (d > 0) {
+					if (menuAnchor.getLayoutX() < x) {
+						menuAnchor.setLayoutX(menuAnchor.getLayoutX() + d);
+						moveAnchor(x, d);
+					}
+				}
+				else{
+					if (menuAnchor.getLayoutX() > x) {
+						menuAnchor.setLayoutX(menuAnchor.getLayoutX() + d);
+						moveAnchor(x, d);
+					}
+				}
+			}
+		});
+		new Thread(sleeper).start();
 	}
 
 	public void searchBookOnHover() {
@@ -104,19 +144,16 @@ public abstract class SystemController extends AbstractController {
 		membershipButton.setLayoutX(0);
 	}
 
-	public void toggleMenuOffHover() {
-		// scrollPane.setLayoutX(0);
-		toggleMenuAnchor.setVisible(false);
-		menuAnchor.setLayoutX(-175);
-		arrowLabel.setVisible(true);
-	}
-
 	public void logoutOnClick() throws IOException {
 		ClientUI.setScene("LoginGUI.fxml");
 		if (ClientUI.user instanceof User) {
 			Message msg = new Message("system", 1, ClientUI.user);
 			Client.instance.sendToServer(msg);
 		}
+	}
+	
+	public void logoOnClick(){
+		ClientUI.setScene("HomepageGUI.fxml");
 	}
 
 }

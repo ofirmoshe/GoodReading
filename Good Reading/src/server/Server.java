@@ -16,8 +16,10 @@ import org.orm.cfg.JDBCConnectionSetting;
 import common.Message;
 import i_book.Author;
 import i_book.Book;
+import i_book.Field;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
+import i_book.Subject;
 import i_book.User;
 import ocsf.server.*;
 
@@ -56,7 +58,7 @@ public class Server extends AbstractServer {
 	public void systemMessageHandler(Message msg) {
 		switch (msg.getFunc()) {
 		case 1:
-			User u = (User) msg.getMsg();
+			/*User u = (User) msg.getMsg();
 			u.setStatus("offline");
 			try {
 				PersistentTransaction t = session.beginTransaction();
@@ -70,7 +72,7 @@ public class Server extends AbstractServer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			break;
+			break;*/
 		}
 	}
 
@@ -88,7 +90,7 @@ public class Server extends AbstractServer {
 		GeneralUser login = (GeneralUser) msg.getMsg();
 		GeneralUser u = null;
 		try {
-			u = GeneralUser.loadGeneralUserByORMID(session,login.getID());
+			u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			a[1] = "wrong username";
@@ -100,7 +102,7 @@ public class Server extends AbstractServer {
 			a[1] = u;
 			msg.setMsg(a);
 			sendToAllClients(msg);
-			if (u instanceof User) {
+			/*if (u instanceof User) {
 				User user = (User) u;
 				if (user.getStatus().equals("offline")) {
 					user.setStatus("online");
@@ -116,7 +118,7 @@ public class Server extends AbstractServer {
 						e.printStackTrace();
 					}
 				}
-			}
+			}*/
 			return;
 		}
 		a[1] = "wrong password";
@@ -137,7 +139,13 @@ public class Server extends AbstractServer {
 			try {
 				Book b = Book.getBookByORMID((int) msg.getMsg());
 				Author[] a = b.author.toArray();
-				msg.setMsg(a);
+				Field[] f=b.field.toArray();
+				Subject[] s=b.subject.toArray();
+				Object[] o=new Object[3];
+				o[0]=a;
+				o[1]=f;
+				o[2]=s;
+				msg.setMsg(o);
 				sendToAllClients(msg);
 			} catch (PersistentException e) {
 				// TODO Auto-generated catch block
@@ -151,7 +159,7 @@ public class Server extends AbstractServer {
 		switch (msg.getFunc()) {
 		case 1:
 			String[] query = (String[]) msg.getMsg();
-			int[] counter = new int[Integer.parseInt(query[1])+1];
+			int[] counter = new int[Integer.parseInt(query[1]) + 1];
 			ArrayList<Book> searchResult = new ArrayList<Book>();
 			Book[] importer;
 			int queryCounter = 0;
@@ -159,7 +167,7 @@ public class Server extends AbstractServer {
 			if (!query[2].equals("")) {
 				queryCounter++;
 				try {
-					importer = Book.listBookByQuery("Title=" +"'"+ query[2]+"'", "ID");
+					importer = Book.listBookByQuery("Title=" + "'" + query[2] + "'", "ID");
 					for (int i = 0; i < importer.length; i++) {
 						counter[importer[i].getID()]++;
 					}
@@ -171,12 +179,10 @@ public class Server extends AbstractServer {
 			if (!query[3].equals("")) {
 				queryCounter++;
 				try {
-					importer = Book.listBookByQuery("Language="+"'"+query[3]+"'", "ID");
-					System.out.println("before for");
+					importer = Book.listBookByQuery("Language=" + "'" + query[3] + "'", "ID");
 					for (int i = 0; i < importer.length; i++) {
 						counter[importer[i].getID()]++;
 					}
-					System.out.println("after for");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -185,10 +191,12 @@ public class Server extends AbstractServer {
 			if (!query[4].equals("")) {
 				queryCounter++;
 				try {
-					Author a = Author.loadAuthorByQuery("Name='"+query[4]+"'","ID");
-					importer = a.book.toArray();
-					for (int i = 0; i < importer.length; i++) {
-						counter[importer[i].getID()]++;
+					Author a = Author.loadAuthorByQuery("Name='" + query[4] + "'", "ID");
+					if (a != null) {
+						importer = a.book.toArray();
+						for (int i = 0; i < importer.length; i++) {
+							counter[importer[i].getID()]++;
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -196,13 +204,10 @@ public class Server extends AbstractServer {
 			}
 			// Check AND/OR
 			if (query[0].equals("AND")) {
-				System.out.println("if and");
 				for (int i = 1; i < counter.length; i++) {
 					if (counter[i] == queryCounter)
 						try {
-							System.out.println("before import");
 							searchResult.add(Book.getBookByORMID(i));
-							System.out.println("after import");
 						} catch (PersistentException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -220,10 +225,25 @@ public class Server extends AbstractServer {
 						}
 				}
 			}
-			msg.setMsg(searchResult);
-			System.out.println("before send");
+			Book[] 	b = new Book[searchResult.size()];
+			for (int i = 0; i < searchResult.size(); i++) {
+				b[i] = searchResult.get(i);
+			}
+			Author[][] a = new Author[b.length][];
+			Field[][] f = new Field[b.length][];
+			Subject[][] s = new Subject[b.length][];
+			for(int i=0; i<b.length;i++){
+				a[i] = b[i].author.toArray();
+				f[i]=b[i].field.toArray();
+				s[i]=b[i].subject.toArray();
+			}
+			Object[] o = new Object[4];
+			o[0]=b;
+			o[1]=a;
+			o[2]=f;
+			o[3]=s;
+			msg.setMsg(o);
 			sendToAllClients(msg);
-			System.out.println("after send");
 		}
 
 	}

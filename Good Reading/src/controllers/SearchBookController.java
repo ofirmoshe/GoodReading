@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import boundary.ClientUI;
 import client.Client;
 import common.Message;
-import controllers.UserHomepageController.BookGrid;
+import i_book.Author;
 import i_book.Book;
+import i_book.Field;
+import i_book.Subject;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,52 +29,43 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class SearchBookController extends SystemController{
-	
-	class BookGrid {
-		public Book book;
-		public int x;
-		public int y;
+public class SearchBookController extends SystemController {
 
-		public BookGrid(Book b,  int x, int y) {
-			book = b;
-			this.x = x;
-			this.y = y;
-		}
-	}
-	
 	public static String[] query = new String[5];
 	public static Book[] books;
-	public static BookGrid[] bookPos;
-	private GridPane grid;
-	
+	private GridPane grid = null;
+	public static Author[][] authors;
+	public static Field[][] fields;
+	public static Subject[][] subjects;
+
 	@FXML
 	private TextField titleField;
 	@FXML
 	private TextField langField;
 	@FXML
 	private TextField authorField;
-	@FXML 
+	@FXML
 	private ChoiceBox<String> optionBox;
 	@FXML
 	private AnchorPane scrollAnchor;
-	
-	public void initialize(){
+
+	public void initialize() {
 		super.initialize();
 		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
 		optionBox.getSelectionModel().selectFirst();
 	}
-	
-	public void searchOnEnterPressed(){
-		query[0]=optionBox.getSelectionModel().getSelectedItem();
-		query[1]=""+UserHomepageController.books.length;
-		query[2]=titleField.getText();
-		query[3]=langField.getText();
-		query[4]=authorField.getText();
-		Message msg = new Message("search book",1,query);
+
+	public void searchOnEnterPressed() {
+		query[0] = optionBox.getSelectionModel().getSelectedItem();
+		query[1] = "" + UserHomepageController.books.length;
+		query[2] = titleField.getText();
+		query[3] = langField.getText();
+		query[4] = authorField.getText();
+		Message msg = new Message("search book", 1, query);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
@@ -83,107 +76,110 @@ public class SearchBookController extends SystemController{
 
 	@Override
 	public void handleMessage(Message msg) {
-		switch(msg.getFunc()){
+		switch (msg.getFunc()) {
 		case 1:
-			ArrayList<Book> b = (ArrayList<Book>) msg.getMsg();
-			System.out.println("hi");
-			books = new Book[b.size()];
-			for(int i=0; i<b.size(); i++){
-				books[i]=b.get(i);
-			}
-			System.out.println("dies");
-			for(int i=0; i<b.size(); i++) System.out.println(b.get(i).getTitle());
+			Object[] o = (Object[]) msg.getMsg();
+			books = (Book[]) o[0];
+			authors = (Author[][]) o[1];
+			fields = (Field[][]) o[2];
+			subjects = (Subject[][]) o[3];
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
+					if (grid != null)
+						scrollAnchor.getChildren().remove(grid);
+					if (books.length == 0) {
+						StackPane sp = new StackPane();
+						sp.setPrefHeight(200);
+						sp.setPrefWidth(900);
+						Label noRes = new Label("Sorry, no results.");
+						noRes.setTextFill(Color.DARKSLATEGRAY);
+						noRes.setFont(Font.font("System", 20));
+						sp.getChildren().add(noRes);
+						StackPane.setAlignment(noRes, Pos.CENTER);
+						scrollAnchor.getChildren().add(sp);
+						return;
+					}
 					setBookGrid();
 				}
 			});
 		}
 	}
-	
+
 	public void setBookGrid() {
 		grid = new GridPane();
-		bookPos = new BookGrid[books.length];
-		int width = 5;
-		int length = books.length / 5 + 1;
-		if (books.length < 5) {
-			length = 1;
-			width = books.length;
-		}
-		for (int y = 0; y < length; y++) {
-			for (int x = 0; x < width; x++) {
-				bookPos[y * 5 + x] = new BookGrid(books[y * 5 + x], x, y);
-				StackPane ap = new StackPane();
-				ap.setUserData(bookPos[y * 5 + x]);
-				ap.setCursor(Cursor.HAND);
-				ap.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						BookGrid pos = (BookGrid) ap.getUserData();
-						System.out.println(pos.book.getTitle());
-						BookPageController.book = pos.book;
-						ClientUI.setScene("BookPageGUI.fxml");
-						event.consume();
-					}
-				});
-				ap.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						ColorAdjust ca = new ColorAdjust();
-						ca.setBrightness(0.8);
-						ImageView iv = (ImageView) ap.getChildren().get(0);
-						iv.setEffect(ca);
-						BookGrid pos = (BookGrid) ap.getUserData();
-						Label title = new Label(pos.book.getTitle());
-						title.setTextFill(Color.BLACK);
-						title.setFont(Font.font("System", FontWeight.BOLD, 14));
-						ap.getChildren().add(title);
-						StackPane.setAlignment(title, Pos.CENTER);
-						String s = new String();
-						float f = pos.book.getPrice();
-						if (f == (long) f)
-							s = String.format("%d", (long) f);
-						else
-							s = String.format("%s", f);
-						Label price = new Label(s + "$");
-						price.setTextFill(Color.RED);
-						price.setFont(Font.font("System", 20));
-						ap.getChildren().add(price);
-						StackPane.setAlignment(price, Pos.CENTER);
-						price.setTranslateY(25);
-						event.consume();
-					}
-				});
-				ap.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						ColorAdjust ca = new ColorAdjust();
-						ca.setBrightness(0);
-						ImageView iv = (ImageView) ap.getChildren().get(0);
-						iv.setEffect(ca);
-						ap.getChildren().remove(ap.lookup(".label"));
-						ap.getChildren().remove(ap.lookup(".label"));
-						event.consume();
-					}
-				});
-				Image img = new Image(books[y * 5 + x].getImage());
-				ImageView iv = new ImageView();
-				iv.setImage(img);
-				iv.setFitWidth(180);
-				iv.setFitHeight(270);
-				InnerShadow innerShadow = new InnerShadow();
-				innerShadow.setColor(Color.BLACK);
-				iv.setEffect(innerShadow);
-				ap.getChildren().add(iv);
-				grid.add(ap, x, y);
+		for (int y = 0; y < books.length; y++) {
+			AnchorPane ap = new AnchorPane();
+			ap.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					int y = (int) ap.getUserData();
+					BookPageController.book = books[y];
+					ClientUI.setScene("BookPageGUI.fxml");
+					event.consume();
+				}
+			});
+			ap.setCursor(Cursor.HAND);
+			ap.setUserData(y);
+			ap.setPrefHeight(170);
+			ap.setPrefWidth(900);
+			Rectangle rect = new Rectangle();
+			rect.setHeight(170);
+			rect.setWidth(900);
+			rect.setFill(Color.WHITE);
+			rect.setStrokeWidth(1);
+			rect.setStroke(Color.BURLYWOOD);
+			ap.getChildren().add(rect);
+			Image img = new Image(books[y].getImage());
+			ImageView iv = new ImageView();
+			iv.setImage(img);
+			iv.setFitWidth(100);
+			iv.setFitHeight(150);
+			InnerShadow innerShadow = new InnerShadow();
+			innerShadow.setColor(Color.BLACK);
+			iv.setEffect(innerShadow);
+			ap.getChildren().add(iv);
+			iv.setLayoutX(10);
+			iv.setLayoutY(10);
+			Label title = new Label(books[y].getTitle());
+			title.setTextFill(Color.BLACK);
+			title.setFont(Font.font("System",FontWeight.BOLD, 18));
+			ap.getChildren().add(title);
+			title.setLayoutX(120);
+			title.setLayoutY(10);
+			String s = "by " + authors[y][0].getName();
+			for (int i = 1; i < authors[y].length; i++)
+				s = s + ", " + authors[y][i].getName();
+			Label authors = new Label(s);
+			authors.setTextFill(Color.BLACK);
+			authors.setFont(Font.font("System", 13));
+			ap.getChildren().add(authors);
+			authors.setLayoutX(120);
+			authors.setLayoutY(33);
+			s = fields[y][0].getField();
+			for (int i = 1; i < fields[y].length; i++)
+				s = s + ", " + fields[y][i].getField();
+			Label fields = new Label(s);
+			fields.setTextFill(Color.GREY);
+			fields.setFont(Font.font("System", 12));
+			ap.getChildren().add(fields);
+			fields.setLayoutX(120);
+			fields.setLayoutY(55);
+			if (subjects[y].length != 0) {
+				s = subjects[y][0].getSub();
+				for (int i = 1; i < subjects[y].length; i++)
+					s = s + ", " + subjects[y][i].getSub();
+				Label subjects = new Label(s);
+				subjects.setTextFill(Color.GREY);
+				subjects.setFont(Font.font("System", 12));
+				ap.getChildren().add(subjects);
+				subjects.setLayoutX(120);
+				subjects.setLayoutY(72);
 			}
-			if (books.length % 5 != 0 && y == length - 2) {
-				width = books.length % 5;
-			}
+			grid.add(ap, 0, y);
 		}
 
-		scrollAnchor.setPrefHeight(280 * length);
+		scrollAnchor.setPrefHeight(171 * books.length);
 		scrollAnchor.getChildren().add(grid);
 	}
 

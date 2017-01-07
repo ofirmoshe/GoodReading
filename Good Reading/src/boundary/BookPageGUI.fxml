@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookPageController">
+<AnchorPane fx:id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookPageController">
    <children>
       <ImageView>
          <image>
@@ -63,24 +63,31 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label layoutX="228.0" layoutY="59.0" text="Field Name - Subject Name" />
+                  <Label fx:id="fieldLabel" layoutX="228.0" layoutY="59.0" text="Field Name" />
                   <Label fx:id="authorLabel" layoutX="228.0" layoutY="42.0" text="By Author Name" />
-                  <Label layoutX="228.0" layoutY="87.0" text="Summary">
+                  <Label layoutX="228.0" layoutY="96.0" text="Summary">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="summaryText" editable="false" layoutX="228.0" layoutY="111.0" prefHeight="150.0" prefWidth="572.0" text="At 32, Russell Green has it all: a stunning wife, a lovable six year-old daughter, a successful career as an advertising executive and an expansive home in Charlotte. He is living the dream, and his marriage to the bewitching Vivian is the center of that. But underneath the shiny surface of this perfect existence, fault lines are beginning to appear...and no one is more surprised than Russ when he finds every aspect of the life he took for granted turned upside down. In a matter of months, Russ finds himself without a job or wife, caring for his young daughter while struggling to adapt to a new and baffling reality. Throwing himself into the wilderness of single parenting, Russ embarks on a journey at once terrifying and rewarding-one that will test his abilities and his emotional resources beyond anything he ever imagined." wrapText="true" />
-                  <ImageView fitHeight="42.0" fitWidth="124.0" layoutX="679.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/button.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="701.0" layoutY="66.0" text="Get this book" textFill="WHITE">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
+                  <TextArea fx:id="summaryText" editable="false" layoutX="228.0" layoutY="120.0" prefHeight="150.0" prefWidth="572.0" text="At 32, Russell Green has it all: a stunning wife, a lovable six year-old daughter, a successful career as an advertising executive and an expansive home in Charlotte. He is living the dream, and his marriage to the bewitching Vivian is the center of that. But underneath the shiny surface of this perfect existence, fault lines are beginning to appear...and no one is more surprised than Russ when he finds every aspect of the life he took for granted turned upside down. In a matter of months, Russ finds himself without a job or wife, caring for his young daughter while struggling to adapt to a new and baffling reality. Throwing himself into the wilderness of single parenting, Russ embarks on a journey at once terrifying and rewarding-one that will test his abilities and his emotional resources beyond anything he ever imagined." wrapText="true" />
+                  <AnchorPane layoutX="679.0" layoutY="55.0" onMouseClicked="#getBookOnClick">
+                     <children>
+                        <ImageView fitHeight="42.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/button.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="22.0" layoutY="11.0" text="Get this book" textFill="WHITE">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
                   <Label layoutX="225.0" layoutY="274.0" text="Reviews">
                      <font>
                         <Font name="System Bold" size="14.0" />
@@ -102,6 +109,7 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
+                  <Label fx:id="subjectLabel" layoutX="228.0" layoutY="76.0" text="Subject Name" />
                </children>
             </AnchorPane>
          </content>
@@ -164,17 +172,20 @@
                   <Image url="@../graphics/shelf.png" />
                </image>
             </ImageView>
-            <Label fx:id="arrowLabel" layoutX="185.0" layoutY="103.0" onMouseEntered="#toggleMenuOnHover" text="&gt;" textFill="WHITE">
+            <Label fx:id="arrowLabel" layoutX="185.0" layoutY="103.0" onMouseClicked="#toggleMenuOnHover" prefHeight="27.0" prefWidth="20.0" text="&gt;" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Label>
          </children>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" onMouseMoved="#toggleMenuOnHover" prefHeight="440.0" prefWidth="239.0" visible="false">
+      <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" prefHeight="440.0" prefWidth="239.0" visible="false">
          <children>
             <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseClicked="#searchBookOnClick" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" prefHeight="36.0" prefWidth="239.0">
                <cursor>
@@ -210,5 +221,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
+      <AnchorPane fx:id="logoAnchor" layoutX="248.0" layoutY="35.0" onMouseClicked="#logoOnClick" prefHeight="85.0" prefWidth="373.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></AnchorPane>
    </children>
 </AnchorPane>

@@ -16,10 +16,16 @@ package i_book;
 import org.orm.*;
 import org.hibernate.Query;
 import org.hibernate.LockMode;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Subject {
-	public Subject() {
+public class Subject implements Serializable{ /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public Subject()  {
 	}
 	
 	public static Subject loadSubjectByORMID(int ID) throws PersistentException {

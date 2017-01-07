@@ -98,7 +98,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'Fantastic Beasts','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/61kS08bR-EL._SX311_BO1,204,203,200_.jpg',NULL,NULL,'',20,NULL),(2,'The Winter Over','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51G4yhDlZKL.jpg',NULL,NULL,NULL,18,NULL),(3,'The Fault in Our Stars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51VlKD1aucL._SX312_BO1,204,203,200_.jpg',NULL,NULL,NULL,25,NULL),(4,'The Black Key','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51faryWZWkL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(5,'Something Sweet','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51dL%2BVTqLmL._SX416_BO1,204,203,200_.jpg',NULL,NULL,NULL,12,NULL),(6,'A Dog\'s Purpose','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51q94MZ3BQL._SX330_BO1,204,203,200_.jpg',NULL,NULL,NULL,7,NULL),(7,'Small Great Things','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MzOneN8rL._SX325_BO1,204,203,200_.jpg',NULL,NULL,NULL,10,NULL),(8,'Commonwealth','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51IZNKC9j%2BL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,13,NULL),(9,'Two By Two','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51SRNKysi0L._SX332_BO1,204,203,200_.jpg',NULL,NULL,NULL,20,NULL),(10,'Star Wars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MC3VIGAnL._SX327_BO1,204,203,200_.jpg',NULL,NULL,NULL,15,NULL),(11,'1984','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/31besGg4t3L._SX311_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(12,'Harry Potter','Russian',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/518VhA3dH9L._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,17.99,NULL);
+INSERT INTO `book` VALUES (1,'Fantastic Beasts','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/61kS08bR-EL._SX311_BO1,204,203,200_.jpg',NULL,NULL,'',20,NULL),(2,'The Winter Over','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51G4yhDlZKL.jpg',NULL,NULL,NULL,18,NULL),(3,'The Fault in Our Stars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51VlKD1aucL._SX312_BO1,204,203,200_.jpg',NULL,NULL,NULL,25,NULL),(4,'The Black Key','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51faryWZWkL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(5,'Something Sweet','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51dL%2BVTqLmL._SX416_BO1,204,203,200_.jpg',NULL,NULL,NULL,12,NULL),(6,'A Dogs Purpose','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51q94MZ3BQL._SX330_BO1,204,203,200_.jpg',NULL,NULL,NULL,7,NULL),(7,'Small Great Things','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MzOneN8rL._SX325_BO1,204,203,200_.jpg',NULL,NULL,NULL,10,NULL),(8,'Commonwealth','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51IZNKC9j%2BL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,13,NULL),(9,'Two By Two','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51SRNKysi0L._SX332_BO1,204,203,200_.jpg',NULL,NULL,NULL,20,NULL),(10,'Star Wars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MC3VIGAnL._SX327_BO1,204,203,200_.jpg',NULL,NULL,NULL,15,NULL),(11,'1984','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/31besGg4t3L._SX311_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(12,'Harry Potter','Russian',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/518VhA3dH9L._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,17.99,NULL);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,6 +126,7 @@ CREATE TABLE `book_field` (
 
 LOCK TABLES `book_field` WRITE;
 /*!40000 ALTER TABLE `book_field` DISABLE KEYS */;
+INSERT INTO `book_field` VALUES (1,1),(1,15),(2,13),(2,15),(3,1),(4,1),(4,2),(5,8),(6,9),(7,1),(7,12),(7,14),(8,4),(8,10),(9,14),(10,1),(10,15),(11,1),(11,13),(12,1),(12,15);
 /*!40000 ALTER TABLE `book_field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,6 +154,7 @@ CREATE TABLE `book_subject` (
 
 LOCK TABLES `book_subject` WRITE;
 /*!40000 ALTER TABLE `book_subject` DISABLE KEYS */;
+INSERT INTO `book_subject` VALUES (1,1),(2,46),(2,55),(3,3),(4,4),(5,25),(6,32),(7,4),(7,42),(7,49),(8,10),(8,35),(9,53),(10,1),(10,56),(12,3);
 /*!40000 ALTER TABLE `book_subject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,11 +167,11 @@ DROP TABLE IF EXISTS `field`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `field` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `SubjectID` int(11) NOT NULL,
+  `SubjectID` int(11) DEFAULT NULL,
   `Field` varchar(255) DEFAULT NULL,
-  `FieldID` int(11) NOT NULL,
+  `FieldID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,6 +180,7 @@ CREATE TABLE `field` (
 
 LOCK TABLES `field` WRITE;
 /*!40000 ALTER TABLE `field` DISABLE KEYS */;
+INSERT INTO `field` VALUES (1,NULL,'Literature & Fiction',NULL),(2,NULL,'Arts & Photography',NULL),(3,NULL,'Biographies & Memoirs',NULL),(4,NULL,'Business & Money',NULL),(5,NULL,'Christian Books & Bibles',NULL),(6,NULL,'Comics & Graphic Novels',NULL),(7,NULL,'Computers & Technology',NULL),(8,NULL,'Cookbooks, Food & Wine',NULL),(9,NULL,'Crafts, Hobbies & Home',NULL),(10,NULL,'Education & Teaching',NULL),(11,NULL,'Engineering & Transportation',NULL),(12,NULL,'Health, Fitness & Dieting',NULL),(13,NULL,'History',NULL),(14,NULL,'Humor & Entertainment',NULL),(15,NULL,'Mystery, Thriller & Suspense',NULL),(16,NULL,'Politics & Social Sciences',NULL);
 /*!40000 ALTER TABLE `field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -358,7 +361,7 @@ CREATE TABLE `subject` (
   PRIMARY KEY (`ID`),
   KEY `FKSubject46610` (`FieldID`),
   CONSTRAINT `FKSubject46610` FOREIGN KEY (`FieldID`) REFERENCES `field` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,6 +370,7 @@ CREATE TABLE `subject` (
 
 LOCK TABLES `subject` WRITE;
 /*!40000 ALTER TABLE `subject` DISABLE KEYS */;
+INSERT INTO `subject` VALUES (1,'Action & Adventure',1),(2,'Ancient & Medieval Literature',1),(3,'Dramas & Plays',1),(4,'Erotica',1),(5,'Arts & Literature',2),(6,'Ethnic & National',2),(7,'Professionals & Academics',2),(8,'Accounting',4),(9,'Business Culture',4),(10,'Economics',4),(11,'Finance',4),(12,'Job Hunting & Careers',4),(13,'Action & Adventure Manga',6),(14,'Art of Comics and Manga',6),(15,'Comic Books',6),(16,'Romance Manga',6),(17,'Computer Science',7),(18,'Databases & Big Data',7),(19,'Networking & Cloud Computing',7),(20,'Programming Languages',7),(21,'Web Development & Design',7),(22,'Baking',8),(23,'Beverages & Wine',8),(24,'Italian Cooking',8),(25,'Desserts',8),(26,'Antiques & Collectibles',9),(27,'Coloring Books for Grown-Ups',9),(28,'Crafts & Hobbies',9),(29,'Gardening & Landscape Design',9),(30,'Home Improvement & Design',9),(31,'Needlecrafts & Textile Crafts',9),(32,'Pets & Animal Care',9),(33,'Sustainable Living',9),(34,'Weddings',9),(35,'Higher & Continuing Education',10),(36,'Schools & Teaching',10),(37,'Studying & Workbooks',10),(38,'Test Preparation',10),(39,'Aging',12),(40,'Alternative Medicine',12),(41,'Mental Health',12),(42,'Sexual Health',12),(43,'Teen Health',12),(44,'Africa',13),(45,'Americas',13),(46,'Arctic & Antarctica',13),(47,'Asia',13),(48,'Middle East',13),(49,'Humor',14),(50,'Coloring Books for Grown-Ups',14),(51,'Pop Culture',14),(52,'Sheet Music & Scores',14),(53,'Trivia & Fun Facts',14),(54,'Movies',14),(55,'Mystery',15),(56,'Thrillers & Suspense',15),(57,'Writing',15);
 /*!40000 ALTER TABLE `subject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -464,4 +468,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-07  4:10:37
+-- Dump completed on 2017-01-08  1:54:05

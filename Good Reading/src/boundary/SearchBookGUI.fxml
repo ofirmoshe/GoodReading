@@ -45,21 +45,18 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="900.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="446.0" layoutX="-2.0" layoutY="161.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="905.0" />
+      <TextField fx:id="titleField" layoutX="42.0" layoutY="196.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
+      <TextField fx:id="langField" layoutX="207.0" layoutY="196.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
+      <TextField fx:id="authorField" layoutX="372.0" layoutY="196.0" onAction="#searchOnEnterPressed" />
+      <Label layoutX="42.0" layoutY="175.0" text="Title" />
+      <Label layoutX="207.0" layoutY="175.0" text="Language" />
+      <Label layoutX="372.0" layoutY="175.0" text="Author" />
+      <ChoiceBox fx:id="optionBox" layoutX="542.0" layoutY="196.0" prefHeight="25.0" prefWidth="64.0" />
+      <Button layoutX="627.0" layoutY="196.0" mnemonicParsing="false" onAction="#searchOnEnterPressed" text="Search" />
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="234.0" prefHeight="367.0" prefWidth="900.0">
          <content>
-          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="566.0" prefWidth="900.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="583.0" layoutX="-3.0" layoutY="-15.0" stroke="BLACK" strokeType="INSIDE" width="916.0" />
-                  <TextField fx:id="titleField" layoutX="150.0" layoutY="65.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
-                  <TextField fx:id="langField" layoutX="150.0" layoutY="105.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
-                  <TextField fx:id="authorField" layoutX="150.0" layoutY="148.0" onAction="#searchOnEnterPressed" />
-                  <Label layoutX="101.0" layoutY="69.0" text="Title" />
-                  <Label layoutX="87.0" layoutY="109.0" text="Language" />
-                  <Label layoutX="94.0" layoutY="152.0" text="Author" />
-                  <ChoiceBox fx:id="optionBox" layoutX="150.0" layoutY="192.0" prefHeight="25.0" prefWidth="64.0" />
-                  <Button layoutX="150.0" layoutY="235.0" mnemonicParsing="false" onAction="#searchOnEnterPressed" text="Button" />
-               </children>
-            </AnchorPane>
+          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="356.0" prefWidth="894.0" />
          </content>
       </ScrollPane>
       <AnchorPane fx:id="menuAnchor" layoutX="-182.0" layoutY="244.0" prefHeight="131.0" prefWidth="191.0">
@@ -120,17 +117,20 @@
                   <Image url="@../graphics/shelf.png" />
                </image>
             </ImageView>
-            <Label fx:id="arrowLabel" layoutX="185.0" layoutY="103.0" onMouseEntered="#toggleMenuOnHover" text="&gt;" textFill="WHITE">
+            <Label fx:id="arrowLabel" layoutX="185.0" layoutY="103.0" onMouseClicked="#toggleMenuOnHover" prefHeight="27.0" prefWidth="20.0" text="&gt;" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Label>
          </children>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" onMouseMoved="#toggleMenuOnHover" prefHeight="440.0" prefWidth="239.0" visible="false">
+      <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" prefHeight="440.0" prefWidth="239.0" visible="false">
          <children>
             <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseClicked="#searchBookOnClick" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" prefHeight="36.0" prefWidth="239.0">
                <cursor>
@@ -162,6 +162,11 @@
                </font>
             </Label>
          </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane layoutX="247.0" layoutY="38.0" onMouseClicked="#logoOnClick" prefHeight="79.0" prefWidth="376.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

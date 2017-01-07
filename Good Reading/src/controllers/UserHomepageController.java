@@ -41,22 +41,9 @@ import javafx.scene.text.FontWeight;
 
 public class UserHomepageController extends SystemController {
 
-	class BookGrid {
-		public Book book;
-		public int x;
-		public int y;
-
-		public BookGrid(Book b,  int x, int y) {
-			book = b;
-			this.x = x;
-			this.y = y;
-		}
-	}
-
 	private GridPane initGrid;
 	private GridPane grid;
 	public static Book[] books = null;
-	public static BookGrid[] bookPos;
 
 	@FXML
 	private AnchorPane searchBookButton;
@@ -78,26 +65,8 @@ public class UserHomepageController extends SystemController {
 	private ScrollPane scrollPane;
 
 	public void initialize() {
-		System.out.println("init");
 		super.initialize();
 		initBookGrid();
-		/*Task<Void> sleeper = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				try {
-					Thread.sleep(15);
-				} catch (InterruptedException e) {
-				}
-				return null;
-			}
-		};
-		sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				setBookGrid();
-			}
-		});
-		new Thread(sleeper).start();*/
 	}
 	
 	public void mainAnchorOnEnter(){
@@ -120,7 +89,6 @@ public class UserHomepageController extends SystemController {
 
 	public void setBookGrid() {
 		grid = new GridPane();
-		bookPos = new BookGrid[books.length];
 		int width = 5;
 		int length = books.length / 5 + 1;
 		if (books.length < 5) {
@@ -129,16 +97,15 @@ public class UserHomepageController extends SystemController {
 		}
 		for (int y = 0; y < length; y++) {
 			for (int x = 0; x < width; x++) {
-				bookPos[y * 5 + x] = new BookGrid(books[y * 5 + x], x, y);
 				StackPane ap = new StackPane();
-				ap.setUserData(bookPos[y * 5 + x]);
+				ap.setUserData(y * 5 + x);
 				ap.setCursor(Cursor.HAND);
 				ap.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						BookGrid pos = (BookGrid) ap.getUserData();
-						System.out.println(pos.book.getTitle());
-						BookPageController.book = pos.book;
+						int i = (int) ap.getUserData();
+						System.out.println(books[i].getTitle());
+						BookPageController.book = books[i];
 						ClientUI.setScene("BookPageGUI.fxml");
 						event.consume();
 					}
@@ -150,14 +117,14 @@ public class UserHomepageController extends SystemController {
 						ca.setBrightness(0.8);
 						ImageView iv = (ImageView) ap.getChildren().get(0);
 						iv.setEffect(ca);
-						BookGrid pos = (BookGrid) ap.getUserData();
-						Label title = new Label(pos.book.getTitle());
+						int i = (int) ap.getUserData();
+						Label title = new Label(books[i].getTitle());
 						title.setTextFill(Color.BLACK);
 						title.setFont(Font.font("System", FontWeight.BOLD, 14));
 						ap.getChildren().add(title);
 						StackPane.setAlignment(title, Pos.CENTER);
 						String s = new String();
-						float f = pos.book.getPrice();
+						float f = books[i].getPrice();
 						if (f == (long) f)
 							s = String.format("%d", (long) f);
 						else

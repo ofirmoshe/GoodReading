@@ -123,7 +123,7 @@ public class LoginController extends AbstractController {
 				@Override
 				public void run() {
 					loginLabel.setText("loading");
-					loginLabel.setTranslateX(loginLabel.getTranslateX() - 6);
+					loginLabel.setTranslateX(-5);
 				}
 			});
 			ClientUI.user = (GeneralUser) a[1];
