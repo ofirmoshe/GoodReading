@@ -1,32 +1,24 @@
 package controllers;
 
 import java.io.IOException;
-import java.util.Random;
-
-import org.orm.PersistentException;
+import java.util.ArrayList;
 
 import boundary.ClientUI;
 import client.Client;
 import common.Message;
-import graphics.GraphicsImporter;
-import i_book.Author;
+import controllers.UserHomepageController.BookGrid;
 import i_book.Book;
-import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,12 +27,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class UserHomepageController extends SystemController {
-
+public class SearchBookController extends SystemController{
+	
 	class BookGrid {
 		public Book book;
 		public int x;
@@ -52,72 +43,65 @@ public class UserHomepageController extends SystemController {
 			this.y = y;
 		}
 	}
-
-	private GridPane initGrid;
-	private GridPane grid;
-	public static Book[] books = null;
+	
+	public static String[] query = new String[5];
+	public static Book[] books;
 	public static BookGrid[] bookPos;
-
+	private GridPane grid;
+	
 	@FXML
-	private AnchorPane searchBookButton;
+	private TextField titleField;
 	@FXML
-	private AnchorPane searchReviewButton;
+	private TextField langField;
 	@FXML
-	private AnchorPane membershipButton;
-	@FXML
-	private Label userLabel;
-	@FXML
-	private AnchorPane searchBookClick;
-	@FXML
-	private AnchorPane searchReviewClick;
-	@FXML
-	private AnchorPane membershipClick;
+	private TextField authorField;
+	@FXML 
+	private ChoiceBox<String> optionBox;
 	@FXML
 	private AnchorPane scrollAnchor;
-	@FXML
-	private ScrollPane scrollPane;
-
-	public void initialize() {
-		System.out.println("init");
+	
+	public void initialize(){
 		super.initialize();
-		initBookGrid();
-		/*Task<Void> sleeper = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				try {
-					Thread.sleep(15);
-				} catch (InterruptedException e) {
-				}
-				return null;
-			}
-		};
-		sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				setBookGrid();
-			}
-		});
-		new Thread(sleeper).start();*/
+		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
+		optionBox.getSelectionModel().selectFirst();
 	}
 	
-	public void mainAnchorOnEnter(){
-		setBookGrid();
-	}
-	
-	public void initBookGrid() {
-		initGrid = new GridPane();
-		for (int y = 0; y < 2; y++) {
-			for (int x = 0; x < 5; x++) {
-				Image img = new Image(GraphicsImporter.class.getResource("loading_book.jpg").toString());
-				ImageView iv = new ImageView(img);
-				iv.setFitWidth(180);
-				iv.setFitHeight(270);
-				initGrid.add(iv, x, y);
-			}
+	public void searchOnEnterPressed(){
+		query[0]=optionBox.getSelectionModel().getSelectedItem();
+		query[1]=""+UserHomepageController.books.length;
+		query[2]=titleField.getText();
+		query[3]=langField.getText();
+		query[4]=authorField.getText();
+		Message msg = new Message("search book",1,query);
+		try {
+			Client.instance.sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		scrollAnchor.getChildren().add(initGrid);
 	}
 
+	@Override
+	public void handleMessage(Message msg) {
+		switch(msg.getFunc()){
+		case 1:
+			ArrayList<Book> b = (ArrayList<Book>) msg.getMsg();
+			System.out.println("hi");
+			books = new Book[b.size()];
+			for(int i=0; i<b.size(); i++){
+				books[i]=b.get(i);
+			}
+			System.out.println("dies");
+			for(int i=0; i<b.size(); i++) System.out.println(b.get(i).getTitle());
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					setBookGrid();
+				}
+			});
+		}
+	}
+	
 	public void setBookGrid() {
 		grid = new GridPane();
 		bookPos = new BookGrid[books.length];
@@ -201,10 +185,6 @@ public class UserHomepageController extends SystemController {
 
 		scrollAnchor.setPrefHeight(280 * length);
 		scrollAnchor.getChildren().add(grid);
-	}
-
-	@Override
-	public void handleMessage(Message msg) {
 	}
 
 }

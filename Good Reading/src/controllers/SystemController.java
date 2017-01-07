@@ -17,7 +17,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 
 public abstract class SystemController extends AbstractController {
-
+	
 	@FXML
 	private AnchorPane toggleMenuAnchor;
 	@FXML
@@ -51,11 +51,11 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void goBackOffHover() {
-		goBackImage.setImage(new Image(GraphicsImporter.class.getResource("button.png").toString()));
+		goBackImage.setImage(new Image(GraphicsImporter.class.getResource("orange_button.png").toString()));
 	}
 
 	public void searchBookOnClick() {
-		System.out.println("book");
+		ClientUI.setScene("SearchBookGUI.fxml");
 	}
 
 	public void searchReviewOnClick() {

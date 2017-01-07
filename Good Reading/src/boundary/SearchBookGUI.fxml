@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookPageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchBookController">
    <children>
       <ImageView>
          <image>
@@ -50,58 +50,14 @@
           <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="566.0" prefWidth="900.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="583.0" layoutX="-3.0" layoutY="-15.0" stroke="BLACK" strokeType="INSIDE" width="916.0" />
-                  <ImageView fx:id="bookImage" fitHeight="243.0" fitWidth="164.0" layoutX="25.0" layoutY="8.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/loading_book.jpg" />
-                     </image>
-                     <effect>
-                        <Reflection fraction="0.62" topOpacity="0.13" />
-                     </effect>
-                  </ImageView>
-                  <Label fx:id="bookNameLabel" layoutX="228.0" layoutY="15.0" text="Book Name">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="228.0" layoutY="59.0" text="Field Name - Subject Name" />
-                  <Label fx:id="authorLabel" layoutX="228.0" layoutY="42.0" text="By Author Name" />
-                  <Label layoutX="228.0" layoutY="87.0" text="Summary">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextArea fx:id="summaryText" editable="false" layoutX="228.0" layoutY="111.0" prefHeight="150.0" prefWidth="572.0" text="At 32, Russell Green has it all: a stunning wife, a lovable six year-old daughter, a successful career as an advertising executive and an expansive home in Charlotte. He is living the dream, and his marriage to the bewitching Vivian is the center of that. But underneath the shiny surface of this perfect existence, fault lines are beginning to appear...and no one is more surprised than Russ when he finds every aspect of the life he took for granted turned upside down. In a matter of months, Russ finds himself without a job or wife, caring for his young daughter while struggling to adapt to a new and baffling reality. Throwing himself into the wilderness of single parenting, Russ embarks on a journey at once terrifying and rewarding-one that will test his abilities and his emotional resources beyond anything he ever imagined." wrapText="true" />
-                  <ImageView fitHeight="42.0" fitWidth="124.0" layoutX="679.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/button.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="701.0" layoutY="66.0" text="Get this book" textFill="WHITE">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="225.0" layoutY="274.0" text="Reviews">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TableView layoutX="225.0" layoutY="297.0" prefHeight="200.0" prefWidth="577.0">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                    </columns>
-                  </TableView>
-                  <Label layoutX="705.0" layoutY="30.0" text="Price: ">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="priceLabel" layoutX="743.0" layoutY="31.0" text="14$" textFill="RED">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
+                  <TextField fx:id="titleField" layoutX="150.0" layoutY="65.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
+                  <TextField fx:id="langField" layoutX="150.0" layoutY="105.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
+                  <TextField fx:id="authorField" layoutX="150.0" layoutY="148.0" onAction="#searchOnEnterPressed" />
+                  <Label layoutX="101.0" layoutY="69.0" text="Title" />
+                  <Label layoutX="87.0" layoutY="109.0" text="Language" />
+                  <Label layoutX="94.0" layoutY="152.0" text="Author" />
+                  <ChoiceBox fx:id="optionBox" layoutX="150.0" layoutY="192.0" prefHeight="25.0" prefWidth="64.0" />
+                  <Button layoutX="150.0" layoutY="235.0" mnemonicParsing="false" onAction="#searchOnEnterPressed" text="Button" />
                </children>
             </AnchorPane>
          </content>

@@ -14,6 +14,7 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import i_book.Author;
 import i_book.Book;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
@@ -128,7 +129,6 @@ public class LoginController extends AbstractController {
 			ClientUI.user = (GeneralUser) a[1];
 			if(ClientUI.user instanceof User){
 				User u = (User)ClientUI.user;
-				System.out.println(u.getStatus());
 				if(u.getStatus().equals("online")|| u.getStatus().equals("banned")){
 					System.out.println(u.getStatus());
 					return;

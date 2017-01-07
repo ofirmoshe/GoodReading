@@ -24,6 +24,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import i_book.GeneralUser;
 import i_book.User;
+import i_book.Author;
 import i_book.Book;
 
 public class ClientUI extends Application {
@@ -83,5 +84,9 @@ public class ClientUI extends Application {
 	public static void goBack() {
 		primaryStage.getScene().setRoot(pageStack.pop());
 
+	}
+	
+	public static Author[] getAuthors(Book book){
+		return book.author.toArray();
 	}
 }

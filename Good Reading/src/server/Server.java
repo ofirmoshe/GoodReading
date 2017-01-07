@@ -14,6 +14,7 @@ import org.orm.PersistentTransaction;
 import org.orm.cfg.JDBCConnectionSetting;
 
 import common.Message;
+import i_book.Author;
 import i_book.Book;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
@@ -44,13 +45,18 @@ public class Server extends AbstractServer {
 		case "system":
 			systemMessageHandler(m);
 			break;
+		case "book page":
+			bookPageMessageHandler(m);
+			break;
+		case "search book":
+			searchBookMessageHandler(m);
 		}
 	}
 
 	public void systemMessageHandler(Message msg) {
 		switch (msg.getFunc()) {
 		case 1:
-			User u = (User)msg.getMsg();
+			User u = (User) msg.getMsg();
 			u.setStatus("offline");
 			try {
 				PersistentTransaction t = session.beginTransaction();
@@ -82,7 +88,7 @@ public class Server extends AbstractServer {
 		GeneralUser login = (GeneralUser) msg.getMsg();
 		GeneralUser u = null;
 		try {
-			u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
+			u = GeneralUser.loadGeneralUserByORMID(session,login.getID());
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			a[1] = "wrong username";
@@ -125,6 +131,103 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	public void bookPageMessageHandler(Message msg) {
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				Book b = Book.getBookByORMID((int) msg.getMsg());
+				Author[] a = b.author.toArray();
+				msg.setMsg(a);
+				sendToAllClients(msg);
+			} catch (PersistentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	public void searchBookMessageHandler(Message msg) {
+		switch (msg.getFunc()) {
+		case 1:
+			String[] query = (String[]) msg.getMsg();
+			int[] counter = new int[Integer.parseInt(query[1])+1];
+			ArrayList<Book> searchResult = new ArrayList<Book>();
+			Book[] importer;
+			int queryCounter = 0;
+			// Books by title
+			if (!query[2].equals("")) {
+				queryCounter++;
+				try {
+					importer = Book.listBookByQuery("Title=" +"'"+ query[2]+"'", "ID");
+					for (int i = 0; i < importer.length; i++) {
+						counter[importer[i].getID()]++;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			// Books by language
+			if (!query[3].equals("")) {
+				queryCounter++;
+				try {
+					importer = Book.listBookByQuery("Language="+"'"+query[3]+"'", "ID");
+					System.out.println("before for");
+					for (int i = 0; i < importer.length; i++) {
+						counter[importer[i].getID()]++;
+					}
+					System.out.println("after for");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			// Books by author
+			if (!query[4].equals("")) {
+				queryCounter++;
+				try {
+					Author a = Author.loadAuthorByQuery("Name='"+query[4]+"'","ID");
+					importer = a.book.toArray();
+					for (int i = 0; i < importer.length; i++) {
+						counter[importer[i].getID()]++;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			// Check AND/OR
+			if (query[0].equals("AND")) {
+				System.out.println("if and");
+				for (int i = 1; i < counter.length; i++) {
+					if (counter[i] == queryCounter)
+						try {
+							System.out.println("before import");
+							searchResult.add(Book.getBookByORMID(i));
+							System.out.println("after import");
+						} catch (PersistentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+				}
+			} else {
+				for (int i = 1; i < counter.length; i++) {
+					if (counter[i] > 0)
+						try {
+							searchResult.add(Book.getBookByORMID(i));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				}
+			}
+			msg.setMsg(searchResult);
+			System.out.println("before send");
+			sendToAllClients(msg);
+			System.out.println("after send");
+		}
+
+	}
+
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}
@@ -155,7 +258,7 @@ public class Server extends AbstractServer {
 		} catch (Exception ex) {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
-		
+
 		try {
 			session = IBookIncPersistentManager.instance().getSession();
 		} catch (PersistentException e) {

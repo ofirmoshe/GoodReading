@@ -16,9 +16,16 @@ package i_book;
 import org.orm.*;
 import org.hibernate.Query;
 import org.hibernate.LockMode;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Author {
+public class Author implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Author() {
 	}
 	
