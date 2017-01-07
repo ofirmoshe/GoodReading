@@ -28,7 +28,7 @@ CREATE TABLE `author` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `author` (
 
 LOCK TABLES `author` WRITE;
 /*!40000 ALTER TABLE `author` DISABLE KEYS */;
+INSERT INTO `author` VALUES (1,'JK Rowling'),(2,'Matthew Iden'),(3,'John Green'),(4,'Amy Ewing'),(5,'Miriam Pascal'),(6,'W. Bruce Cameron'),(7,'Jodi Picoult'),(8,'Ann Patchett'),(9,'Nicholas Sparks'),(10,'James Luceno'),(11,'George Orwell');
 /*!40000 ALTER TABLE `author` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,6 +65,7 @@ CREATE TABLE `author_book` (
 
 LOCK TABLES `author_book` WRITE;
 /*!40000 ALTER TABLE `author_book` DISABLE KEYS */;
+INSERT INTO `author_book` VALUES (1,1),(1,12),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),(11,11);
 /*!40000 ALTER TABLE `author_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +89,7 @@ CREATE TABLE `book` (
   `Price` float NOT NULL,
   `Status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +98,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'Fantastic Beasts','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/61kS08bR-EL._SX311_BO1,204,203,200_.jpg',NULL,NULL,'',20,NULL),(2,'The Winter Over','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51G4yhDlZKL.jpg',NULL,NULL,NULL,18,NULL),(3,'The Fault in Our Stars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51VlKD1aucL._SX312_BO1,204,203,200_.jpg',NULL,NULL,NULL,25,NULL),(4,'The Black Key','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51faryWZWkL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(5,'Something Sweet','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51dL%2BVTqLmL._SX416_BO1,204,203,200_.jpg',NULL,NULL,NULL,12,NULL),(6,'A Dog\'s Purpose','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51q94MZ3BQL._SX330_BO1,204,203,200_.jpg',NULL,NULL,NULL,7,NULL),(7,'Small Great Things','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MzOneN8rL._SX325_BO1,204,203,200_.jpg',NULL,NULL,NULL,10,NULL),(8,'Commonwealth','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51IZNKC9j%2BL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,13,NULL),(9,'Two By Two','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51SRNKysi0L._SX332_BO1,204,203,200_.jpg',NULL,NULL,NULL,20,NULL),(10,'Star Wars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MC3VIGAnL._SX327_BO1,204,203,200_.jpg',NULL,NULL,NULL,15,NULL),(11,'1984','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/31besGg4t3L._SX311_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL);
+INSERT INTO `book` VALUES (1,'Fantastic Beasts','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/61kS08bR-EL._SX311_BO1,204,203,200_.jpg',NULL,NULL,'',20,NULL),(2,'The Winter Over','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51G4yhDlZKL.jpg',NULL,NULL,NULL,18,NULL),(3,'The Fault in Our Stars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51VlKD1aucL._SX312_BO1,204,203,200_.jpg',NULL,NULL,NULL,25,NULL),(4,'The Black Key','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51faryWZWkL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(5,'Something Sweet','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51dL%2BVTqLmL._SX416_BO1,204,203,200_.jpg',NULL,NULL,NULL,12,NULL),(6,'A Dog\'s Purpose','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51q94MZ3BQL._SX330_BO1,204,203,200_.jpg',NULL,NULL,NULL,7,NULL),(7,'Small Great Things','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MzOneN8rL._SX325_BO1,204,203,200_.jpg',NULL,NULL,NULL,10,NULL),(8,'Commonwealth','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51IZNKC9j%2BL._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,13,NULL),(9,'Two By Two','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51SRNKysi0L._SX332_BO1,204,203,200_.jpg',NULL,NULL,NULL,20,NULL),(10,'Star Wars','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/51MC3VIGAnL._SX327_BO1,204,203,200_.jpg',NULL,NULL,NULL,15,NULL),(11,'1984','English',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/31besGg4t3L._SX311_BO1,204,203,200_.jpg',NULL,NULL,NULL,14,NULL),(12,'Harry Potter','Russian',NULL,NULL,'https://images-na.ssl-images-amazon.com/images/I/518VhA3dH9L._SX329_BO1,204,203,200_.jpg',NULL,NULL,NULL,17.99,NULL);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,7 +210,7 @@ CREATE TABLE `generaluser` (
 
 LOCK TABLES `generaluser` WRITE;
 /*!40000 ALTER TABLE `generaluser` DISABLE KEYS */;
-INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,NULL,NULL,'User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,NULL,NULL,'User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,NULL,NULL,'User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,NULL,NULL,'User');
+INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,NULL,'offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,NULL,'offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,NULL,'offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,NULL,'offline','User');
 /*!40000 ALTER TABLE `generaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,4 +464,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-06 15:25:05
+-- Dump completed on 2017-01-07  4:10:37
