@@ -84,7 +84,8 @@ public class SearchBookController extends SystemController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		} else
+			setFieldBox();
 		scrollAnchor.setPrefHeight(200);
 		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
 		optionBox.getSelectionModel().selectFirst();
@@ -100,12 +101,13 @@ public class SearchBookController extends SystemController {
 	 */
 	public void searchOnEnterPressed() {
 		query[0] = optionBox.getSelectionModel().getSelectedItem();
-		query[1] = "" + UserHomepageController.books.length; // The amount of books in DB.														// books in DB.
+		// The amount of books in DB.
+		query[1] = "" + UserHomepageController.books.length;
 		query[2] = titleField.getText();
 		query[3] = langField.getText();
 		query[4] = authorField.getText();
 		query[5] = keywordField.getText();
-		query[6] = ""+fieldBox.getSelectionModel().getSelectedIndex();
+		query[6] = "" + fieldBox.getSelectionModel().getSelectedIndex();
 		query[7] = subjectBox.getSelectionModel().getSelectedItem();
 		Message msg = new Message("search book", 1, query);
 		try {
@@ -166,27 +168,31 @@ public class SearchBookController extends SystemController {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					ObservableList<String> olf = FXCollections.observableArrayList();
-					olf.add("None");
-					for (int i = 0; i < fields.length; i++) {
-						olf.add(fields[i].getField());
-					}
-					fieldBox.setItems(olf);
-					fieldBox.getSelectionModel().selectFirst();
-					fieldBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-						public void changed(ObservableValue ov, Number value, Number new_value){
-							ObservableList<String> ols = FXCollections.observableArrayList();
-							ols.add("None");
-							for (int i = 0; i < subjects[new_value.intValue()-1].length; i++) {
-								ols.add(subjects[new_value.intValue()-1][i].getSub());
-							}
-							subjectBox.setItems(ols);
-							subjectBox.getSelectionModel().selectFirst();
-						}
-					});
+					setFieldBox();
 				}
 			});
 		}
+	}
+
+	public void setFieldBox() {
+		ObservableList<String> olf = FXCollections.observableArrayList();
+		olf.add("None");
+		for (int i = 0; i < fields.length; i++) {
+			olf.add(fields[i].getField());
+		}
+		fieldBox.setItems(olf);
+		fieldBox.getSelectionModel().selectFirst();
+		fieldBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			public void changed(ObservableValue ov, Number value, Number new_value) {
+				ObservableList<String> ols = FXCollections.observableArrayList();
+				ols.add("None");
+				for (int i = 0; i < subjects[new_value.intValue() - 1].length; i++) {
+					ols.add(subjects[new_value.intValue() - 1][i].getSub());
+				}
+				subjectBox.setItems(ols);
+				subjectBox.getSelectionModel().selectFirst();
+			}
+		});
 	}
 
 	/**

@@ -30,10 +30,11 @@ import javafx.scene.layout.AnchorPane;
 public class BookPageController extends SystemController {
 
 	public static Book book;
-	public static Author[] authors;
-	public static Field[] fields;
-	public static Subject[] subjects;
-
+	private Author[] authors;
+	private Field[] fields;
+	private Subject[] subjects;
+	private Book currBook;
+	
 	@FXML
 	private ImageView bookImage;
 	@FXML
@@ -64,7 +65,7 @@ public class BookPageController extends SystemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mainAnchor.setUserData(book);
+		currBook = book;
 		Image img = new Image(book.getImage());
 		bookImage.setImage(img);
 		bookImage.setFitWidth(180);
@@ -84,7 +85,9 @@ public class BookPageController extends SystemController {
 	 * This method is called when "Get this book" button is clicked.
 	 */
 	public void getBookOnClick() {
-		System.out.println(((Book) mainAnchor.getUserData()).getTitle());
+		BookPaymentController.book=currBook;
+		BookPaymentController.authors = authors;
+		ClientUI.setScene("BookPaymentGUI.fxml");
 	}
 
 	/**
