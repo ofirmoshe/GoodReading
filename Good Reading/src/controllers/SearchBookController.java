@@ -35,12 +35,12 @@ import javafx.scene.text.FontWeight;
 
 public class SearchBookController extends SystemController {
 
-	public static String[] query = new String[5];
-	public static Book[] books;
+	private String[] query = new String[5];
+	private Book[] books;
 	private GridPane grid = null;
-	public static Author[][] authors;
-	public static Field[][] fields;
-	public static Subject[][] subjects;
+	private Author[][] authors;
+	private Field[][] fields;
+	private Subject[][] subjects;
 
 	@FXML
 	private TextField titleField;
