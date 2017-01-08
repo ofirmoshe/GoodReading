@@ -66,7 +66,7 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void membershipOnClick() {
-		System.out.println("membership");
+		ClientUI.setScene("MembershipsGUI.fxml");
 	}
 
 	public void toggleMenuOnHover() {
@@ -153,7 +153,7 @@ public abstract class SystemController extends AbstractController {
 	}
 	
 	public void logoOnClick(){
-		ClientUI.setScene("HomepageGUI.fxml");
+		ClientUI.setScene("UserHomepageGUI.fxml");
 	}
 
 }
