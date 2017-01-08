@@ -3,6 +3,8 @@ package controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.event.ChangeEvent;
+
 import boundary.ClientUI;
 import client.Client;
 import common.Message;
@@ -11,6 +13,8 @@ import i_book.Book;
 import i_book.Field;
 import i_book.Subject;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -41,12 +45,14 @@ import javafx.scene.text.FontWeight;
  */
 public class SearchBookController extends SystemController {
 
-	private String[] query = new String[5];
+	private String[] query = new String[8];
 	private Book[] books;
 	private GridPane grid = null;
-	private Author[][] authors;
-	private Field[][] fields;
-	private Subject[][] subjects;
+	private Author[][] book_authors;
+	private Field[][] book_fields;
+	private Subject[][] book_subjects;
+	public static Field[] fields;
+	public static Subject[][] subjects;
 
 	@FXML
 	private TextField titleField;
@@ -58,14 +64,34 @@ public class SearchBookController extends SystemController {
 	private ChoiceBox<String> optionBox;
 	@FXML
 	private AnchorPane scrollAnchor;
+	@FXML
+	private TextField keywordField;
+	@FXML
+	private ChoiceBox<String> fieldBox;
+	@FXML
+	private ChoiceBox<String> subjectBox;
 
 	/**
 	 * This method initializes the controller.
 	 */
 	public void initialize() {
 		super.initialize();
+		if (fields == null) {
+			Message msg = new Message("search book", 2);
+			try {
+				Client.instance.sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		scrollAnchor.setPrefHeight(200);
 		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
 		optionBox.getSelectionModel().selectFirst();
+		fieldBox.setItems(FXCollections.observableArrayList("None"));
+		fieldBox.getSelectionModel().selectFirst();
+		subjectBox.setItems(FXCollections.observableArrayList("None"));
+		subjectBox.getSelectionModel().selectFirst();
 	}
 
 	/**
@@ -74,10 +100,13 @@ public class SearchBookController extends SystemController {
 	 */
 	public void searchOnEnterPressed() {
 		query[0] = optionBox.getSelectionModel().getSelectedItem();
-		query[1] = "" + UserHomepageController.books.length; //The amount of books in DB.
+		query[1] = "" + UserHomepageController.books.length; // The amount of books in DB.														// books in DB.
 		query[2] = titleField.getText();
 		query[3] = langField.getText();
 		query[4] = authorField.getText();
+		query[5] = keywordField.getText();
+		query[6] = ""+fieldBox.getSelectionModel().getSelectedIndex();
+		query[7] = subjectBox.getSelectionModel().getSelectedItem();
 		Message msg = new Message("search book", 1, query);
 		try {
 			Client.instance.sendToServer(msg);
@@ -92,11 +121,11 @@ public class SearchBookController extends SystemController {
 	 * 
 	 * @param msg
 	 *            case 1: The message is an object array. index 0 - Book array.
-	 *            		index 1 - Author matrix, each index is an array of authors of
-	 *            				  the matching book in the book array. index 2 - Fields matrix.
-	 *         		    index 3 - Subject matrix. If the book array is empty, no
-	 *         				      result message is displayed, else the book grid is set
-	 *                            according to this data.
+	 *            index 1 - Author matrix, each index is an array of
+	 *            book_authors of the matching book in the book array. index 2 -
+	 *            book_fields matrix. index 3 - Subject matrix. If the book
+	 *            array is empty, no result message is displayed, else the book
+	 *            grid is set according to this data.
 	 */
 	@Override
 	public void handleMessage(Message msg) {
@@ -104,9 +133,9 @@ public class SearchBookController extends SystemController {
 		case 1:
 			Object[] o = (Object[]) msg.getMsg();
 			books = (Book[]) o[0];
-			authors = (Author[][]) o[1];
-			fields = (Field[][]) o[2];
-			subjects = (Subject[][]) o[3];
+			book_authors = (Author[][]) o[1];
+			book_fields = (Field[][]) o[2];
+			book_subjects = (Subject[][]) o[3];
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -122,9 +151,39 @@ public class SearchBookController extends SystemController {
 						sp.getChildren().add(noRes);
 						StackPane.setAlignment(noRes, Pos.CENTER);
 						scrollAnchor.getChildren().add(sp);
+						scrollAnchor.setPrefHeight(200);
 						return;
 					}
 					setBookGrid();
+				}
+			});
+			break;
+
+		case 2:
+			Object[] ob = (Object[]) msg.getMsg();
+			fields = (Field[]) ob[0];
+			subjects = (Subject[][]) ob[1];
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					ObservableList<String> olf = FXCollections.observableArrayList();
+					olf.add("None");
+					for (int i = 0; i < fields.length; i++) {
+						olf.add(fields[i].getField());
+					}
+					fieldBox.setItems(olf);
+					fieldBox.getSelectionModel().selectFirst();
+					fieldBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+						public void changed(ObservableValue ov, Number value, Number new_value){
+							ObservableList<String> ols = FXCollections.observableArrayList();
+							ols.add("None");
+							for (int i = 0; i < subjects[new_value.intValue()-1].length; i++) {
+								ols.add(subjects[new_value.intValue()-1][i].getSub());
+							}
+							subjectBox.setItems(ols);
+							subjectBox.getSelectionModel().selectFirst();
+						}
+					});
 				}
 			});
 		}
@@ -175,34 +234,34 @@ public class SearchBookController extends SystemController {
 			ap.getChildren().add(title);
 			title.setLayoutX(120);
 			title.setLayoutY(10);
-			String s = "by " + authors[y][0].getName();
-			for (int i = 1; i < authors[y].length; i++)
-				s = s + ", " + authors[y][i].getName();
-			Label authors = new Label(s);
-			authors.setTextFill(Color.BLACK);
-			authors.setFont(Font.font("System", 13));
-			ap.getChildren().add(authors);
-			authors.setLayoutX(120);
-			authors.setLayoutY(33);
-			s = fields[y][0].getField();
-			for (int i = 1; i < fields[y].length; i++)
-				s = s + ", " + fields[y][i].getField();
-			Label fields = new Label(s);
-			fields.setTextFill(Color.GREY);
-			fields.setFont(Font.font("System", 12));
-			ap.getChildren().add(fields);
-			fields.setLayoutX(120);
-			fields.setLayoutY(55);
-			if (subjects[y].length != 0) {
-				s = subjects[y][0].getSub();
-				for (int i = 1; i < subjects[y].length; i++)
-					s = s + ", " + subjects[y][i].getSub();
-				Label subjects = new Label(s);
-				subjects.setTextFill(Color.GREY);
-				subjects.setFont(Font.font("System", 12));
-				ap.getChildren().add(subjects);
-				subjects.setLayoutX(120);
-				subjects.setLayoutY(72);
+			String s = "by " + book_authors[y][0].getName();
+			for (int i = 1; i < book_authors[y].length; i++)
+				s = s + ", " + book_authors[y][i].getName();
+			Label book_authors = new Label(s);
+			book_authors.setTextFill(Color.BLACK);
+			book_authors.setFont(Font.font("System", 13));
+			ap.getChildren().add(book_authors);
+			book_authors.setLayoutX(120);
+			book_authors.setLayoutY(33);
+			s = book_fields[y][0].getField();
+			for (int i = 1; i < book_fields[y].length; i++)
+				s = s + ", " + book_fields[y][i].getField();
+			Label book_fields = new Label(s);
+			book_fields.setTextFill(Color.GREY);
+			book_fields.setFont(Font.font("System", 12));
+			ap.getChildren().add(book_fields);
+			book_fields.setLayoutX(120);
+			book_fields.setLayoutY(55);
+			if (book_subjects[y].length != 0) {
+				s = book_subjects[y][0].getSub();
+				for (int i = 1; i < book_subjects[y].length; i++)
+					s = s + ", " + book_subjects[y][i].getSub();
+				Label book_subjects = new Label(s);
+				book_subjects.setTextFill(Color.GREY);
+				book_subjects.setFont(Font.font("System", 12));
+				ap.getChildren().add(book_subjects);
+				book_subjects.setLayoutX(120);
+				book_subjects.setLayoutY(72);
 			}
 			grid.add(ap, 0, y);
 		}

@@ -19,6 +19,7 @@ import i_book.Book;
 import i_book.Field;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
+import i_book.Keyword;
 import i_book.Subject;
 import i_book.User;
 import ocsf.server.*;
@@ -189,10 +190,56 @@ public class Server extends AbstractServer {
 					e.printStackTrace();
 				}
 			}
+			if(!query[5].equals("")){
+				queryCounter++;
+				String[] s =query[5].split(" ");
+				for(int i=0; i<s.length; i++){
+					try {
+						Keyword k = Keyword.loadKeywordByQuery("Word='"+s[i]+"'", "ID");
+						if(k!=null){
+							importer = k.book.toArray();
+							for(int j=0; j<importer.length; j++){
+								counter[importer[j].getID()]++;
+							}
+						}
+					} catch (PersistentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			if(!query[6].equals("0")){
+				queryCounter++;
+				try {
+					Field f = Field.loadFieldByORMID(Integer.parseInt(query[6]));
+					if (f != null) {
+						importer = f.book.toArray();
+						for (int i = 0; i < importer.length; i++) {
+							counter[importer[i].getID()]++;
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if(!query[7].equals("None")){
+				queryCounter++;
+				try {
+					Subject s = Subject.loadSubjectByQuery("Sub='" + query[7] + "'", "ID");
+					if (s != null) {
+						importer = s.book.toArray();
+						for (int i = 0; i < importer.length; i++) {
+							counter[importer[i].getID()]++;
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			// Check AND/OR
 			if (query[0].equals("AND")) {
 				for (int i = 1; i < counter.length; i++) {
-					if (counter[i] == queryCounter)
+					if (counter[i] >= queryCounter)
 						try {
 							searchResult.add(Book.getBookByORMID(i));
 						} catch (PersistentException e) {
@@ -230,8 +277,26 @@ public class Server extends AbstractServer {
 			o[3] = s;
 			msg.setMsg(o);
 			sendToAllClients(msg);
+			break;
+			
+		case 2:
+			try {
+				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
+				Subject[][] subjects = new Subject[fields.length][];
+				for(int i=0; i<fields.length; i++){
+					subjects[i] = fields[i].subject.toArray();
+				}
+				Object[] ob = new Object[2];
+				ob[0] = fields;
+				ob[1] = subjects;
+				msg.setMsg(ob);
+				sendToAllClients(msg);
+			} catch (PersistentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
-
 	}
 
 	protected void serverStarted() {
