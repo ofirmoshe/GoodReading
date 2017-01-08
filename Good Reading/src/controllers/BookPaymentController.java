@@ -18,7 +18,7 @@ public class BookPaymentController extends SystemController {
 	public static Author[] authors;
 	
 	@FXML
-	private ImageView bookImage;
+	 ImageView bookImage;
 	@FXML
 	private Label bookNameLabel;
 	@FXML
