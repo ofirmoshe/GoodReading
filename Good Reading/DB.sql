@@ -167,9 +167,7 @@ DROP TABLE IF EXISTS `field`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `field` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `SubjectID` int(11) DEFAULT NULL,
   `Field` varchar(255) DEFAULT NULL,
-  `FieldID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -180,7 +178,7 @@ CREATE TABLE `field` (
 
 LOCK TABLES `field` WRITE;
 /*!40000 ALTER TABLE `field` DISABLE KEYS */;
-INSERT INTO `field` VALUES (1,NULL,'Literature & Fiction',NULL),(2,NULL,'Arts & Photography',NULL),(3,NULL,'Biographies & Memoirs',NULL),(4,NULL,'Business & Money',NULL),(5,NULL,'Christian Books & Bibles',NULL),(6,NULL,'Comics & Graphic Novels',NULL),(7,NULL,'Computers & Technology',NULL),(8,NULL,'Cookbooks, Food & Wine',NULL),(9,NULL,'Crafts, Hobbies & Home',NULL),(10,NULL,'Education & Teaching',NULL),(11,NULL,'Engineering & Transportation',NULL),(12,NULL,'Health, Fitness & Dieting',NULL),(13,NULL,'History',NULL),(14,NULL,'Humor & Entertainment',NULL),(15,NULL,'Mystery, Thriller & Suspense',NULL),(16,NULL,'Politics & Social Sciences',NULL);
+INSERT INTO `field` VALUES (1,'Literature & Fiction'),(2,'Arts & Photography'),(3,'Biographies & Memoirs'),(4,'Business & Money'),(5,'Christian Books & Bibles'),(6,'Comics & Graphic Novels'),(7,'Computers & Technology'),(8,'Cookbooks, Food & Wine'),(9,'Crafts, Hobbies & Home'),(10,'Education & Teaching'),(11,'Engineering & Transportation'),(12,'Health, Fitness & Dieting'),(13,'History'),(14,'Humor & Entertainment'),(15,'Mystery, Thriller & Suspense'),(16,'Politics & Social Sciences');
 /*!40000 ALTER TABLE `field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -468,4 +466,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-08  1:54:05
+-- Dump completed on 2017-01-08 14:49:03
