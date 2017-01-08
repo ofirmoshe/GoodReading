@@ -19,6 +19,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Book page controller is the controller of all the book pages. The controller
+ * match the page to display the data of the book to be shown (according to a
+ * static book variable).
+ * 
+ * @author guyzi
+ *
+ */
 public class BookPageController extends SystemController {
 
 	public static Book book;
@@ -43,6 +51,10 @@ public class BookPageController extends SystemController {
 	@FXML
 	AnchorPane mainAnchor;
 
+	/**
+	 * This method initializes the controller, sends a message to server to get
+	 * the authors, fields and subjects.
+	 */
 	public void initialize() {
 		super.initialize();
 		Message msg = new Message("book page", 1, book.getID());
@@ -68,10 +80,21 @@ public class BookPageController extends SystemController {
 
 	}
 
+	/**
+	 * This method is called when "Get this book" button is clicked.
+	 */
 	public void getBookOnClick() {
 		System.out.println(((Book) mainAnchor.getUserData()).getTitle());
 	}
 
+	/**
+	 * This method implements AbstractController's method.
+	 * It handles message from server, and displays the book's data. 
+	 * @param msg	case 1: the message is an object array. 
+	 * 						index 0- contains an Author array
+	 * 						index 1- contains a Field array 
+	 *						index 2- contains a Subject array 
+	 */
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {
@@ -96,8 +119,8 @@ public class BookPageController extends SystemController {
 						for (int i = 1; i < subjects.length; i++)
 							s = s + ", " + subjects[i].getSub();
 						subjectLabel.setText(s);
-					}
-					else subjectLabel.setText("");
+					} else
+						subjectLabel.setText("");
 				}
 
 			});

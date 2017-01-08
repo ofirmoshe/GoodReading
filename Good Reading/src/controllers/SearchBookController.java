@@ -33,6 +33,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * Search book controller is the controller of the search book page.
+ * 
+ * @author guyzi
+ *
+ */
 public class SearchBookController extends SystemController {
 
 	private String[] query = new String[5];
@@ -53,15 +59,22 @@ public class SearchBookController extends SystemController {
 	@FXML
 	private AnchorPane scrollAnchor;
 
+	/**
+	 * This method initializes the controller.
+	 */
 	public void initialize() {
 		super.initialize();
 		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
 		optionBox.getSelectionModel().selectFirst();
 	}
 
+	/**
+	 * This method is called when the search button is clicked, or when Enter
+	 * key is pressed. Sends the input query to the server.
+	 */
 	public void searchOnEnterPressed() {
 		query[0] = optionBox.getSelectionModel().getSelectedItem();
-		query[1] = "" + UserHomepageController.books.length;
+		query[1] = "" + UserHomepageController.books.length; //The amount of books in DB.
 		query[2] = titleField.getText();
 		query[3] = langField.getText();
 		query[4] = authorField.getText();
@@ -74,6 +87,17 @@ public class SearchBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method implements the abstract controller method.
+	 * 
+	 * @param msg
+	 *            case 1: The message is an object array. index 0 - Book array.
+	 *            		index 1 - Author matrix, each index is an array of authors of
+	 *            				  the matching book in the book array. index 2 - Fields matrix.
+	 *         		    index 3 - Subject matrix. If the book array is empty, no
+	 *         				      result message is displayed, else the book grid is set
+	 *                            according to this data.
+	 */
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {
@@ -106,6 +130,10 @@ public class SearchBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method sets the book grid with books, and event handlers for each
+	 * book. The book grid is added to the scroll anchor.
+	 */
 	public void setBookGrid() {
 		grid = new GridPane();
 		for (int y = 0; y < books.length; y++) {
@@ -143,7 +171,7 @@ public class SearchBookController extends SystemController {
 			iv.setLayoutY(10);
 			Label title = new Label(books[y].getTitle());
 			title.setTextFill(Color.BLACK);
-			title.setFont(Font.font("System",FontWeight.BOLD, 18));
+			title.setFont(Font.font("System", FontWeight.BOLD, 18));
 			ap.getChildren().add(title);
 			title.setLayoutX(120);
 			title.setLayoutY(10);
@@ -178,7 +206,6 @@ public class SearchBookController extends SystemController {
 			}
 			grid.add(ap, 0, y);
 		}
-
 		scrollAnchor.setPrefHeight(171 * books.length);
 		scrollAnchor.getChildren().add(grid);
 	}

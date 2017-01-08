@@ -58,73 +58,60 @@ public class Server extends AbstractServer {
 	public void systemMessageHandler(Message msg) {
 		switch (msg.getFunc()) {
 		case 1:
-			/*User u = (User) msg.getMsg();
-			u.setStatus("offline");
-			try {
-				PersistentTransaction t = session.beginTransaction();
-				session.update(u);
-				t.commit();
-				t = session.beginTransaction();
-				session.evict(u);
-				t.commit();
-				session = IBookIncPersistentManager.instance().getSession();
-			} catch (PersistentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			break;*/
+			/*
+			 * User u = (User) msg.getMsg(); u.setStatus("offline"); try {
+			 * PersistentTransaction t = session.beginTransaction();
+			 * session.update(u); t.commit(); t = session.beginTransaction();
+			 * session.evict(u); t.commit(); session =
+			 * IBookIncPersistentManager.instance().getSession(); } catch
+			 * (PersistentException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); } break;
+			 */
 		}
 	}
 
 	public void loginMessageHandler(Message msg) {
-		Object[] a = new Object[2];
-		if (msg.getFunc() == 1) {
+		switch (msg.getFunc()) {
+		case 1:
+			Object[] a = new Object[2];
 			try {
 				Book[] books = Book.listBookByQuery("ID>0", "ID");
 				a[0] = books;
 			} catch (PersistentException e1) {
 				System.out.println("Can't load book list.");
 			}
-		}
-		msg.setFunc(1);
-		GeneralUser login = (GeneralUser) msg.getMsg();
-		GeneralUser u = null;
-		try {
-			u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
-		} catch (PersistentException e) {
-			// TODO Auto-generated catch block
-			a[1] = "wrong username";
+			msg.setFunc(1);
+			GeneralUser login = (GeneralUser) msg.getMsg();
+			GeneralUser u = null;
+			try {
+				u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
+			} catch (PersistentException e) {
+				// TODO Auto-generated catch block
+				a[1] = "wrong username";
+				msg.setMsg(a);
+				sendToAllClients(msg);
+				return;
+			}
+			if (u.getPassword().equals(login.getPassword())) {
+				a[1] = u;
+				msg.setMsg(a);
+				sendToAllClients(msg);
+				/*
+				 * if (u instanceof User) { User user = (User) u; if
+				 * (user.getStatus().equals("offline")) {
+				 * user.setStatus("online"); try { PersistentTransaction t =
+				 * session.beginTransaction(); session.update(user); t.commit();
+				 * t = session.beginTransaction(); session.evict(user);
+				 * t.commit(); } catch (PersistentException e) { // TODO
+				 * Auto-generated catch block e.printStackTrace(); } } }
+				 */
+				return;
+			}
+			a[1] = "wrong password";
 			msg.setMsg(a);
 			sendToAllClients(msg);
-			return;
+			break;
 		}
-		if (u.getPassword().equals(login.getPassword())) {
-			a[1] = u;
-			msg.setMsg(a);
-			sendToAllClients(msg);
-			/*if (u instanceof User) {
-				User user = (User) u;
-				if (user.getStatus().equals("offline")) {
-					user.setStatus("online");
-					try {
-						PersistentTransaction t = session.beginTransaction();
-						session.update(user);
-						t.commit();
-						t = session.beginTransaction();
-						session.evict(user);
-						t.commit();
-					} catch (PersistentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}*/
-			return;
-		}
-		a[1] = "wrong password";
-		msg.setMsg(a);
-		sendToAllClients(msg);
-
 	}
 
 	public void userHomepageMessageHandler(Message msg) {
@@ -139,12 +126,12 @@ public class Server extends AbstractServer {
 			try {
 				Book b = Book.getBookByORMID((int) msg.getMsg());
 				Author[] a = b.author.toArray();
-				Field[] f=b.field.toArray();
-				Subject[] s=b.subject.toArray();
-				Object[] o=new Object[3];
-				o[0]=a;
-				o[1]=f;
-				o[2]=s;
+				Field[] f = b.field.toArray();
+				Subject[] s = b.subject.toArray();
+				Object[] o = new Object[3];
+				o[0] = a;
+				o[1] = f;
+				o[2] = s;
 				msg.setMsg(o);
 				sendToAllClients(msg);
 			} catch (PersistentException e) {
@@ -212,7 +199,6 @@ public class Server extends AbstractServer {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
 				}
 			} else {
 				for (int i = 1; i < counter.length; i++) {
@@ -225,23 +211,23 @@ public class Server extends AbstractServer {
 						}
 				}
 			}
-			Book[] 	b = new Book[searchResult.size()];
+			Book[] b = new Book[searchResult.size()];
 			for (int i = 0; i < searchResult.size(); i++) {
 				b[i] = searchResult.get(i);
 			}
 			Author[][] a = new Author[b.length][];
 			Field[][] f = new Field[b.length][];
 			Subject[][] s = new Subject[b.length][];
-			for(int i=0; i<b.length;i++){
+			for (int i = 0; i < b.length; i++) {
 				a[i] = b[i].author.toArray();
-				f[i]=b[i].field.toArray();
-				s[i]=b[i].subject.toArray();
+				f[i] = b[i].field.toArray();
+				s[i] = b[i].subject.toArray();
 			}
 			Object[] o = new Object[4];
-			o[0]=b;
-			o[1]=a;
-			o[2]=f;
-			o[3]=s;
+			o[0] = b;
+			o[1] = a;
+			o[2] = f;
+			o[3] = s;
 			msg.setMsg(o);
 			sendToAllClients(msg);
 		}

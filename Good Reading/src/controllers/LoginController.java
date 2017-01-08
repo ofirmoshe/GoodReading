@@ -32,6 +32,13 @@ import java.io.Serializable;
 
 import org.hibernate.*;
 
+/**
+ * Login controller is the controller of the first page the user sees. In this
+ * page the user (Client and/or Manager) is logging into the system.
+ * 
+ * @author guyzi
+ *
+ */
 public class LoginController extends AbstractController {
 
 	final public static int DEFAULT_PORT = 5555;
@@ -53,6 +60,9 @@ public class LoginController extends AbstractController {
 	@FXML
 	public Label loginLabel;
 
+	/**
+	 * This method initializes the controller.
+	 */
 	public void initialize() {
 		super.initialize();
 	}
@@ -65,6 +75,11 @@ public class LoginController extends AbstractController {
 		loginButton.setImage(new Image(GraphicsImporter.class.getResource("button.png").toString()));
 	}
 
+	/** This method is called when the login button has been clicked.
+	 * It creates a new client and transfers the input login data to the server to check validation.
+	 * If the client can't connect it displays a red x sign besides the host field.
+	 * @throws Exception
+	 */
 	public void loginOnClick() throws Exception {
 		wrongHost.setVisible(false);
 		wrongUser.setVisible(false);
@@ -81,11 +96,8 @@ public class LoginController extends AbstractController {
 			client = new Client(host, DEFAULT_PORT);
 			u.setID(id);
 			u.setPassword(pass);
-			Message msg=null;
-			if (UserHomepageController.books == null) 
-				msg = new Message("login", 1, u);
-			else 
-				msg = new Message("login", 2, u);
+			Message msg = null;
+			msg = new Message("login", 1, u);
 			Client.instance.sendToServer(msg);
 		} catch (Exception e) {
 			wrongHost.setVisible(true);
@@ -93,14 +105,20 @@ public class LoginController extends AbstractController {
 
 	}
 
+	/**
+	 * This method overrides the method of abstract controller.
+	 * @param msg	case 1: this message is an object array where the first index is a book array
+	 * contains all the books in DB, and the second index is a message about the user that tries to connect.
+	 * if the username and the password are correct the message will be an instance of this user. 
+	 * if the user is not banned or online already it displays the matching homepage.
+	 */
 	@Override
 	public void handleMessage(Message msg) {
 		// TODO Auto-generated method stub
-		Object[] a = (Object[]) msg.getMsg();
-		if(UserHomepageController.books==null)
-			UserHomepageController.books = (Book[]) a[0];
 		switch (msg.getFunc()) {
 		case 1:
+			Object[] a = (Object[]) msg.getMsg();
+			UserHomepageController.books = (Book[]) a[0];
 			if (a[1].equals("wrong username")) {
 				Platform.runLater(new Runnable() {
 					@Override
@@ -127,9 +145,9 @@ public class LoginController extends AbstractController {
 				}
 			});
 			ClientUI.user = (GeneralUser) a[1];
-			if(ClientUI.user instanceof User){
-				User u = (User)ClientUI.user;
-				if(u.getStatus().equals("online")|| u.getStatus().equals("banned")){
+			if (ClientUI.user instanceof User) {
+				User u = (User) ClientUI.user;
+				if (u.getStatus().equals("online") || u.getStatus().equals("banned")) {
 					System.out.println(u.getStatus());
 					return;
 				}

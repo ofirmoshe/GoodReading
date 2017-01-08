@@ -39,6 +39,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/** 
+ * User Homepage Controller is the controller of the user homepage.
+ * @author guyzi
+ *
+ */
 public class UserHomepageController extends SystemController {
 
 	private GridPane initGrid;
@@ -63,16 +68,26 @@ public class UserHomepageController extends SystemController {
 	private AnchorPane scrollAnchor;
 	@FXML
 	private ScrollPane scrollPane;
-
+	
+	/**
+	 * This method initializes the controller and the book grid to the initial grid (loading).
+	 */
 	public void initialize() {
 		super.initialize();
 		initBookGrid();
 	}
 	
+	/**
+	 * This method is called when the mouse enter the main anchor of the page, 
+	 * and sets the book grid.
+	 */
 	public void mainAnchorOnEnter(){
 		setBookGrid();
 	}
 	
+	/**
+	 * This method initializes the book grid and adds it to the scroll anchor.
+	 */
 	public void initBookGrid() {
 		initGrid = new GridPane();
 		for (int y = 0; y < 2; y++) {
@@ -87,6 +102,9 @@ public class UserHomepageController extends SystemController {
 		scrollAnchor.getChildren().add(initGrid);
 	}
 
+	/**
+	 * This method fills the book grid with books from DB, and sets event handlers for each one.
+	 */
 	public void setBookGrid() {
 		grid = new GridPane();
 		int width = 5;
