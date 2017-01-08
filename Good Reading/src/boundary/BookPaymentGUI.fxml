@@ -69,14 +69,14 @@
                      </font>
                   </Label>
                   <Label fx:id="authorLabel" layoutX="185.0" layoutY="102.0" text="By Author Name" />
-                  <Label layoutX="185.0" layoutY="119.0" text="Price: ">
+                  <Label layoutX="185.0" layoutY="122.0" text="Price: ">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="priceLabel" layoutX="229.0" layoutY="120.0" text="14$" textFill="RED">
+                  <Label fx:id="priceLabel" layoutX="227.0" layoutY="118.0" text="14$" textFill="RED">
                      <font>
-                        <Font size="13.0" />
+                        <Font size="16.0" />
                      </font>
                   </Label>
                   <TextField fx:id="paymentInfoField" layoutX="229.0" layoutY="188.0" prefHeight="36.0" prefWidth="199.0">
@@ -120,7 +120,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </AnchorPane>
-                  <Line endY="400.0" layoutX="490.0" layoutY="20.0" />
+                  <Line endY="400.0" layoutX="480.0" layoutY="20.0" opacity="0.44" />
                   <Label layoutX="514.0" layoutY="21.0" text="You may also like...">
                      <font>
                         <Font name="System Bold" size="20.0" />
@@ -142,6 +142,9 @@
                            </font>
                         </Label>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
                </children>
             </AnchorPane>
@@ -241,5 +244,22 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></AnchorPane>
+      <AnchorPane layoutX="795.0" layoutY="25.0" onMouseClicked="#goBackOnClick" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover">
+         <children>
+            <ImageView fx:id="goBackImage1" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/orange_button.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="16.0" layoutY="4.0" text="go back" textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
    </children>
 </AnchorPane>

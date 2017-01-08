@@ -78,6 +78,7 @@ public class BookPageController extends SystemController {
 		else
 			s = String.format("%s", f);
 		priceLabel.setText(s + "$");
+		summaryText.setText(book.getSummary());
 
 	}
 

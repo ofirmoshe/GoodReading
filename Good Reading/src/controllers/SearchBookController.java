@@ -23,7 +23,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -186,11 +188,13 @@ public class SearchBookController extends SystemController {
 			public void changed(ObservableValue ov, Number value, Number new_value) {
 				ObservableList<String> ols = FXCollections.observableArrayList();
 				ols.add("None");
-				for (int i = 0; i < subjects[new_value.intValue() - 1].length; i++) {
-					ols.add(subjects[new_value.intValue() - 1][i].getSub());
+				if (new_value.intValue() > 0) {
+					for (int i = 0; i < subjects[new_value.intValue() - 1].length; i++) {
+						ols.add(subjects[new_value.intValue() - 1][i].getSub());
+					}
+					subjectBox.setItems(ols);
+					subjectBox.getSelectionModel().selectFirst();
 				}
-				subjectBox.setItems(ols);
-				subjectBox.getSelectionModel().selectFirst();
 			}
 		});
 	}
@@ -269,6 +273,12 @@ public class SearchBookController extends SystemController {
 				book_subjects.setLayoutX(120);
 				book_subjects.setLayoutY(72);
 			}
+			Label sum = new Label(books[y].getSummary());;
+			sum.setPrefSize(600, 40);
+			sum.setLayoutX(120);
+			sum.setLayoutY(90);
+			sum.setWrapText(true);
+			ap.getChildren().add(sum);
 			grid.add(ap, 0, y);
 		}
 		scrollAnchor.setPrefHeight(171 * books.length);

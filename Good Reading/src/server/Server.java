@@ -191,8 +191,8 @@ public class Server extends AbstractServer {
 				}
 			}
 			if(!query[5].equals("")){
-				queryCounter++;
 				String[] s =query[5].split(" ");
+				queryCounter+=s.length;
 				for(int i=0; i<s.length; i++){
 					try {
 						Keyword k = Keyword.loadKeywordByQuery("Word='"+s[i]+"'", "ID");
