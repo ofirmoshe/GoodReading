@@ -20,6 +20,11 @@ import java.util.List;
 
 import java.io.Serializable;
 public class User_Book implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public User_Book() {
 	}
 	

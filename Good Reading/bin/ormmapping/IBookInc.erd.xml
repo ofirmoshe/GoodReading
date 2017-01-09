@@ -38,8 +38,8 @@
     <Column name="Summary">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
-      <Type>27</Type>
-      <Length>255</Length>
+      <Type>36</Type>
+      <Length>0</Length>
       <Nullable>true</Nullable>
       <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
@@ -47,6 +47,17 @@
       <UserTypes/>
     </Column>
     <Column name="Table_of_contents">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>36</Type>
+      <Length>0</Length>
+      <Nullable>true</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="Image">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
       <Type>27</Type>
@@ -149,34 +160,12 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="SubjectID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>false</ForeignKey>
-      <Type>9</Type>
-      <Length>11</Length>
-      <Nullable>false</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
     <Column name="Field">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
       <Type>27</Type>
       <Length>255</Length>
       <Nullable>true</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
-    <Column name="FieldID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>false</ForeignKey>
-      <Type>9</Type>
-      <Length>11</Length>
-      <Nullable>false</Nullable>
       <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
@@ -364,14 +353,25 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
+    <Column name="Days">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
   </Entity>
   <Entity name="User_Membership" PKClustered="0">
     <Column name="S_date">
-      <PrimaryKey>true</PrimaryKey>
+      <PrimaryKey>false</PrimaryKey>
       <ForeignKey>false</ForeignKey>
       <Type>17</Type>
       <Length>0</Length>
-      <Nullable>false</Nullable>
+      <Nullable>true</Nullable>
       <IDGenerator>assigned</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
@@ -431,7 +431,7 @@
       <Type>17</Type>
       <Length>0</Length>
       <Nullable>true</Nullable>
-      <IDGenerator>assigned</IDGenerator>
+      <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
       <UserTypes/>
@@ -484,17 +484,6 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="Sub">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>false</ForeignKey>
-      <Type>27</Type>
-      <Length>255</Length>
-      <Nullable>true</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
     <Column name="FieldID">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
@@ -502,6 +491,17 @@
       <Type>9</Type>
       <Length>11</Length>
       <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="Sub">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>false</ForeignKey>
+      <Type>27</Type>
+      <Length>255</Length>
+      <Nullable>true</Nullable>
       <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
@@ -542,24 +542,24 @@
       <Index>false</Index>
       <UserTypes/>
     </Column>
-    <Column name="User_BookBookID">
-      <PrimaryKey>false</PrimaryKey>
-      <ForeignKey>true</ForeignKey>
-      <ReferencedColumn>i-book.User_Book.BookID</ReferencedColumn>
-      <Type>9</Type>
-      <Length>11</Length>
-      <Nullable>false</Nullable>
-      <IDGenerator>native</IDGenerator>
-      <Unique>false</Unique>
-      <Index>false</Index>
-      <UserTypes/>
-    </Column>
     <Column name="User_BookGeneralUserID">
       <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
       <ReferencedColumn>i-book.User_Book.GeneralUserID</ReferencedColumn>
       <Type>27</Type>
       <Length>255</Length>
+      <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="User_BookBookID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>i-book.User_Book.BookID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
       <Nullable>false</Nullable>
       <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
@@ -574,6 +574,30 @@
       <Type>9</Type>
       <Length>11</Length>
       <Nullable>false</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="MembershipID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>i-book.Membership.ID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>true</Nullable>
+      <IDGenerator>native</IDGenerator>
+      <Unique>false</Unique>
+      <Index>false</Index>
+      <UserTypes/>
+    </Column>
+    <Column name="BookID">
+      <PrimaryKey>false</PrimaryKey>
+      <ForeignKey>true</ForeignKey>
+      <ReferencedColumn>i-book.Book.ID</ReferencedColumn>
+      <Type>9</Type>
+      <Length>11</Length>
+      <Nullable>true</Nullable>
       <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
@@ -638,13 +662,13 @@
       <UserTypes/>
     </Column>
     <Column name="BookID">
-      <PrimaryKey>true</PrimaryKey>
+      <PrimaryKey>false</PrimaryKey>
       <ForeignKey>true</ForeignKey>
       <ReferencedColumn>i-book.Book.ID</ReferencedColumn>
       <Type>9</Type>
       <Length>11</Length>
       <Nullable>false</Nullable>
-      <IDGenerator>assigned</IDGenerator>
+      <IDGenerator>native</IDGenerator>
       <Unique>false</Unique>
       <Index>false</Index>
       <UserTypes/>
@@ -922,6 +946,26 @@
     <ReferencedTable>Field</ReferencedTable>
     <Columns>
       <Column>FieldID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>ID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKPaymentReq551000">
+    <ReferenceTable>PaymentRequest</ReferenceTable>
+    <ReferencedTable>Book</ReferencedTable>
+    <Columns>
+      <Column>BookID</Column>
+    </Columns>
+    <RefColumns>
+      <Column>ID</Column>
+    </RefColumns>
+  </ForeignKey>
+  <ForeignKey name="FKPaymentReq235996">
+    <ReferenceTable>PaymentRequest</ReferenceTable>
+    <ReferencedTable>Membership</ReferencedTable>
+    <Columns>
+      <Column>MembershipID</Column>
     </Columns>
     <RefColumns>
       <Column>ID</Column>

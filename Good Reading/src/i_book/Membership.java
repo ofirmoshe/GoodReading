@@ -16,9 +16,16 @@ package i_book;
 import org.orm.*;
 import org.hibernate.Query;
 import org.hibernate.LockMode;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Membership {
+public class Membership  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Membership() {
 	}
 	
@@ -364,6 +371,10 @@ public class Membership {
 			for(int i = 0; i < lUser_Membershipss.length; i++) {
 				lUser_Membershipss[i].setMembership(null);
 			}
+			i_book.PaymentRequest[] lPaymentRequests = paymentRequest.toArray();
+			for(int i = 0; i < lPaymentRequests.length; i++) {
+				lPaymentRequests[i].setMembership(null);
+			}
 			return delete();
 		}
 		catch(Exception e) {
@@ -377,6 +388,10 @@ public class Membership {
 			i_book.User_Membership[] lUser_Membershipss = user_Memberships.toArray();
 			for(int i = 0; i < lUser_Membershipss.length; i++) {
 				lUser_Membershipss[i].setMembership(null);
+			}
+			i_book.PaymentRequest[] lPaymentRequests = paymentRequest.toArray();
+			for(int i = 0; i < lPaymentRequests.length; i++) {
+				lPaymentRequests[i].setMembership(null);
 			}
 			try {
 				session.delete(this);
@@ -395,6 +410,9 @@ public class Membership {
 		if (key == i_book.ORMConstants.KEY_MEMBERSHIP_USER_MEMBERSHIPS) {
 			return ORM_user_Memberships;
 		}
+		else if (key == i_book.ORMConstants.KEY_MEMBERSHIP_PAYMENTREQUEST) {
+			return ORM_paymentRequest;
+		}
 		
 		return null;
 	}
@@ -412,7 +430,11 @@ public class Membership {
 	
 	private float price;
 	
+	private int days;
+	
 	private java.util.Set ORM_user_Memberships = new java.util.HashSet();
+	
+	private java.util.Set ORM_paymentRequest = new java.util.HashSet();
 	
 	private void setID(int value) {
 		this.ID = value;
@@ -440,6 +462,14 @@ public class Membership {
 	
 	public float getPrice() {
 		return price;
+	}
+	
+	public void setDays(int value) {
+		this.days = value;
+	}
+	
+	public int getDays() {
+		return days;
 	}
 	
 	public i_book.User[] getUsers() {
@@ -483,6 +513,16 @@ public class Membership {
 	}
 	
 	public final i_book.User_MembershipSetCollection user_Memberships = new i_book.User_MembershipSetCollection(this, _ormAdapter, i_book.ORMConstants.KEY_MEMBERSHIP_USER_MEMBERSHIPS, i_book.ORMConstants.KEY_USER_MEMBERSHIP_MEMBERSHIP, i_book.ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
+	private void setORM_PaymentRequest(java.util.Set value) {
+		this.ORM_paymentRequest = value;
+	}
+	
+	private java.util.Set getORM_PaymentRequest() {
+		return ORM_paymentRequest;
+	}
+	
+	public final i_book.PaymentRequestSetCollection paymentRequest = new i_book.PaymentRequestSetCollection(this, _ormAdapter, i_book.ORMConstants.KEY_MEMBERSHIP_PAYMENTREQUEST, i_book.ORMConstants.KEY_PAYMENTREQUEST_MEMBERSHIP, i_book.ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
 	public String toString() {
 		return String.valueOf(getID());

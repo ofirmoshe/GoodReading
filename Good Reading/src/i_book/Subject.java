@@ -20,12 +20,13 @@ import org.hibernate.LockMode;
 import java.io.Serializable;
 import java.util.List;
 
-public class Subject implements Serializable{ /**
+public class Subject  implements Serializable{
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Subject()  {
+	public Subject() {
 	}
 	
 	public static Subject loadSubjectByORMID(int ID) throws PersistentException {
@@ -432,9 +433,9 @@ public class Subject implements Serializable{ /**
 	
 	private int ID;
 	
-	private String sub;
-	
 	private i_book.Field field;
+	
+	private String sub;
 	
 	private java.util.Set ORM_book = new java.util.HashSet();
 	

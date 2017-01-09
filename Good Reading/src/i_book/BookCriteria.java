@@ -34,6 +34,7 @@ public class BookCriteria extends AbstractORMCriteria {
 	public final CollectionExpression user_Books;
 	public final CollectionExpression author;
 	public final CollectionExpression keyword;
+	public final CollectionExpression paymentRequest;
 	public final CollectionExpression field;
 	public final CollectionExpression subject;
 	
@@ -54,6 +55,7 @@ public class BookCriteria extends AbstractORMCriteria {
 		user_Books = new CollectionExpression("ORM_User_Books", this);
 		author = new CollectionExpression("ORM_Author", this);
 		keyword = new CollectionExpression("ORM_Keyword", this);
+		paymentRequest = new CollectionExpression("ORM_PaymentRequest", this);
 		field = new CollectionExpression("ORM_Field", this);
 		subject = new CollectionExpression("ORM_Subject", this);
 	}
@@ -80,6 +82,10 @@ public class BookCriteria extends AbstractORMCriteria {
 	
 	public KeywordCriteria createKeywordCriteria() {
 		return new KeywordCriteria(createCriteria("ORM_Keyword"));
+	}
+	
+	public PaymentRequestCriteria createPaymentRequestCriteria() {
+		return new PaymentRequestCriteria(createCriteria("ORM_PaymentRequest"));
 	}
 	
 	public FieldCriteria createFieldCriteria() {

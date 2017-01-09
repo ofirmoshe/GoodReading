@@ -75,6 +75,7 @@ public class BookSetCollection extends org.orm.util.ORMSet {
 	 * <li>language</li>
 	 * <li>summary</li>
 	 * <li>table_of_contents</li>
+	 * <li>image</li>
 	 * <li>pdf</li>
 	 * <li>doc</li>
 	 * <li>fb2</li>
@@ -95,6 +96,7 @@ public class BookSetCollection extends org.orm.util.ORMSet {
 	 * <li>language</li>
 	 * <li>summary</li>
 	 * <li>table_of_contents</li>
+	 * <li>image</li>
 	 * <li>pdf</li>
 	 * <li>doc</li>
 	 * <li>fb2</li>

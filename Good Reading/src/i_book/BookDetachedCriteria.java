@@ -34,6 +34,7 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final CollectionExpression user_Books;
 	public final CollectionExpression author;
 	public final CollectionExpression keyword;
+	public final CollectionExpression paymentRequest;
 	public final CollectionExpression field;
 	public final CollectionExpression subject;
 	
@@ -54,6 +55,7 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 		user_Books = new CollectionExpression("ORM_User_Books", this.getDetachedCriteria());
 		author = new CollectionExpression("ORM_Author", this.getDetachedCriteria());
 		keyword = new CollectionExpression("ORM_Keyword", this.getDetachedCriteria());
+		paymentRequest = new CollectionExpression("ORM_PaymentRequest", this.getDetachedCriteria());
 		field = new CollectionExpression("ORM_Field", this.getDetachedCriteria());
 		subject = new CollectionExpression("ORM_Subject", this.getDetachedCriteria());
 	}
@@ -75,6 +77,7 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 		user_Books = new CollectionExpression("ORM_User_Books", this.getDetachedCriteria());
 		author = new CollectionExpression("ORM_Author", this.getDetachedCriteria());
 		keyword = new CollectionExpression("ORM_Keyword", this.getDetachedCriteria());
+		paymentRequest = new CollectionExpression("ORM_PaymentRequest", this.getDetachedCriteria());
 		field = new CollectionExpression("ORM_Field", this.getDetachedCriteria());
 		subject = new CollectionExpression("ORM_Subject", this.getDetachedCriteria());
 	}
@@ -93,6 +96,10 @@ public class BookDetachedCriteria extends AbstractORMDetachedCriteria {
 	
 	public KeywordDetachedCriteria createKeywordCriteria() {
 		return new KeywordDetachedCriteria(createCriteria("ORM_Keyword"));
+	}
+	
+	public PaymentRequestDetachedCriteria createPaymentRequestCriteria() {
+		return new PaymentRequestDetachedCriteria(createCriteria("ORM_PaymentRequest"));
 	}
 	
 	public FieldDetachedCriteria createFieldCriteria() {

@@ -383,6 +383,10 @@ public class Book implements Serializable{
 			for(int i = 0; i < lKeywords.length; i++) {
 				lKeywords[i].book.remove(this);
 			}
+			i_book.PaymentRequest[] lPaymentRequests = paymentRequest.toArray();
+			for(int i = 0; i < lPaymentRequests.length; i++) {
+				lPaymentRequests[i].setBook(null);
+			}
 			i_book.Field[] lFields = field.toArray();
 			for(int i = 0; i < lFields.length; i++) {
 				lFields[i].book.remove(this);
@@ -417,6 +421,10 @@ public class Book implements Serializable{
 			for(int i = 0; i < lKeywords.length; i++) {
 				lKeywords[i].book.remove(this);
 			}
+			i_book.PaymentRequest[] lPaymentRequests = paymentRequest.toArray();
+			for(int i = 0; i < lPaymentRequests.length; i++) {
+				lPaymentRequests[i].setBook(null);
+			}
 			i_book.Field[] lFields = field.toArray();
 			for(int i = 0; i < lFields.length; i++) {
 				lFields[i].book.remove(this);
@@ -450,6 +458,9 @@ public class Book implements Serializable{
 		}
 		else if (key == i_book.ORMConstants.KEY_BOOK_KEYWORD) {
 			return ORM_keyword;
+		}
+		else if (key == i_book.ORMConstants.KEY_BOOK_PAYMENTREQUEST) {
+			return ORM_paymentRequest;
 		}
 		else if (key == i_book.ORMConstants.KEY_BOOK_FIELD) {
 			return ORM_field;
@@ -498,6 +509,8 @@ public class Book implements Serializable{
 	
 	private java.util.Set ORM_keyword = new java.util.HashSet();
 	
+	private java.util.Set ORM_paymentRequest = new java.util.HashSet();
+	
 	private java.util.Set ORM_field = new java.util.HashSet();
 	
 	private java.util.Set ORM_subject = new java.util.HashSet();
@@ -545,9 +558,9 @@ public class Book implements Serializable{
 	public String getTable_of_contents() {
 		return table_of_contents;
 	}
-
-	public void setImage(String image) {
-		this.image = image;
+	
+	public void setImage(String value) {
+		this.image = value;
 	}
 	
 	public String getImage() {
@@ -666,6 +679,16 @@ public class Book implements Serializable{
 	
 	public final i_book.KeywordSetCollection keyword = new i_book.KeywordSetCollection(this, _ormAdapter, i_book.ORMConstants.KEY_BOOK_KEYWORD, i_book.ORMConstants.KEY_KEYWORD_BOOK, i_book.ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
+	private void setORM_PaymentRequest(java.util.Set value) {
+		this.ORM_paymentRequest = value;
+	}
+	
+	private java.util.Set getORM_PaymentRequest() {
+		return ORM_paymentRequest;
+	}
+	
+	public final i_book.PaymentRequestSetCollection paymentRequest = new i_book.PaymentRequestSetCollection(this, _ormAdapter, i_book.ORMConstants.KEY_BOOK_PAYMENTREQUEST, i_book.ORMConstants.KEY_PAYMENTREQUEST_BOOK, i_book.ORMConstants.KEY_MUL_ONE_TO_MANY);
+	
 	private void setORM_Field(java.util.Set value) {
 		this.ORM_field = value;
 	}
@@ -689,6 +712,5 @@ public class Book implements Serializable{
 	public String toString() {
 		return String.valueOf(getID());
 	}
-
 	
 }

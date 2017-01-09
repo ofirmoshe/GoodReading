@@ -19,6 +19,11 @@ import org.hibernate.LockMode;
 import java.util.List;
 
 public class User extends i_book.GeneralUser {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public User() {
 	}
 	

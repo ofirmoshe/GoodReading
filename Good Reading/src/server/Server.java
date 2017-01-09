@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
@@ -20,6 +21,7 @@ import i_book.Field;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import i_book.Keyword;
+import i_book.PaymentRequest;
 import i_book.Subject;
 import i_book.User;
 import ocsf.server.*;
@@ -53,6 +55,8 @@ public class Server extends AbstractServer {
 			break;
 		case "search book":
 			searchBookMessageHandler(m);
+		case "book payment":
+			bookPaymentMessageHandler(m);
 		}
 	}
 
@@ -294,6 +298,46 @@ public class Server extends AbstractServer {
 			} catch (PersistentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	public void bookPaymentMessageHandler(Message msg){
+		switch(msg.getFunc()){
+		case 1:
+			try {
+				Object[] o = (Object[])msg.getMsg();
+				User u = User.loadUserByORMID((String)o[0]);
+				PaymentRequest[] p = u.paymentrequest.toArray();
+				for(int i=0; i<p.length; i++){
+					if(p[i].getBook().getID()== (int)o[1] && p[i].getStatus().equals("waiting")){
+						msg.setMsg("d");
+						sendToAllClients(msg);
+						return;
+					}
+				}
+				session.beginTransaction();
+				PaymentRequest pr = PaymentRequest.createPaymentRequest();
+				pr.setUser(u);
+				pr.setBook(Book.loadBookByORMID((int)o[1]));
+				pr.setPaymentInfo((String)o[2]);
+				pr.setDate(new Date());
+				pr.setStatus("waiting");
+				pr.save();
+				session.getTransaction().commit();
+				msg.setMsg("s");
+				sendToAllClients(msg);
+				
+			} catch (Exception e) {
+				try {
+					session.getTransaction().rollback();
+					msg.setMsg("f");
+					sendToAllClients(msg);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
 			}
 			
 		}

@@ -16,17 +16,23 @@ package i_book;
 import org.orm.*;
 import org.hibernate.Query;
 import org.hibernate.LockMode;
-import java.util.List;
 
 import java.io.Serializable;
-public class Views_Date implements Serializable {
+import java.util.List;
+
+public class Views_Date  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Views_Date() {
 	}
 	
-	public static Views_Date loadViews_DateByORMID(java.util.Date date, i_book.Book book) throws PersistentException {
+	public static Views_Date loadViews_DateByORMID(java.util.Date date) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return loadViews_DateByORMID(session, date, book);
+			return loadViews_DateByORMID(session, date);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -34,10 +40,10 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date getViews_DateByORMID(java.util.Date date, i_book.Book book) throws PersistentException {
+	public static Views_Date getViews_DateByORMID(java.util.Date date) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return getViews_DateByORMID(session, date, book);
+			return getViews_DateByORMID(session, date);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -45,10 +51,10 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date loadViews_DateByORMID(java.util.Date date, i_book.Book book, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Views_Date loadViews_DateByORMID(java.util.Date date, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return loadViews_DateByORMID(session, date, book, lockMode);
+			return loadViews_DateByORMID(session, date, lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -56,10 +62,10 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date getViews_DateByORMID(java.util.Date date, i_book.Book book, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Views_Date getViews_DateByORMID(java.util.Date date, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return getViews_DateByORMID(session, date, book, lockMode);
+			return getViews_DateByORMID(session, date, lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -67,13 +73,9 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date loadViews_DateByORMID(PersistentSession session, java.util.Date date, i_book.Book book) throws PersistentException {
+	public static Views_Date loadViews_DateByORMID(PersistentSession session, java.util.Date date) throws PersistentException {
 		try {
-			Views_Date views_date = new i_book.Views_Date();
-			views_date.setDate(date);
-			views_date.setORM_Book(book);
-			
-			return (Views_Date) session.load(i_book.Views_Date.class, views_date);
+			return (Views_Date) session.load(i_book.Views_Date.class, date);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -81,13 +83,9 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date getViews_DateByORMID(PersistentSession session, java.util.Date date, i_book.Book book) throws PersistentException {
+	public static Views_Date getViews_DateByORMID(PersistentSession session, java.util.Date date) throws PersistentException {
 		try {
-			Views_Date views_date = new i_book.Views_Date();
-			views_date.setDate(date);
-			views_date.setORM_Book(book);
-			
-			return (Views_Date) session.get(i_book.Views_Date.class, views_date);
+			return (Views_Date) session.get(i_book.Views_Date.class, date);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -95,13 +93,9 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date loadViews_DateByORMID(PersistentSession session, java.util.Date date, i_book.Book book, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Views_Date loadViews_DateByORMID(PersistentSession session, java.util.Date date, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			Views_Date views_date = new i_book.Views_Date();
-			views_date.setDate(date);
-			views_date.setORM_Book(book);
-			
-			return (Views_Date) session.load(i_book.Views_Date.class, views_date, lockMode);
+			return (Views_Date) session.load(i_book.Views_Date.class, date, lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -109,13 +103,9 @@ public class Views_Date implements Serializable {
 		}
 	}
 	
-	public static Views_Date getViews_DateByORMID(PersistentSession session, java.util.Date date, i_book.Book book, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static Views_Date getViews_DateByORMID(PersistentSession session, java.util.Date date, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
-			Views_Date views_date = new i_book.Views_Date();
-			views_date.setDate(date);
-			views_date.setORM_Book(book);
-			
-			return (Views_Date) session.get(i_book.Views_Date.class, views_date, lockMode);
+			return (Views_Date) session.get(i_book.Views_Date.class, date, lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -335,21 +325,12 @@ public class Views_Date implements Serializable {
 		Views_Date views_date = (Views_Date)aObj;
 		if ((getDate() != null && !getDate().equals(views_date.getDate())) || (getDate() == null && views_date.getDate() != null))
 			return false;
-		if (getBook() == null) {
-			if (views_date.getBook() != null)
-				return false;
-		}
-		else if (!getBook().equals(views_date.getBook()))
-			return false;
 		return true;
 	}
 	
 	public int hashCode() {
 		int hashcode = 0;
 		hashcode = hashcode + (getDate() == null ? 0 : getDate().hashCode());
-		if (getBook() != null) {
-			hashcode = hashcode + (int) getBook().getORMID();
-		}
 		return hashcode;
 	}
 	
@@ -403,11 +384,9 @@ public class Views_Date implements Serializable {
 	
 	public boolean deleteAndDissociate()throws PersistentException {
 		try {
-			i_book.Book book = getBook();
 			if(getBook() != null) {
 				getBook().view.remove(this);
 			}
-			setORM_Book(book);
 			
 			return delete();
 		}
@@ -419,11 +398,9 @@ public class Views_Date implements Serializable {
 	
 	public boolean deleteAndDissociate(org.orm.PersistentSession session)throws PersistentException {
 		try {
-			i_book.Book book = getBook();
 			if(getBook() != null) {
 				getBook().view.remove(this);
 			}
-			setORM_Book(book);
 			
 			try {
 				session.delete(this);
@@ -455,16 +432,6 @@ public class Views_Date implements Serializable {
 	
 	private i_book.Book book;
 	
-	private int bookId;
-	
-	private void setBookId(int value) {
-		this.bookId = value;
-	}
-	
-	public int getBookId() {
-		return bookId;
-	}
-	
 	private int viewCount;
 	
 	public void setViewCount(int value) {
@@ -481,6 +448,10 @@ public class Views_Date implements Serializable {
 	
 	public java.util.Date getDate() {
 		return date;
+	}
+	
+	public java.util.Date getORMID() {
+		return getDate();
 	}
 	
 	public void setBook(i_book.Book value) {
@@ -508,7 +479,7 @@ public class Views_Date implements Serializable {
 	}
 	
 	public String toString() {
-		return String.valueOf(getDate() + " " + ((getBook() == null) ? "" : String.valueOf(getBook().getORMID())));
+		return String.valueOf(getDate());
 	}
 	
 }

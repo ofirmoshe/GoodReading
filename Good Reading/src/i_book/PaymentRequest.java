@@ -16,9 +16,16 @@ package i_book;
 import org.orm.*;
 import org.hibernate.Query;
 import org.hibernate.LockMode;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class PaymentRequest {
+public class PaymentRequest implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PaymentRequest() {
 	}
 	
@@ -360,6 +367,14 @@ public class PaymentRequest {
 	
 	public boolean deleteAndDissociate()throws PersistentException {
 		try {
+			if(getMembership() != null) {
+				getMembership().paymentRequest.remove(this);
+			}
+			
+			if(getBook() != null) {
+				getBook().paymentRequest.remove(this);
+			}
+			
 			if(getUser() != null) {
 				getUser().paymentrequest.remove(this);
 			}
@@ -374,6 +389,14 @@ public class PaymentRequest {
 	
 	public boolean deleteAndDissociate(org.orm.PersistentSession session)throws PersistentException {
 		try {
+			if(getMembership() != null) {
+				getMembership().paymentRequest.remove(this);
+			}
+			
+			if(getBook() != null) {
+				getBook().paymentRequest.remove(this);
+			}
+			
 			if(getUser() != null) {
 				getUser().paymentrequest.remove(this);
 			}
@@ -395,6 +418,14 @@ public class PaymentRequest {
 		if (key == i_book.ORMConstants.KEY_PAYMENTREQUEST_USER) {
 			this.user = (i_book.User) owner;
 		}
+		
+		else if (key == i_book.ORMConstants.KEY_PAYMENTREQUEST_BOOK) {
+			this.book = (i_book.Book) owner;
+		}
+		
+		else if (key == i_book.ORMConstants.KEY_PAYMENTREQUEST_MEMBERSHIP) {
+			this.membership = (i_book.Membership) owner;
+		}
 	}
 	
 	org.orm.util.ORMAdapter _ormAdapter = new org.orm.util.AbstractORMAdapter() {
@@ -405,6 +436,10 @@ public class PaymentRequest {
 	};
 	
 	private int ID;
+	
+	private i_book.Membership membership;
+	
+	private i_book.Book book;
 	
 	private i_book.User user;
 	
@@ -472,6 +507,54 @@ public class PaymentRequest {
 	
 	private i_book.User getORM_User() {
 		return user;
+	}
+	
+	public void setBook(i_book.Book value) {
+		if (book != null) {
+			book.paymentRequest.remove(this);
+		}
+		if (value != null) {
+			value.paymentRequest.add(this);
+		}
+	}
+	
+	public i_book.Book getBook() {
+		return book;
+	}
+	
+	/**
+	 * This method is for internal use only.
+	 */
+	private void setORM_Book(i_book.Book value) {
+		this.book = value;
+	}
+	
+	private i_book.Book getORM_Book() {
+		return book;
+	}
+	
+	public void setMembership(i_book.Membership value) {
+		if (membership != null) {
+			membership.paymentRequest.remove(this);
+		}
+		if (value != null) {
+			value.paymentRequest.add(this);
+		}
+	}
+	
+	public i_book.Membership getMembership() {
+		return membership;
+	}
+	
+	/**
+	 * This method is for internal use only.
+	 */
+	private void setORM_Membership(i_book.Membership value) {
+		this.membership = value;
+	}
+	
+	private i_book.Membership getORM_Membership() {
+		return membership;
 	}
 	
 	public String toString() {

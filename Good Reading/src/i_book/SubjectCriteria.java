@@ -20,17 +20,17 @@ import org.orm.criteria.*;
 
 public class SubjectCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
-	public final StringExpression sub;
 	public final IntegerExpression fieldId;
 	public final AssociationExpression field;
+	public final StringExpression sub;
 	public final CollectionExpression book;
 	
 	public SubjectCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
-		sub = new StringExpression("sub", this);
 		fieldId = new IntegerExpression("field.ID", this);
 		field = new AssociationExpression("field", this);
+		sub = new StringExpression("sub", this);
 		book = new CollectionExpression("ORM_Book", this);
 	}
 	

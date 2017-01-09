@@ -20,7 +20,7 @@ import org.hibernate.LockMode;
 import java.io.Serializable;
 import java.util.List;
 
-public class Field implements Serializable {
+public class Field  implements Serializable{
 	/**
 	 * 
 	 */

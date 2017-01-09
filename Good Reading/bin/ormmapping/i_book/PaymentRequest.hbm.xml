@@ -10,6 +10,10 @@ License Type: Academic
 			<generator class="native">
 			</generator>
 		</id>
+		<many-to-one name="membership" cascade="lock" column="MembershipID" class="i_book.Membership" not-null="false" lazy="proxy" access="field">
+		</many-to-one>
+		<many-to-one name="book" cascade="lock" column="BookID" class="i_book.Book" not-null="false" lazy="proxy" access="field">
+		</many-to-one>
 		<many-to-one name="user" cascade="lock" column="GeneralUserID" class="i_book.User" not-null="true" lazy="proxy" access="field">
 		</many-to-one>
 		<property name="date" column="`Date`" type="date" not-null="false" lazy="false"/>

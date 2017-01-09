@@ -12,9 +12,14 @@ License Type: Academic
 		</id>
 		<property name="type" column="Type" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="price" column="Price" type="float" not-null="true" lazy="false"/>
+		<property name="days" column="Days" type="integer" length="11" not-null="true" lazy="false"/>
 		<set name="ORM_User_Memberships" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="MembershipID" not-null="true"/>
 			<one-to-many class="i_book.User_Membership"/>
+		</set>
+		<set name="ORM_PaymentRequest" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="MembershipID" not-null="false"/>
+			<one-to-many class="i_book.PaymentRequest"/>
 		</set>
 	</class>
 </hibernate-mapping>

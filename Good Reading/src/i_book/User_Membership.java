@@ -23,10 +23,10 @@ public class User_Membership implements Serializable {
 	public User_Membership() {
 	}
 	
-	public static User_Membership loadUser_MembershipByORMID(java.util.Date s_date, i_book.Membership membership, i_book.User user) throws PersistentException {
+	public static User_Membership loadUser_MembershipByORMID(i_book.Membership membership, i_book.User user) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return loadUser_MembershipByORMID(session, s_date, membership, user);
+			return loadUser_MembershipByORMID(session, membership, user);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -34,10 +34,10 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership getUser_MembershipByORMID(java.util.Date s_date, i_book.Membership membership, i_book.User user) throws PersistentException {
+	public static User_Membership getUser_MembershipByORMID(i_book.Membership membership, i_book.User user) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return getUser_MembershipByORMID(session, s_date, membership, user);
+			return getUser_MembershipByORMID(session, membership, user);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -45,10 +45,10 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership loadUser_MembershipByORMID(java.util.Date s_date, i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static User_Membership loadUser_MembershipByORMID(i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return loadUser_MembershipByORMID(session, s_date, membership, user, lockMode);
+			return loadUser_MembershipByORMID(session, membership, user, lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -56,10 +56,10 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership getUser_MembershipByORMID(java.util.Date s_date, i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static User_Membership getUser_MembershipByORMID(i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			PersistentSession session = i_book.IBookIncPersistentManager.instance().getSession();
-			return getUser_MembershipByORMID(session, s_date, membership, user, lockMode);
+			return getUser_MembershipByORMID(session, membership, user, lockMode);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -67,10 +67,9 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership loadUser_MembershipByORMID(PersistentSession session, java.util.Date s_date, i_book.Membership membership, i_book.User user) throws PersistentException {
+	public static User_Membership loadUser_MembershipByORMID(PersistentSession session, i_book.Membership membership, i_book.User user) throws PersistentException {
 		try {
 			User_Membership user_membership = new i_book.User_Membership();
-			user_membership.setS_date(s_date);
 			user_membership.setORM_Membership(membership);
 			user_membership.setORM_User(user);
 			
@@ -82,10 +81,9 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership getUser_MembershipByORMID(PersistentSession session, java.util.Date s_date, i_book.Membership membership, i_book.User user) throws PersistentException {
+	public static User_Membership getUser_MembershipByORMID(PersistentSession session, i_book.Membership membership, i_book.User user) throws PersistentException {
 		try {
 			User_Membership user_membership = new i_book.User_Membership();
-			user_membership.setS_date(s_date);
 			user_membership.setORM_Membership(membership);
 			user_membership.setORM_User(user);
 			
@@ -97,10 +95,9 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership loadUser_MembershipByORMID(PersistentSession session, java.util.Date s_date, i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static User_Membership loadUser_MembershipByORMID(PersistentSession session, i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			User_Membership user_membership = new i_book.User_Membership();
-			user_membership.setS_date(s_date);
 			user_membership.setORM_Membership(membership);
 			user_membership.setORM_User(user);
 			
@@ -112,10 +109,9 @@ public class User_Membership implements Serializable {
 		}
 	}
 	
-	public static User_Membership getUser_MembershipByORMID(PersistentSession session, java.util.Date s_date, i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
+	public static User_Membership getUser_MembershipByORMID(PersistentSession session, i_book.Membership membership, i_book.User user, org.hibernate.LockMode lockMode) throws PersistentException {
 		try {
 			User_Membership user_membership = new i_book.User_Membership();
-			user_membership.setS_date(s_date);
 			user_membership.setORM_Membership(membership);
 			user_membership.setORM_User(user);
 			
@@ -337,8 +333,6 @@ public class User_Membership implements Serializable {
 		if (!(aObj instanceof User_Membership))
 			return false;
 		User_Membership user_membership = (User_Membership)aObj;
-		if ((getS_date() != null && !getS_date().equals(user_membership.getS_date())) || (getS_date() == null && user_membership.getS_date() != null))
-			return false;
 		if (getMembership() == null) {
 			if (user_membership.getMembership() != null)
 				return false;
@@ -356,7 +350,6 @@ public class User_Membership implements Serializable {
 	
 	public int hashCode() {
 		int hashcode = 0;
-		hashcode = hashcode + (getS_date() == null ? 0 : getS_date().hashCode());
 		if (getMembership() != null) {
 			hashcode = hashcode + (int) getMembership().getORMID();
 		}
@@ -583,7 +576,7 @@ public class User_Membership implements Serializable {
 	}
 	
 	public String toString() {
-		return String.valueOf(getS_date() + " " + ((getMembership() == null) ? "" : String.valueOf(getMembership().getORMID())) + " " + ((getUser() == null) ? "" : String.valueOf(getUser().getORMID())));
+		return String.valueOf(((getMembership() == null) ? "" : String.valueOf(getMembership().getORMID())) + " " + ((getUser() == null) ? "" : String.valueOf(getUser().getORMID())));
 	}
 	
 }

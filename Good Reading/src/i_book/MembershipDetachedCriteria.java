@@ -22,14 +22,18 @@ public class MembershipDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
 	public final StringExpression type;
 	public final FloatExpression price;
+	public final IntegerExpression days;
 	public final CollectionExpression user_Memberships;
+	public final CollectionExpression paymentRequest;
 	
 	public MembershipDetachedCriteria() {
 		super(i_book.Membership.class, i_book.MembershipCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		type = new StringExpression("type", this.getDetachedCriteria());
 		price = new FloatExpression("price", this.getDetachedCriteria());
+		days = new IntegerExpression("days", this.getDetachedCriteria());
 		user_Memberships = new CollectionExpression("ORM_User_Memberships", this.getDetachedCriteria());
+		paymentRequest = new CollectionExpression("ORM_PaymentRequest", this.getDetachedCriteria());
 	}
 	
 	public MembershipDetachedCriteria(DetachedCriteria aDetachedCriteria) {
@@ -37,11 +41,17 @@ public class MembershipDetachedCriteria extends AbstractORMDetachedCriteria {
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
 		type = new StringExpression("type", this.getDetachedCriteria());
 		price = new FloatExpression("price", this.getDetachedCriteria());
+		days = new IntegerExpression("days", this.getDetachedCriteria());
 		user_Memberships = new CollectionExpression("ORM_User_Memberships", this.getDetachedCriteria());
+		paymentRequest = new CollectionExpression("ORM_PaymentRequest", this.getDetachedCriteria());
 	}
 	
 	public User_MembershipDetachedCriteria createUser_MembershipsCriteria() {
 		return new User_MembershipDetachedCriteria(createCriteria("ORM_User_Memberships"));
+	}
+	
+	public PaymentRequestDetachedCriteria createPaymentRequestCriteria() {
+		return new PaymentRequestDetachedCriteria(createCriteria("ORM_PaymentRequest"));
 	}
 	
 	public Membership uniqueMembership(PersistentSession session) {

@@ -20,7 +20,7 @@ import org.hibernate.LockMode;
 import java.io.Serializable;
 import java.util.List;
 
-public class Author implements Serializable {
+public class Author  implements Serializable{
 	/**
 	 * 
 	 */

@@ -27,21 +27,21 @@ public class Views_DateDetachedCriteria extends AbstractORMDetachedCriteria {
 	public Views_DateDetachedCriteria() {
 		super(i_book.Views_Date.class, i_book.Views_DateCriteria.class);
 		date = new DateExpression("date", this.getDetachedCriteria());
-		bookId = new IntegerExpression("ORM_Book.ID", this.getDetachedCriteria());
-		book = new AssociationExpression("ORM_Book", this.getDetachedCriteria());
+		bookId = new IntegerExpression("book.ID", this.getDetachedCriteria());
+		book = new AssociationExpression("book", this.getDetachedCriteria());
 		viewCount = new IntegerExpression("viewCount", this.getDetachedCriteria());
 	}
 	
 	public Views_DateDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, i_book.Views_DateCriteria.class);
 		date = new DateExpression("date", this.getDetachedCriteria());
-		bookId = new IntegerExpression("ORM_Book.ID", this.getDetachedCriteria());
-		book = new AssociationExpression("ORM_Book", this.getDetachedCriteria());
+		bookId = new IntegerExpression("book.ID", this.getDetachedCriteria());
+		book = new AssociationExpression("book", this.getDetachedCriteria());
 		viewCount = new IntegerExpression("viewCount", this.getDetachedCriteria());
 	}
 	
 	public BookDetachedCriteria createBookCriteria() {
-		return new BookDetachedCriteria(createCriteria("ORM_Book"));
+		return new BookDetachedCriteria(createCriteria("book"));
 	}
 	
 	public Views_Date uniqueViews_Date(PersistentSession session) {

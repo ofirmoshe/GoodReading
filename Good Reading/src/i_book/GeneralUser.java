@@ -20,7 +20,7 @@ import org.hibernate.LockMode;
 import java.io.Serializable;
 import java.util.List;
 
-public class GeneralUser implements Serializable  {
+public class GeneralUser  implements Serializable{
 	/**
 	 * 
 	 */
@@ -78,7 +78,7 @@ public class GeneralUser implements Serializable  {
 			return (GeneralUser) session.load(i_book.GeneralUser.class, ID);
 		}
 		catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}

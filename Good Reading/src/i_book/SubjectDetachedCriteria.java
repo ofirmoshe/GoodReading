@@ -20,26 +20,26 @@ import org.orm.criteria.*;
 
 public class SubjectDetachedCriteria extends AbstractORMDetachedCriteria {
 	public final IntegerExpression ID;
-	public final StringExpression sub;
 	public final IntegerExpression fieldId;
 	public final AssociationExpression field;
+	public final StringExpression sub;
 	public final CollectionExpression book;
 	
 	public SubjectDetachedCriteria() {
 		super(i_book.Subject.class, i_book.SubjectCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		sub = new StringExpression("sub", this.getDetachedCriteria());
 		fieldId = new IntegerExpression("field.ID", this.getDetachedCriteria());
 		field = new AssociationExpression("field", this.getDetachedCriteria());
+		sub = new StringExpression("sub", this.getDetachedCriteria());
 		book = new CollectionExpression("ORM_Book", this.getDetachedCriteria());
 	}
 	
 	public SubjectDetachedCriteria(DetachedCriteria aDetachedCriteria) {
 		super(aDetachedCriteria, i_book.SubjectCriteria.class);
 		ID = new IntegerExpression("ID", this.getDetachedCriteria());
-		sub = new StringExpression("sub", this.getDetachedCriteria());
 		fieldId = new IntegerExpression("field.ID", this.getDetachedCriteria());
 		field = new AssociationExpression("field", this.getDetachedCriteria());
+		sub = new StringExpression("sub", this.getDetachedCriteria());
 		book = new CollectionExpression("ORM_Book", this.getDetachedCriteria());
 	}
 	

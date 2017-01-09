@@ -27,8 +27,8 @@ public class Views_DateCriteria extends AbstractORMCriteria {
 	public Views_DateCriteria(Criteria criteria) {
 		super(criteria);
 		date = new DateExpression("date", this);
-		bookId = new IntegerExpression("ORM_Book.ID", this);
-		book = new AssociationExpression("ORM_Book", this);
+		bookId = new IntegerExpression("book.ID", this);
+		book = new AssociationExpression("book", this);
 		viewCount = new IntegerExpression("viewCount", this);
 	}
 	
@@ -41,7 +41,7 @@ public class Views_DateCriteria extends AbstractORMCriteria {
 	}
 	
 	public BookCriteria createBookCriteria() {
-		return new BookCriteria(createCriteria("ORM_Book"));
+		return new BookCriteria(createCriteria("book"));
 	}
 	
 	public Views_Date uniqueViews_Date() {

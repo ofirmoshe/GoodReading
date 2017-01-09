@@ -20,6 +20,10 @@ import org.orm.criteria.*;
 
 public class PaymentRequestCriteria extends AbstractORMCriteria {
 	public final IntegerExpression ID;
+	public final IntegerExpression membershipId;
+	public final AssociationExpression membership;
+	public final IntegerExpression bookId;
+	public final AssociationExpression book;
 	public final StringExpression userId;
 	public final AssociationExpression user;
 	public final DateExpression date;
@@ -29,6 +33,10 @@ public class PaymentRequestCriteria extends AbstractORMCriteria {
 	public PaymentRequestCriteria(Criteria criteria) {
 		super(criteria);
 		ID = new IntegerExpression("ID", this);
+		membershipId = new IntegerExpression("membership.ID", this);
+		membership = new AssociationExpression("membership", this);
+		bookId = new IntegerExpression("book.ID", this);
+		book = new AssociationExpression("book", this);
 		userId = new StringExpression("user.ID", this);
 		user = new AssociationExpression("user", this);
 		date = new DateExpression("date", this);
@@ -42,6 +50,14 @@ public class PaymentRequestCriteria extends AbstractORMCriteria {
 	
 	public PaymentRequestCriteria() throws PersistentException {
 		this(i_book.IBookIncPersistentManager.instance().getSession());
+	}
+	
+	public MembershipCriteria createMembershipCriteria() {
+		return new MembershipCriteria(createCriteria("membership"));
+	}
+	
+	public BookCriteria createBookCriteria() {
+		return new BookCriteria(createCriteria("book"));
 	}
 	
 	public UserCriteria createUserCriteria() {

@@ -22,6 +22,8 @@ public interface ORMConstants extends org.orm.util.ORMBaseConstants {
 	
 	final int KEY_BOOK_KEYWORD = -882025805;
 	
+	final int KEY_BOOK_PAYMENTREQUEST = -516959841;
+	
 	final int KEY_BOOK_SUBJECT = -1935502858;
 	
 	final int KEY_BOOK_USER_BOOKS = 1833456652;
@@ -34,7 +36,13 @@ public interface ORMConstants extends org.orm.util.ORMBaseConstants {
 	
 	final int KEY_KEYWORD_BOOK = -1425902689;
 	
+	final int KEY_MEMBERSHIP_PAYMENTREQUEST = -963902190;
+	
 	final int KEY_MEMBERSHIP_USER_MEMBERSHIPS = 1285142002;
+	
+	final int KEY_PAYMENTREQUEST_BOOK = -677857377;
+	
+	final int KEY_PAYMENTREQUEST_MEMBERSHIP = -261544948;
 	
 	final int KEY_PAYMENTREQUEST_USER = -677287807;
 	
