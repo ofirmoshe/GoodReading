@@ -10,14 +10,27 @@ import common.Message;
 import i_book.Author;
 import i_book.Book;
 import i_book.Field;
+import i_book.Review;
 import i_book.Subject;
+import i_book.User;
+import i_book.User_Book;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  * Book page controller is the controller of all the book pages. The controller
@@ -34,7 +47,11 @@ public class BookPageController extends SystemController {
 	private Field[] fields;
 	private Subject[] subjects;
 	private Book currBook;
-	
+	private GridPane reviewGrid;
+	private Review[] reviews;
+	private String[] usernames;
+	private String canReview;
+
 	@FXML
 	private ImageView bookImage;
 	@FXML
@@ -51,6 +68,16 @@ public class BookPageController extends SystemController {
 	Label subjectLabel;
 	@FXML
 	AnchorPane mainAnchor;
+	@FXML
+	AnchorPane reviewAnchor;
+	@FXML
+	TextArea addReviewText;
+	@FXML
+	Label reviewSentLabel;
+	@FXML
+	Label addReviewLabel;
+	@FXML
+	Button addReviewButton;
 
 	/**
 	 * This method initializes the controller, sends a message to server to get
@@ -58,7 +85,10 @@ public class BookPageController extends SystemController {
 	 */
 	public void initialize() {
 		super.initialize();
-		Message msg = new Message("book page", 1, book.getID());
+		Object[] o = new Object[2];
+		o[0] = book.getID();
+		o[1] = ClientUI.user.getID();
+		Message msg = new Message("book page", 1, o);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
@@ -86,18 +116,66 @@ public class BookPageController extends SystemController {
 	 * This method is called when "Get this book" button is clicked.
 	 */
 	public void getBookOnClick() {
-		BookPaymentController.book=currBook;
+		BookPaymentController.book = currBook;
 		BookPaymentController.authors = authors;
 		ClientUI.setScene("BookPaymentGUI.fxml");
 	}
 
+	public void addReview() {
+		if (!addReviewText.getText().equals("")) {
+			Object[] o = new Object[3];
+			o[0] = currBook.getID();
+			o[1] = ClientUI.user.getID();
+			o[2] = addReviewText.getText();
+			Message msg = new Message("book page", 2, o);
+			try {
+				Client.instance.sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void setReviewGrid() {
+		reviewGrid = new GridPane();
+		for (int y = 0; y < reviews.length; y++) {
+			AnchorPane ap = new AnchorPane();
+			ap.setPrefHeight(60);
+			ap.setPrefWidth(900);
+			Rectangle rect = new Rectangle();
+			rect.setHeight(60);
+			rect.setWidth(900);
+			rect.setFill(Color.WHITE);
+			rect.setStrokeWidth(1);
+			rect.setStroke(Color.BURLYWOOD);
+			ap.getChildren().add(rect);
+			Label username = new Label(usernames[y]);
+			username.setTextFill(Color.DARKCYAN);
+			username.setFont(Font.font("System", FontWeight.BOLD, 14));
+			ap.getChildren().add(username);
+			username.setLayoutX(10);
+			username.setLayoutY(10);
+			Label rev = new Label(reviews[y].getText());
+			rev.setFont(Font.font("System", 12));
+			rev.setLayoutX(10);
+			rev.setLayoutY(30);
+			rev.setWrapText(true);
+			ap.getChildren().add(rev);
+			reviewGrid.add(ap, 0, y);
+		}
+		reviewAnchor.setPrefHeight(60 * reviews.length);
+		reviewAnchor.getChildren().add(reviewGrid);
+	}
+
 	/**
-	 * This method implements AbstractController's method.
-	 * It handles message from server, and displays the book's data. 
-	 * @param msg	case 1: the message is an object array. 
-	 * 						index 0- contains an Author array
-	 * 						index 1- contains a Field array 
-	 *						index 2- contains a Subject array 
+	 * This method implements AbstractController's method. It handles message
+	 * from server, and displays the book's data.
+	 * 
+	 * @param msg
+	 *            case 1: the message is an object array. index 0- contains an
+	 *            Author array index 1- contains a Field array index 2- contains
+	 *            a Subject array
 	 */
 	@Override
 	public void handleMessage(Message msg) {
@@ -107,6 +185,9 @@ public class BookPageController extends SystemController {
 			authors = (Author[]) m[0];
 			fields = (Field[]) m[1];
 			subjects = (Subject[]) m[2];
+			reviews = (Review[]) m[3];
+			usernames = (String[]) m[4];
+			canReview = (String) m[5];
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -125,9 +206,35 @@ public class BookPageController extends SystemController {
 						subjectLabel.setText(s);
 					} else
 						subjectLabel.setText("");
+					if (canReview.equals("no") || canReview.equals("waiting") || canReview.equals("approved")) {
+						addReviewText.setVisible(false);
+						addReviewLabel.setVisible(false);
+						addReviewButton.setVisible(false);
+						if (canReview.equals("waiting")) {
+							reviewSentLabel.setText("Your review is waiting to be approved.");
+							reviewSentLabel.setVisible(true);
+						}
+					}
+					if (reviews.length != 0)
+						setReviewGrid();
 				}
 
 			});
+			break;
+
+		case 2:
+			if (msg.getMsg().equals("s")) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						addReviewText.setVisible(false);
+						addReviewLabel.setVisible(false);
+						reviewSentLabel.setText("Thank you for the review!");
+						reviewSentLabel.setVisible(true);
+						addReviewButton.setVisible(false);
+					}
+				});
+			}
 		}
 	}
 

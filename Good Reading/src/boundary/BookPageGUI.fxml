@@ -47,9 +47,9 @@
       </AnchorPane>
       <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="900.0">
          <content>
-          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="434.0" prefWidth="900.0">
+          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="526.0" prefWidth="900.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="583.0" layoutX="-3.0" layoutY="-15.0" stroke="BLACK" strokeType="INSIDE" width="916.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="583.0" layoutX="-8.0" layoutY="-12.0" stroke="BLACK" strokeType="INSIDE" width="916.0" />
                   <ImageView fx:id="bookImage" fitHeight="243.0" fitWidth="164.0" layoutX="25.0" layoutY="8.0" preserveRatio="true">
                      <image>
                         <Image url="@../graphics/loading_book.jpg" />
@@ -98,9 +98,9 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <ScrollPane hbarPolicy="NEVER" layoutX="221.0" layoutY="255.0" prefHeight="102.0" prefWidth="574.0">
+                  <ScrollPane hbarPolicy="NEVER" layoutX="221.0" layoutY="255.0" prefHeight="101.0" prefWidth="574.0">
                     <content>
-                      <AnchorPane fx:id="reviewAnchor" minHeight="0.0" minWidth="0.0" prefHeight="94.0" prefWidth="574.0" />
+                      <AnchorPane fx:id="reviewAnchor" minHeight="0.0" minWidth="0.0" prefHeight="92.0" prefWidth="574.0" />
                     </content>
                   </ScrollPane>
                   <TabPane layoutX="220.0" layoutY="99.0" prefHeight="130.0" prefWidth="576.0" tabClosingPolicy="UNAVAILABLE">
@@ -125,6 +125,18 @@
                       </Tab>
                     </tabs>
                   </TabPane>
+                  <TextArea fx:id="addReviewText" layoutX="220.0" layoutY="396.0" prefHeight="74.0" prefWidth="583.0" />
+                  <Label fx:id="addReviewLabel" layoutX="221.0" layoutY="368.0" text="Add new review">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="addReviewButton" layoutX="726.0" layoutY="487.0" mnemonicParsing="false" onAction="#addReview" prefHeight="14.0" prefWidth="72.0" text="Send" />
+                  <Label fx:id="reviewSentLabel" layoutX="397.0" layoutY="390.0" prefHeight="21.0" prefWidth="239.0" text="Your review is waiting to be approved." visible="false">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </content>

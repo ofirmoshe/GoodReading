@@ -24,8 +24,10 @@ import i_book.IBookIncPersistentManager;
 import i_book.Keyword;
 import i_book.Membership;
 import i_book.PaymentRequest;
+import i_book.Review;
 import i_book.Subject;
 import i_book.User;
+import i_book.User_Book;
 import ocsf.server.*;
 
 public class Server extends AbstractServer {
@@ -153,19 +155,74 @@ public class Server extends AbstractServer {
 		switch (msg.getFunc()) {
 		case 1:
 			try {
-				Book b = Book.getBookByORMID((int) msg.getMsg());
+				Object[] o = (Object[]) msg.getMsg();
+				Book b = Book.getBookByORMID((int) o[0]);
 				Author[] a = b.author.toArray();
 				Field[] f = b.field.toArray();
 				Subject[] s = b.subject.toArray();
-				Object[] o = new Object[3];
+				Review[] r = Review.listReviewByQuery("User_BookBookID=" + b.getID() + " AND Status='approved'", "ID");
+				String[] u = new String[r.length];
+				User user = null;
+				for (int i = 0; i < r.length; i++) {
+					user = r[i].getUsersbook().getUser();
+					u[i] = user.getFname() + " " + user.getLname();
+				}
+				String canReview = "no";
+				String userID = (String) o[1];
+				user = User.loadUserByORMID(userID);
+				User_Book[] ub = user.user_Books.toArray();
+				for (int i = 0; i < ub.length; i++) {
+					if (ub[i].getBook().getID() == b.getID()) {
+						canReview = "yes";
+						Review[] ur = ub[i].review.toArray();
+						if (ur.length != 0) {
+							// Only the last review can be active.
+							canReview = ur[ur.length - 1].getStatus();
+						}
+					}
+				}
+
+				o = new Object[6];
 				o[0] = a;
 				o[1] = f;
 				o[2] = s;
+				o[3] = r;
+				o[4] = u;
+				o[5] = canReview;
 				msg.setMsg(o);
 				client.sendToClient(msg);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			break;
+
+		case 2:
+			try {
+				Object[] o = (Object[]) msg.getMsg();
+				Book b = Book.loadBookByORMID((int) o[0]);
+				User u = User.loadUserByORMID((String) o[1]);
+				User_Book ub = User_Book.loadUser_BookByORMID(b, u);
+				session.beginTransaction();
+				Review rev = Review.createReview();
+				rev.setUsersbook(ub);
+				rev.setText((String) o[2]);
+				rev.setStatus("waiting");
+				rev.save();
+				session.getTransaction().commit();
+				msg.setMsg("s");
+				client.sendToClient(msg);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				session.getTransaction().rollback();
+				msg.setMsg("f");
+				try {
+					client.sendToClient(msg);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		}

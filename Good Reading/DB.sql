@@ -81,7 +81,7 @@ CREATE TABLE `book` (
   `Title` varchar(255) DEFAULT NULL,
   `Language` varchar(255) DEFAULT NULL,
   `Summary` mediumtext,
-  `Table_of_contents` varchar(255) DEFAULT NULL,
+  `Table_of_contents` mediumtext,
   `Image` varchar(255) DEFAULT NULL,
   `Pdf` varchar(255) DEFAULT NULL,
   `Doc` varchar(255) DEFAULT NULL,
@@ -199,7 +199,7 @@ CREATE TABLE `generaluser` (
   `Dep` varchar(255) DEFAULT NULL,
   `Position` varchar(255) DEFAULT NULL,
   `PaymentInfo` varchar(255) DEFAULT NULL,
-  `Status` varchar(255) DEFAULT 'offline',
+  `Status` varchar(255) DEFAULT NULL,
   `Discriminator` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -211,7 +211,7 @@ CREATE TABLE `generaluser` (
 
 LOCK TABLES `generaluser` WRITE;
 /*!40000 ALTER TABLE `generaluser` DISABLE KEYS */;
-INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,NULL,'offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,NULL,'offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,NULL,'offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,NULL,'offline','User');
+INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,'234567','offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,'345678','offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User');
 /*!40000 ALTER TABLE `generaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -278,6 +278,7 @@ CREATE TABLE `membership` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Type` varchar(255) DEFAULT NULL,
   `Price` float NOT NULL,
+  `Days` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -288,7 +289,7 @@ CREATE TABLE `membership` (
 
 LOCK TABLES `membership` WRITE;
 /*!40000 ALTER TABLE `membership` DISABLE KEYS */;
-INSERT INTO `membership` VALUES (1,'year',120),(2,'month',30);
+INSERT INTO `membership` VALUES (1,'Monthly',24.99,30),(2,'Yearly',89.99,365);
 /*!40000 ALTER TABLE `membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,14 +302,20 @@ DROP TABLE IF EXISTS `paymentrequest`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `paymentrequest` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MembershipID` int(11) DEFAULT NULL,
+  `BookID` int(11) DEFAULT NULL,
   `GeneralUserID` varchar(255) NOT NULL,
   `Date` date DEFAULT NULL,
   `PaymentInfo` varchar(255) DEFAULT NULL,
   `Status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FKPaymentReq760019` (`GeneralUserID`),
+  KEY `FKPaymentReq551000` (`BookID`),
+  KEY `FKPaymentReq235996` (`MembershipID`),
+  CONSTRAINT `FKPaymentReq235996` FOREIGN KEY (`MembershipID`) REFERENCES `membership` (`ID`),
+  CONSTRAINT `FKPaymentReq551000` FOREIGN KEY (`BookID`) REFERENCES `book` (`ID`),
   CONSTRAINT `FKPaymentReq760019` FOREIGN KEY (`GeneralUserID`) REFERENCES `generaluser` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,6 +324,7 @@ CREATE TABLE `paymentrequest` (
 
 LOCK TABLES `paymentrequest` WRITE;
 /*!40000 ALTER TABLE `paymentrequest` DISABLE KEYS */;
+INSERT INTO `paymentrequest` VALUES (59,NULL,2,'3','2017-01-10','345678','waiting');
 /*!40000 ALTER TABLE `paymentrequest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,12 +339,12 @@ CREATE TABLE `review` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Text` varchar(255) DEFAULT NULL,
   `Status` varchar(255) DEFAULT NULL,
-  `User_BookBookID` int(11) NOT NULL,
   `User_BookGeneralUserID` varchar(255) NOT NULL,
+  `User_BookBookID` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FKReview85949` (`User_BookBookID`,`User_BookGeneralUserID`),
   CONSTRAINT `FKReview85949` FOREIGN KEY (`User_BookBookID`, `User_BookGeneralUserID`) REFERENCES `user_book` (`BookID`, `GeneralUserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -345,6 +353,7 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
+INSERT INTO `review` VALUES (2,'I hate this book','approved','2',1),(3,'This book is wow','approved','3',1),(4,'I don\'t know how to read','approved','4',1),(8,'i freaking love this book','approved','1',1);
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -401,6 +410,7 @@ CREATE TABLE `user_book` (
 
 LOCK TABLES `user_book` WRITE;
 /*!40000 ALTER TABLE `user_book` DISABLE KEYS */;
+INSERT INTO `user_book` VALUES (NULL,NULL,1,'1'),(NULL,NULL,1,'2'),(NULL,NULL,1,'3'),(NULL,NULL,1,'4');
 /*!40000 ALTER TABLE `user_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -412,12 +422,12 @@ DROP TABLE IF EXISTS `user_membership`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_membership` (
-  `S_date` date NOT NULL,
+  `S_date` date DEFAULT NULL,
   `E_date` date DEFAULT NULL,
   `Status` varchar(255) DEFAULT NULL,
   `MembershipID` int(11) NOT NULL,
   `GeneralUserID` varchar(255) NOT NULL,
-  PRIMARY KEY (`S_date`,`MembershipID`,`GeneralUserID`),
+  PRIMARY KEY (`MembershipID`,`GeneralUserID`),
   KEY `FKUser_Membe409156` (`MembershipID`),
   KEY `FKUser_Membe885132` (`GeneralUserID`),
   CONSTRAINT `FKUser_Membe409156` FOREIGN KEY (`MembershipID`) REFERENCES `membership` (`ID`),
@@ -445,7 +455,7 @@ CREATE TABLE `views_date` (
   `Date` date NOT NULL,
   `BookID` int(11) NOT NULL,
   `ViewCount` int(11) NOT NULL,
-  PRIMARY KEY (`Date`,`BookID`),
+  PRIMARY KEY (`Date`),
   KEY `FKViews_Date742991` (`BookID`),
   CONSTRAINT `FKViews_Date742991` FOREIGN KEY (`BookID`) REFERENCES `book` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -469,4 +479,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-08 18:33:57
+-- Dump completed on 2017-01-10 21:42:39
