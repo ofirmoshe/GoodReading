@@ -133,24 +133,24 @@
       </AnchorPane>
       <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" prefHeight="440.0" prefWidth="239.0" visible="false">
          <children>
-            <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseReleased="#searchBookOnClick" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" prefHeight="36.0" prefWidth="239.0">
+            <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" onMouseReleased="#searchBookOnClick" prefHeight="36.0" prefWidth="239.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="searchReviewClick" layoutY="120.0" onMouseReleased="#searchReviewOnClick" onMouseEntered="#searchReviewOnHover" onMouseExited="#searchReviewOffHover" onMouseMoved="#searchReviewOnHover" prefHeight="36.0" prefWidth="239.0">
+            <AnchorPane fx:id="searchReviewClick" layoutY="120.0" onMouseEntered="#searchReviewOnHover" onMouseExited="#searchReviewOffHover" onMouseMoved="#searchReviewOnHover" onMouseReleased="#searchReviewOnClick" prefHeight="36.0" prefWidth="239.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="membershipClick" layoutX="-1.0" layoutY="155.0" onMouseReleased="#membershipOnClick" onMouseEntered="#membershipOnHover" onMouseExited="#membershipOffHover" onMouseMoved="#membershipOnHover" prefHeight="36.0" prefWidth="239.0">
+            <AnchorPane fx:id="membershipClick" layoutX="-1.0" layoutY="155.0" onMouseEntered="#membershipOnHover" onMouseExited="#membershipOffHover" onMouseMoved="#membershipOnHover" onMouseReleased="#membershipOnClick" prefHeight="36.0" prefWidth="239.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="796.0" layoutY="21.0" onMouseReleased="#goBackOnClick" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover">
+      <AnchorPane layoutX="796.0" layoutY="21.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
          <children>
             <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
                <image>
@@ -163,6 +163,11 @@
                </font>
             </Label>
          </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane layoutX="246.0" layoutY="34.0" onMouseEntered="#logoOnClick" prefHeight="85.0" prefWidth="378.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookPaymentController">
+<AnchorPane fx:id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MembershipPaymentController">
    <children>
       <ImageView>
          <image>
@@ -55,20 +55,11 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="bookImage" fitHeight="197.0" fitWidth="130.0" layoutX="43.0" layoutY="72.0">
-                     <image>
-                        <Image url="@../graphics/loading_book.jpg" />
-                     </image>
-                     <effect>
-                        <Reflection fraction="0.62" topOpacity="0.13" />
-                     </effect>
-                  </ImageView>
-                  <Label fx:id="bookNameLabel" layoutX="185.0" layoutY="72.0" text="Book Name">
+                  <Label fx:id="membershipNameLabel" layoutX="185.0" layoutY="72.0" text="Membership">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="authorLabel" layoutX="185.0" layoutY="102.0" text="By Author Name" />
                   <Label layoutX="185.0" layoutY="122.0" text="Price: ">
                      <font>
                         <Font name="System Bold" size="14.0" />
@@ -89,28 +80,17 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <AnchorPane layoutX="246.0" layoutY="242.0">
+                  <AnchorPane layoutX="246.0" layoutY="242.0" onMouseReleased="#paymentOnClick">
                      <children>
-                        <ImageView fitHeight="27.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="27.0" fitWidth="79.0" onMouseReleased="#paymentOnClick" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../graphics/button.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
-                        <Label layoutX="16.0" layoutY="4.0" onMouseReleased="#paymentOnClick" text="Proceed" textFill="WHITE">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="333.0" layoutY="242.0" onMouseReleased="#goBackOnClick" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover">
-                     <children>
-                        <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
-                           <image>
-                              <Image url="@../graphics/orange_button.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="20.0" layoutY="4.0" text="Cancel" textFill="WHITE">
+                        <Label layoutX="16.0" layoutY="4.0" text="Proceed" textFill="WHITE">
                            <font>
                               <Font size="13.0" />
                            </font>
@@ -120,26 +100,20 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </AnchorPane>
-                  <Line endY="400.0" layoutX="480.0" layoutY="20.0" opacity="0.44" />
-                  <Label layoutX="514.0" layoutY="21.0" text="You may also like...">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane layoutX="504.0" layoutY="59.0" onMouseReleased="#membershipOnClick" prefHeight="353.0" prefWidth="387.0">
+                  <AnchorPane layoutX="340.0" layoutY="242.0" onMouseReleased="#goBackOnClick">
                      <children>
-                        <ImageView fitHeight="306.0" fitWidth="275.0" layoutX="58.0" layoutY="35.0" preserveRatio="true" rotate="10.0">
+                        <ImageView fx:id="cancelImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
                            <image>
-                              <Image url="@../graphics/hara.png" />
+                              <Image url="@../graphics/orange_button.png" />
                            </image>
+                        </ImageView>
+                        <Label layoutX="20.0" layoutY="4.0" text="Cancel" textFill="WHITE">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                        </ImageView>
-                        <Label layoutX="179.0" layoutY="153.0" text="Click for more details!">
-                           <font>
-                              <Font name="System Italic" size="15.0" />
-                           </font>
                         </Label>
                      </children>
                      <cursor>
@@ -223,17 +197,17 @@
       </AnchorPane>
       <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" prefHeight="440.0" prefWidth="239.0" visible="false">
          <children>
-            <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseReleased="#searchBookOnClick" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" prefHeight="36.0" prefWidth="239.0">
+            <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" onMouseReleased="#searchBookOnClick" prefHeight="36.0" prefWidth="239.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="searchReviewClick" layoutY="120.0" onMouseReleased="#searchReviewOnClick" onMouseEntered="#searchReviewOnHover" onMouseExited="#searchReviewOffHover" onMouseMoved="#searchReviewOnHover" prefHeight="36.0" prefWidth="239.0">
+            <AnchorPane fx:id="searchReviewClick" layoutY="120.0" onMouseEntered="#searchReviewOnHover" onMouseExited="#searchReviewOffHover" onMouseMoved="#searchReviewOnHover" onMouseReleased="#searchReviewOnClick" prefHeight="36.0" prefWidth="239.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </AnchorPane>
-            <AnchorPane fx:id="membershipClick" layoutX="-1.0" layoutY="155.0" onMouseReleased="#membershipOnClick" onMouseEntered="#membershipOnHover" onMouseExited="#membershipOffHover" onMouseMoved="#membershipOnHover" prefHeight="36.0" prefWidth="239.0">
+            <AnchorPane fx:id="membershipClick" layoutX="-1.0" layoutY="155.0" onMouseEntered="#membershipOnHover" onMouseExited="#membershipOffHover" onMouseMoved="#membershipOnHover" onMouseReleased="#membershipOnClick" prefHeight="36.0" prefWidth="239.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -244,9 +218,9 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></AnchorPane>
-      <AnchorPane layoutX="795.0" layoutY="25.0" onMouseReleased="#goBackOnClick" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover">
+      <AnchorPane layoutX="796.0" layoutY="22.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
          <children>
-            <ImageView fx:id="goBackImage1" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+            <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
                <image>
                   <Image url="@../graphics/orange_button.png" />
                </image>

@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +22,7 @@ import i_book.Field;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import i_book.Keyword;
+import i_book.Membership;
 import i_book.PaymentRequest;
 import i_book.Subject;
 import i_book.User;
@@ -42,25 +44,32 @@ public class Server extends AbstractServer {
 		Message m = (Message) msg;
 		switch (m.getCont()) {
 		case "login":
-			loginMessageHandler(m);
+			loginMessageHandler(m, client);
 			break;
 		case "user homepage":
-			userHomepageMessageHandler(m);
+			userHomepageMessageHandler(m, client);
 			break;
 		case "system":
-			systemMessageHandler(m);
+			systemMessageHandler(m, client);
 			break;
 		case "book page":
-			bookPageMessageHandler(m);
+			bookPageMessageHandler(m, client);
 			break;
 		case "search book":
-			searchBookMessageHandler(m);
+			searchBookMessageHandler(m, client);
+			break;
 		case "book payment":
-			bookPaymentMessageHandler(m);
+			bookPaymentMessageHandler(m, client);
+			break;
+		case "membership payment":
+			membershipPaymentMessageHandler(m, client);
+			break;
+		case "membership":
+			membershipMessageHandler(m, client);
 		}
 	}
 
-	public void systemMessageHandler(Message msg) {
+	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 			/*
@@ -75,7 +84,7 @@ public class Server extends AbstractServer {
 		}
 	}
 
-	public void loginMessageHandler(Message msg) {
+	public void loginMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 			Object[] a = new Object[2];
@@ -94,13 +103,23 @@ public class Server extends AbstractServer {
 				// TODO Auto-generated catch block
 				a[1] = "wrong username";
 				msg.setMsg(a);
-				sendToAllClients(msg);
+				try {
+					client.sendToClient(msg);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				return;
 			}
 			if (u.getPassword().equals(login.getPassword())) {
 				a[1] = u;
 				msg.setMsg(a);
-				sendToAllClients(msg);
+				try {
+					client.sendToClient(msg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				/*
 				 * if (u instanceof User) { User user = (User) u; if
 				 * (user.getStatus().equals("offline")) {
@@ -114,18 +133,23 @@ public class Server extends AbstractServer {
 			}
 			a[1] = "wrong password";
 			msg.setMsg(a);
-			sendToAllClients(msg);
+			try {
+				client.sendToClient(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}
 	}
 
-	public void userHomepageMessageHandler(Message msg) {
+	public void userHomepageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 		}
 	}
 
-	public void bookPageMessageHandler(Message msg) {
+	public void bookPageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 			try {
@@ -138,8 +162,8 @@ public class Server extends AbstractServer {
 				o[1] = f;
 				o[2] = s;
 				msg.setMsg(o);
-				sendToAllClients(msg);
-			} catch (PersistentException e) {
+				client.sendToClient(msg);
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -147,7 +171,7 @@ public class Server extends AbstractServer {
 		}
 	}
 
-	public void searchBookMessageHandler(Message msg) {
+	public void searchBookMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 			String[] query = (String[]) msg.getMsg();
@@ -194,15 +218,15 @@ public class Server extends AbstractServer {
 					e.printStackTrace();
 				}
 			}
-			if(!query[5].equals("")){
-				String[] s =query[5].split(" ");
-				queryCounter+=s.length;
-				for(int i=0; i<s.length; i++){
+			if (!query[5].equals("")) {
+				String[] s = query[5].split(" ");
+				queryCounter += s.length;
+				for (int i = 0; i < s.length; i++) {
 					try {
-						Keyword k = Keyword.loadKeywordByQuery("Word='"+s[i]+"'", "ID");
-						if(k!=null){
+						Keyword k = Keyword.loadKeywordByQuery("Word='" + s[i] + "'", "ID");
+						if (k != null) {
 							importer = k.book.toArray();
-							for(int j=0; j<importer.length; j++){
+							for (int j = 0; j < importer.length; j++) {
 								counter[importer[j].getID()]++;
 							}
 						}
@@ -212,7 +236,7 @@ public class Server extends AbstractServer {
 					}
 				}
 			}
-			if(!query[6].equals("0")){
+			if (!query[6].equals("0")) {
 				queryCounter++;
 				try {
 					Field f = Field.loadFieldByORMID(Integer.parseInt(query[6]));
@@ -226,7 +250,7 @@ public class Server extends AbstractServer {
 					e.printStackTrace();
 				}
 			}
-			if(!query[7].equals("None")){
+			if (!query[7].equals("None")) {
 				queryCounter++;
 				try {
 					Subject s = Subject.loadSubjectByQuery("Sub='" + query[7] + "'", "ID");
@@ -280,67 +304,132 @@ public class Server extends AbstractServer {
 			o[2] = f;
 			o[3] = s;
 			msg.setMsg(o);
-			sendToAllClients(msg);
+			try {
+				client.sendToClient(msg);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			break;
-			
+
 		case 2:
 			try {
 				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
 				Subject[][] subjects = new Subject[fields.length][];
-				for(int i=0; i<fields.length; i++){
+				for (int i = 0; i < fields.length; i++) {
 					subjects[i] = fields[i].subject.toArray();
 				}
 				Object[] ob = new Object[2];
 				ob[0] = fields;
 				ob[1] = subjects;
 				msg.setMsg(ob);
-				sendToAllClients(msg);
-			} catch (PersistentException e) {
+				client.sendToClient(msg);
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
-	
-	public void bookPaymentMessageHandler(Message msg){
-		switch(msg.getFunc()){
+
+	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
 		case 1:
 			try {
-				Object[] o = (Object[])msg.getMsg();
-				User u = User.loadUserByORMID((String)o[0]);
+				Object[] o = (Object[]) msg.getMsg();
+				User u = User.loadUserByORMID((String) o[0]);
 				PaymentRequest[] p = u.paymentrequest.toArray();
-				for(int i=0; i<p.length; i++){
-					if(p[i].getBook().getID()== (int)o[1] && p[i].getStatus().equals("waiting")){
-						msg.setMsg("d");
-						sendToAllClients(msg);
-						return;
+				for (int i = 0; i < p.length; i++) {
+					Book b = p[i].getBook();
+					if (b != null) {
+						if (b.getID() == (int) o[1] && p[i].getStatus().equals("waiting")) {
+							msg.setMsg("d");
+							client.sendToClient(msg);
+							return;
+						}
 					}
 				}
 				session.beginTransaction();
 				PaymentRequest pr = PaymentRequest.createPaymentRequest();
 				pr.setUser(u);
-				pr.setBook(Book.loadBookByORMID((int)o[1]));
-				pr.setPaymentInfo((String)o[2]);
+				pr.setBook(Book.loadBookByORMID((int) o[1]));
+				pr.setPaymentInfo((String) o[2]);
 				pr.setDate(new Date());
 				pr.setStatus("waiting");
 				pr.save();
 				session.getTransaction().commit();
 				msg.setMsg("s");
-				sendToAllClients(msg);
-				
+				client.sendToClient(msg);
+
 			} catch (Exception e) {
 				try {
+					e.printStackTrace();
 					session.getTransaction().rollback();
 					msg.setMsg("f");
-					sendToAllClients(msg);
+					client.sendToClient(msg);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 
 			}
-			
+
 		}
+	}
+
+	private void membershipPaymentMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				Object[] o = (Object[]) msg.getMsg();
+				User u = User.loadUserByORMID((String) o[0]);
+				PaymentRequest[] p = u.paymentrequest.toArray();
+				for (int i = 0; i < p.length; i++) {
+					Membership m = p[i].getMembership();
+					if (m != null) {
+						if (p[i].getStatus().equals("waiting")) {
+							msg.setMsg("d");
+							client.sendToClient(msg);
+							return;
+						}
+					}
+				}
+				session.beginTransaction();
+				PaymentRequest pr = PaymentRequest.createPaymentRequest();
+				pr.setUser(u);
+				pr.setMembership(Membership.loadMembershipByORMID((int) o[1]));
+				pr.setPaymentInfo((String) o[2]);
+				pr.setDate(new Date());
+				pr.setStatus("waiting");
+				pr.save();
+				session.getTransaction().commit();
+				msg.setMsg("s");
+				client.sendToClient(msg);
+
+			} catch (Exception e) {
+				try {
+					e.printStackTrace();
+					session.getTransaction().rollback();
+					msg.setMsg("f");
+					client.sendToClient(msg);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
+		}
+	}
+
+	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
+		try {
+			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
+			msg.setMsg(m);
+			client.sendToClient(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	protected void serverStarted() {
