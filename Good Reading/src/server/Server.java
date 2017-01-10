@@ -68,6 +68,10 @@ public class Server extends AbstractServer {
 			break;
 		case "membership":
 			membershipMessageHandler(m, client);
+			break;
+		case "add book":
+			addBookMessageHandler(m, client);
+			break;
 		}
 	}
 
@@ -389,6 +393,34 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	
+	public void addBookMessageHandler(Message msg, ConnectionToClient client) {
+	
+		switch(msg.getFunc())
+		{
+		case 1:
+			try {
+				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
+				Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
+				Subject[][] subjects = new Subject[fields.length][];
+				for (int i = 0; i < fields.length; i++) {
+					subjects[i] = fields[i].subject.toArray();
+				}
+				Object[] ob = new Object[3];
+				ob[0] = fields;
+				ob[1] = subjects;
+				ob[2] = authors;
+				msg.setMsg(ob);
+				client.sendToClient(msg);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
+	
+	
 	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:

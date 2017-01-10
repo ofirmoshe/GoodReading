@@ -62,7 +62,7 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void searchReviewOnClick() {
-		System.out.println("review");
+		ClientUI.setScene("AddNewBookGUI.fxml");
 	}
 
 	public void membershipOnClick() {
