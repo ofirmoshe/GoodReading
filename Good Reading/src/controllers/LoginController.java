@@ -198,8 +198,8 @@ public class LoginController extends AbstractController {
 					return;
 				}
 			}
-			ClientUI.setScene("UserHomepageGUI.fxml");
-			//ClientUI.setScene("BookInfoMenegmentGUI.fxml");
+			//ClientUI.setScene("UserHomepageGUI.fxml");
+			ClientUI.setScene("BookInfoMenegmentGUI.fxml");
 			break;
 		}
 	}

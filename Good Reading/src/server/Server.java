@@ -38,6 +38,7 @@ public class Server extends AbstractServer {
 
 	final public static int DEFAULT_PORT = 5555;
 	static PersistentSession session;
+	static Connection con;
 
 	public Server(int port) {
 		super(port);
@@ -236,28 +237,29 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case 2:
-			Object[] o=(Object[])msg.getMsg();
-			String name=(String)o[0];
-			name = name.substring(0, name.length()-4);
+			Object[] o = (Object[]) msg.getMsg();
+			String name = (String) o[0];
+			name = name.substring(0, name.length() - 4);
 			System.out.println(name);
-			byte[] res = (byte[])o[1];
+			byte[] res = (byte[]) o[1];
 			try {
-				Book b = Book.loadBookByQuery("Title='"+name+"'","ID");
+				Book b = Book.loadBookByQuery("Title='" + name + "'", "ID");
 				session.beginTransaction();
 				b.setImage(res);
 				b.save();
 				session.getTransaction().commit();
-				b=Book.loadBookByQuery("Title='"+name+"'","ID");
-				if(b.getImage()==null) System.out.println("null");
+				b = Book.loadBookByQuery("Title='" + name + "'", "ID");
+				if (b.getImage() == null)
+					System.out.println("null");
 				System.out.println(b.getImage().toString());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				session.getTransaction().rollback();
 			}
-			
+
 		}
 	}
 
@@ -501,11 +503,9 @@ public class Server extends AbstractServer {
 		}
 	}
 
-	
 	public void addBookMessageHandler(Message msg, ConnectionToClient client) {
-	
-		switch(msg.getFunc())
-		{
+
+		switch (msg.getFunc()) {
 		case 1:
 			try {
 				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
@@ -525,8 +525,67 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+		case 2:
+			try {
+				Object[] o = (Object[]) msg.getMsg();
+				session.beginTransaction();
+				Book newBook = Book.createBook();
+				newBook.setTitle((String) o[0]);
+				newBook.setLanguage((String) o[1]);
+				newBook.setImage((byte[]) o[6]);
+				newBook.setSummary((String) o[7]);
+				newBook.setTable_of_contents((String) o[8]);
+				newBook.save();
+				session.getTransaction().commit();
+				Author[] authors = (Author[]) o[4];
+				for (int i = 0; i < authors.length; i++) {
+					Statement stmt = con.createStatement();
+					String sql = "INSERT INTO author_book " + "VALUES (" + authors[i].getID() + ", " + newBook.getID()
+							+ ")";
+					stmt.executeUpdate(sql);
+				}
+				Field[] fields = (Field[]) o[2];
+				for (int i = 0; i < fields.length; i++) {
+					Statement stmt = con.createStatement();
+					String sql = "INSERT INTO book_field " + "VALUES (" + newBook.getID() + ", " + fields[i].getID()
+							+ ")";
+					stmt.executeUpdate(sql);
+				}
+				Subject[] subjects = (Subject[]) o[3];
+				if (subjects.length != 0) {
+					for (int i = 0; i < subjects.length; i++) {
+						Statement stmt = con.createStatement();
+						String sql = "INSERT INTO book_subject " + "VALUES (" + newBook.getID() + ", "
+								+ subjects[i].getID() + ")";
+						stmt.executeUpdate(sql);
+					}
+				}
+				String words = (String) o[5];
+				if (!words.equals("")) {
+					String[] keywords = (String[]) words.split(" ");
+					for (int i = 0; i < keywords.length; i++) {
+						Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
+						if (kw == null) {
+							session.beginTransaction();
+							kw = Keyword.createKeyword();
+							kw.setWord(keywords[i]);
+							kw.save();
+							session.getTransaction().commit();
+						}
+						Statement stmt = con.createStatement();
+						String sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + newBook.getID()
+								+ ")";
+						stmt.executeUpdate(sql);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				session.getTransaction().rollback();
+			}
+
 		}
 	}
+//<<<<<<< HEAD
 	
 	public void userHomepageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
@@ -534,6 +593,9 @@ public class Server extends AbstractServer {
 		}
 	}
 	
+//=======
+
+//>>>>>>> refs/remotes/origin/master
 	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -670,6 +732,21 @@ public class Server extends AbstractServer {
 		} catch (PersistentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://localhost/i-book", "root", "Braude");
+			System.out.println("SQL connection succeed");
+		} catch (SQLException ex) {
+			System.out.println("SQLException: " + ex.getMessage());
+			System.out.println("SQLState: " + ex.getSQLState());
+			System.out.println("VendorError: " + ex.getErrorCode());
 		}
 
 	}

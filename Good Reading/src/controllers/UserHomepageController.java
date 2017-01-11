@@ -177,11 +177,14 @@ public class UserHomepageController extends SystemController {
 							event.consume();
 						}
 					});
-					ByteArrayInputStream in = new ByteArrayInputStream(books[y * 5 + x].getImage());
-					BufferedImage read;
-					read = ImageIO.read(in);
-					Image image = SwingFXUtils.toFXImage(read, null);
-					ImageView iv = new ImageView(image);
+					Image img = new Image(GraphicsImporter.class.getResource("loading_book.jpg").toString());
+					if (books[y * 5 + x].getImage() != null) {
+						ByteArrayInputStream in = new ByteArrayInputStream(books[y * 5 + x].getImage());
+						BufferedImage read;
+						read = ImageIO.read(in);
+						img = SwingFXUtils.toFXImage(read, null);
+					}
+					ImageView iv = new ImageView(img);
 					iv.setFitWidth(180);
 					iv.setFitHeight(270);
 					InnerShadow innerShadow = new InnerShadow();

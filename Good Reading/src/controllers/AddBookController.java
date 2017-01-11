@@ -1,7 +1,11 @@
 package controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 import boundary.ClientUI;
 import client.Client;
@@ -15,6 +19,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -37,6 +42,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class AddBookController extends SystemController {
 
@@ -46,19 +53,28 @@ public class AddBookController extends SystemController {
 	private int currSubCount;
 	private boolean[] checkFields;
 	private GridPane subjectGrid = null;
+	private boolean[][] checkSubjects;
+	private boolean[] checkAuthors;
+	private byte[] bimg = null;
 
 	@FXML
 	private TextField titleField;
 	@FXML
 	private TextField langField;
 	@FXML
-	private TextField authorField;
-	@FXML
 	private AnchorPane fieldChecklist;
 	@FXML
 	private AnchorPane subjectChecklist;
 	@FXML
 	private AnchorPane authorChecklist;
+	@FXML
+	private TextField imageField;
+	@FXML
+	private TextField keywordField;
+	@FXML
+	private TextArea summaryField;
+	@FXML
+	private TextArea tableField;
 
 	public void initialize() {
 		super.initialize();
@@ -72,8 +88,88 @@ public class AddBookController extends SystemController {
 		subjectChecklist.setPrefHeight(1);
 	}
 
-	public void addBookOnClick() {
+	public void uploadImageOnClick() {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image Files", "*.jpg"),
+					new ExtensionFilter("All Files", "*.*"));
+			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
+			if (selectedFile != null) {
+				Image img = new Image(selectedFile.toURI().toString());
+				BufferedImage bImage = SwingFXUtils.fromFXImage(img, null);
+				ByteArrayOutputStream s = new ByteArrayOutputStream();
+				ImageIO.write(bImage, "jpg", s);
+				bimg = s.toByteArray();
+				imageField.setText(selectedFile.getPath());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	public void addBookOnClick() {
+		Object[] o = new Object[9];
+		o[0] = titleField.getText();
+		o[1] = langField.getText();
+		int count = 0;
+		for (int i = 0; i < checkFields.length; i++)
+			if (checkFields[i])
+				count++;
+		Field[] selectedFields = new Field[count];
+		int index = 0;
+		for (int i = 0; i < checkFields.length; i++) {
+			if (checkFields[i]) {
+				selectedFields[index] = fields[i];
+				index++;
+			}
+		}
+		o[2] = selectedFields;
+		
+		count = 0;
+		for (int i = 0; i < checkSubjects.length; i++) {
+			for (int j = 0; j < checkSubjects[i].length; j++) {
+				if (checkSubjects[i][j])
+					count++;
+			}
+		}
+		Subject[] selectedSubjects = new Subject[count];
+		index = 0;
+		for (int i = 0; i < checkSubjects.length; i++) {
+			for (int j = 0; j < checkSubjects[i].length; j++) {
+				if (checkSubjects[i][j]) {
+					selectedSubjects[index] = subjects[i][j];
+					index++;
+				}
+			}
+		}
+		o[3] = selectedSubjects;
+		
+		count = 0;
+		for (int i = 0; i < checkAuthors.length; i++)
+			if (checkAuthors[i])
+				count++;
+		Author[] selectedAuthors = new Author[count];
+		index = 0;
+		for (int i = 0; i < checkAuthors.length; i++) {
+			if (checkAuthors[i]) {
+				selectedAuthors[index] = authors[i];
+				index++;
+			}
+		}
+		o[4] = selectedAuthors;
+		
+		o[5]=keywordField.getText();
+		o[6]=bimg;
+		o[7]=summaryField.getText();
+		o[8]=tableField.getText();
+		Message msg = new Message("add book",2,o);
+		try {
+			Client.instance.sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -84,7 +180,12 @@ public class AddBookController extends SystemController {
 			fields = (Field[]) ob[0];
 			checkFields = new boolean[fields.length];
 			subjects = (Subject[][]) ob[1];
+			checkSubjects =new boolean[fields.length][];
+			for(int i=0; i<fields.length; i++){
+				checkSubjects[i] = new boolean[subjects[i].length];
+			}
 			authors = (Author[]) ob[2];
+			checkAuthors = new boolean[authors.length];
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -114,6 +215,9 @@ public class AddBookController extends SystemController {
 						} else {
 							int sin = (int) cb.getUserData();
 							checkFields[sin] = false;
+							for(int i=0; i<checkSubjects[sin].length; i++){
+								checkSubjects[sin][i]=false;
+							}
 							setSubjects();
 						}
 					}
@@ -128,8 +232,20 @@ public class AddBookController extends SystemController {
 				cb.setText(a.getName());
 				cb.setUserData(i);
 				cb.setLayoutY(i * 20);
+				cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+					public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+						if (new_val) {
+							int sin = (int) cb.getUserData();
+							checkAuthors[sin] = true;
+						} else {
+							int sin = (int) cb.getUserData();
+							checkAuthors[sin] = false;
+						}
+					}
+
+				});
 				authorChecklist.getChildren().add(cb);
-				fieldChecklist.setPrefHeight(21 * authors.length);
+				authorChecklist.setPrefHeight(21 * authors.length);
 			}
 		}
 	}
@@ -144,7 +260,21 @@ public class AddBookController extends SystemController {
 				for (int j = 0; j < s.length; j++, currSubCount++) {
 					CheckBox cb = new CheckBox();
 					cb.setText(s[j].getSub());
-					cb.setUserData(j);
+					if(checkSubjects[i][j])
+						cb.setSelected(true);
+					int[] in = {i,j};
+					cb.setUserData(in);
+					cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+						public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+							if (new_val) {
+								int[] in = (int[]) cb.getUserData();
+								checkSubjects[in[0]][in[1]] = true;
+							} else {
+								int[] in = (int[]) cb.getUserData();
+								checkSubjects[in[0]][in[1]] = false;
+							}
+						}
+					});
 					subjectGrid.add(cb, 0, currSubCount);
 				}
 			}
