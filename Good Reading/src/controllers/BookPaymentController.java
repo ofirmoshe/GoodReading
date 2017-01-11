@@ -1,7 +1,11 @@
 package controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
 
 import boundary.ClientUI;
 import client.Client;
@@ -11,6 +15,7 @@ import i_book.Book;
 import i_book.PaymentRequest;
 import i_book.User;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -39,7 +44,15 @@ public class BookPaymentController extends SystemController {
 	public void initialize() {
 		super.initialize();
 		currBook = book;
-		Image img = new Image(book.getImage());
+		ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
+		BufferedImage read = null;
+		try {
+			read = ImageIO.read(in);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Image img = SwingFXUtils.toFXImage(read, null);
 		bookImage.setImage(img);
 		bookNameLabel.setText(book.getTitle());
 		String s = new String();

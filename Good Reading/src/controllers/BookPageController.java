@@ -1,6 +1,10 @@
 package controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.orm.PersistentException;
 
@@ -15,6 +19,7 @@ import i_book.Subject;
 import i_book.User;
 import i_book.User_Book;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -85,18 +90,17 @@ public class BookPageController extends SystemController {
 	 */
 	public void initialize() {
 		super.initialize();
+		try{
 		Object[] o = new Object[2];
 		o[0] = book.getID();
 		o[1] = ClientUI.user.getID();
 		Message msg = new Message("book page", 1, o);
-		try {
-			Client.instance.sendToServer(msg);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Client.instance.sendToServer(msg);
 		currBook = book;
-		Image img = new Image(book.getImage());
+		ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
+		BufferedImage read;
+		read = ImageIO.read(in);
+		Image img = SwingFXUtils.toFXImage(read, null);
 		bookImage.setImage(img);
 		bookImage.setFitWidth(180);
 		bookImage.setFitHeight(270);
@@ -109,7 +113,9 @@ public class BookPageController extends SystemController {
 			s = String.format("%s", f);
 		priceLabel.setText(s + "$");
 		summaryText.setText(book.getSummary());
-
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -207,6 +213,7 @@ public class BookPageController extends SystemController {
 					} else
 						subjectLabel.setText("");
 					if (canReview.equals("no") || canReview.equals("waiting") || canReview.equals("approved")) {
+						scrollAnchor.setPrefHeight(438);
 						addReviewText.setVisible(false);
 						addReviewLabel.setVisible(false);
 						addReviewButton.setVisible(false);

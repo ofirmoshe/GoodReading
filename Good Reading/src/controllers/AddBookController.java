@@ -2,9 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.swing.event.ChangeEvent;
-
 import boundary.ClientUI;
 import client.Client;
 import common.Message;
@@ -40,12 +38,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-
 public class AddBookController extends SystemController {
 
 	private Author[] authors;
 	public static Field[] fields;
 	public static Subject[][] subjects;
+	private int currSubCount;
+	private boolean[] checkFields;
+	private GridPane subjectGrid = null;
 
 	@FXML
 	private TextField titleField;
@@ -60,30 +60,29 @@ public class AddBookController extends SystemController {
 	@FXML
 	private AnchorPane authorChecklist;
 
-
 	public void initialize() {
 		super.initialize();
-			Message msg = new Message("add book", 1);
-			try {
-				Client.instance.sendToServer(msg);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	} 
-
-
-	public void addBookOnClick() {
-		
+		Message msg = new Message("add book", 1);
+		try {
+			Client.instance.sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		subjectChecklist.setPrefHeight(1);
 	}
 
-	
+	public void addBookOnClick() {
+
+	}
+
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {
 		case 1:
 			Object[] ob = (Object[]) msg.getMsg();
 			fields = (Field[]) ob[0];
+			checkFields = new boolean[fields.length];
 			subjects = (Subject[][]) ob[1];
 			authors = (Author[]) ob[2];
 			Platform.runLater(new Runnable() {
@@ -95,59 +94,64 @@ public class AddBookController extends SystemController {
 			});
 		}
 	}
-	
-	public void setCheckboxes(Object[] o)
-	{
-		for(int i=0; i<o.length; i++)
-		{
-			AnchorPane ap=new AnchorPane();
+
+	public void setCheckboxes(Object[] o) {
+		for (int i = 0; i < o.length; i++) {
 			CheckBox cb = new CheckBox();
 			Field f;
 			Author a;
-			Subject s;
-			if(o[i] instanceof Field)
-			{
-				f=(Field)o[i];
+			if (o[i] instanceof Field) {
+				f = (Field) o[i];
 				cb.setText(f.getField());
 				cb.setUserData(i);
-				cb.setLayoutY(i*20);
+				cb.setLayoutY(i * 20);
 				cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			        public void changed(ObservableValue<? extends Boolean> ov,
-			            Boolean old_val, Boolean new_val) {
-			        	if(new_val)
-			        	{
-			        		setCheckboxes(subjects[(int) cb.getUserData()]);
-			        	}
-			        	else
-			        	{
-			        		System.out.println("fuck");
-			        	}
-			        }
-			        
-			        });
-			        fieldChecklist.getChildren().add(cb);
+					public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+						if (new_val) {
+							int sin = (int) cb.getUserData();
+							checkFields[sin] = true;
+							setSubjects();
+						} else {
+							int sin = (int) cb.getUserData();
+							checkFields[sin] = false;
+							setSubjects();
+						}
+					}
+
+				});
+				fieldChecklist.getChildren().add(cb);
+				fieldChecklist.setPrefHeight(21 * fields.length);
 			}
-			        
-			else if(o[i] instanceof Author)
-			{
-				a=(Author)o[i];
+
+			else if (o[i] instanceof Author) {
+				a = (Author) o[i];
 				cb.setText(a.getName());
 				cb.setUserData(i);
-				cb.setLayoutY(i*20);
+				cb.setLayoutY(i * 20);
 				authorChecklist.getChildren().add(cb);
+				fieldChecklist.setPrefHeight(21 * authors.length);
 			}
-			else if(o[i] instanceof Subject)
-			{
-				s=(Subject)o[i];
-				cb.setText(s.getSub());
-				cb.setUserData(i);
-				cb.setLayoutY(i*20);
-				subjectChecklist.getChildren().add(cb);
-			}
-			
 		}
 	}
 
-	
-}
+	public void setSubjects() {
+		if (subjectGrid != null)
+			subjectChecklist.getChildren().remove(subjectGrid);
+		subjectGrid = new GridPane();
+		for (int i = 0; i < checkFields.length; i++) {
+			if (checkFields[i]) {
+				Subject[] s = subjects[i];
+				for (int j = 0; j < s.length; j++, currSubCount++) {
+					CheckBox cb = new CheckBox();
+					cb.setText(s[j].getSub());
+					cb.setUserData(j);
+					subjectGrid.add(cb, 0, currSubCount);
+				}
+			}
+		}
+		subjectChecklist.getChildren().add(subjectGrid);
+		subjectChecklist.setPrefHeight(18 * currSubCount);
+		currSubCount = 0;
+	}
 
+}

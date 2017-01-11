@@ -489,7 +489,7 @@ public class Book implements Serializable{
 	
 	private String table_of_contents;
 	
-	private String image;
+	private byte[] image;
 	
 	private String pdf;
 	
@@ -559,11 +559,11 @@ public class Book implements Serializable{
 		return table_of_contents;
 	}
 	
-	public void setImage(String value) {
+	public void setImage(byte[] value) {
 		this.image = value;
 	}
 	
-	public String getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 	

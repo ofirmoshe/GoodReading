@@ -38,7 +38,9 @@ public abstract class SystemController extends AbstractController {
 	@FXML
 	private AnchorPane membershipButton;
 	@FXML
-	private ScrollPane scrollPane;
+	protected ScrollPane scrollPane;
+	@FXML
+	protected AnchorPane scrollAnchor;
 
 	public void initialize() {
 		super.initialize();

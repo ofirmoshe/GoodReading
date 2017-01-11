@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -14,6 +15,9 @@ import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import i_book.Author;
 import i_book.Book;
 import i_book.GeneralUser;
@@ -27,8 +31,14 @@ import client.Client;
 import common.Message;
 import graphics.GraphicsImporter;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+
+import javax.imageio.ImageIO;
 
 import org.hibernate.*;
 
@@ -59,6 +69,8 @@ public class LoginController extends AbstractController {
 	public ImageView wrongPass;
 	@FXML
 	public Label loginLabel;
+	@FXML
+	private AnchorPane mainAnchor;
 
 	/**
 	 * This method initializes the controller.
@@ -75,9 +87,12 @@ public class LoginController extends AbstractController {
 		loginButton.setImage(new Image(GraphicsImporter.class.getResource("button.png").toString()));
 	}
 
-	/** This method is called when the login button has been clicked.
-	 * It creates a new client and transfers the input login data to the server to check validation.
-	 * If the client can't connect it displays a red x sign besides the host field.
+	/**
+	 * This method is called when the login button has been clicked. It creates
+	 * a new client and transfers the input login data to the server to check
+	 * validation. If the client can't connect it displays a red x sign besides
+	 * the host field.
+	 * 
 	 * @throws Exception
 	 */
 	public void loginOnClick() throws Exception {
@@ -99,6 +114,33 @@ public class LoginController extends AbstractController {
 			Message msg = null;
 			msg = new Message("login", 1, u);
 			Client.instance.sendToServer(msg);
+			/*FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+					new ExtensionFilter("All Files", "*.*"));
+			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
+			if (selectedFile != null) {
+				System.out.println(selectedFile.getName());
+				try {
+					Image img = new Image(selectedFile.toURI().toString());
+					BufferedImage bImage = SwingFXUtils.fromFXImage(img, null);
+					ByteArrayOutputStream s = new ByteArrayOutputStream();
+					ImageIO.write(bImage, "jpg", s);
+					Object[] o=new Object[2];
+					o[0]=selectedFile.getName();
+					byte[] res = s.toByteArray();
+					o[1]=res;
+					Message m = new Message("login", 2, o);
+					Client.instance.sendToServer(m);
+					/*ByteArrayInputStream in = new ByteArrayInputStream(res);
+					BufferedImage read = ImageIO.read(in);
+					Image image = SwingFXUtils.toFXImage(read, null);
+					ImageView iv = new ImageView(image);
+					mainAnchor.getChildren().add(iv);*/
+			/*	} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}*/
 		} catch (Exception e) {
 			wrongHost.setVisible(true);
 		}
@@ -107,10 +149,14 @@ public class LoginController extends AbstractController {
 
 	/**
 	 * This method overrides the method of abstract controller.
-	 * @param msg	case 1: this message is an object array where the first index is a book array
-	 * contains all the books in DB, and the second index is a message about the user that tries to connect.
-	 * if the username and the password are correct the message will be an instance of this user. 
-	 * if the user is not banned or online already it displays the matching homepage.
+	 * 
+	 * @param msg
+	 *            case 1: this message is an object array where the first index
+	 *            is a book array contains all the books in DB, and the second
+	 *            index is a message about the user that tries to connect. if
+	 *            the username and the password are correct the message will be
+	 *            an instance of this user. if the user is not banned or online
+	 *            already it displays the matching homepage.
 	 */
 	@Override
 	public void handleMessage(Message msg) {

@@ -146,6 +146,28 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+		case 2:
+			Object[] o=(Object[])msg.getMsg();
+			String name=(String)o[0];
+			name = name.substring(0, name.length()-4);
+			System.out.println(name);
+			byte[] res = (byte[])o[1];
+			try {
+				Book b = Book.loadBookByQuery("Title='"+name+"'","ID");
+				session.beginTransaction();
+				b.setImage(res);
+				b.save();
+				session.getTransaction().commit();
+				b=Book.loadBookByQuery("Title='"+name+"'","ID");
+				if(b.getImage()==null) System.out.println("null");
+				System.out.println(b.getImage().toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				session.getTransaction().rollback();
+			}
+			
 		}
 	}
 
