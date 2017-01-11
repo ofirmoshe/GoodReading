@@ -46,16 +46,35 @@
          </cursor>
       </AnchorPane>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="446.0" layoutX="-2.0" layoutY="161.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="905.0" />
-      <TextField fx:id="titleField" layoutX="42.0" layoutY="196.0" prefHeight="25.0" prefWidth="150.0" />
+      <TextField fx:id="titleField" layoutX="42.0" layoutY="194.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="langField" layoutX="247.0" layoutY="194.0" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="42.0" layoutY="175.0" text="Title" />
+      <Label layoutX="42.0" layoutY="173.0" text="Title" />
       <Label layoutX="247.0" layoutY="173.0" text="Language" />
-      <Label layoutX="448.0" layoutY="239.0" text="Author" />
-      <Button layoutX="411.0" layoutY="531.0" mnemonicParsing="false" text="Search" />
-      <TextField fx:id="keywordField" layoutX="43.0" layoutY="466.0" />
-      <Label layoutX="42.0" layoutY="443.0" text="Keywords" />
+      <Label layoutX="448.0" layoutY="238.0" text="Author" />
+      <Button layoutX="400.0" layoutY="560.0" mnemonicParsing="false" onAction="#addBookOnClick" text="Add Book" />
+      <TextField fx:id="keywordField" layoutX="43.0" layoutY="391.0" />
+      <Label layoutX="42.0" layoutY="368.0" text="Keywords" />
       <Label layoutX="45.0" layoutY="239.0" text="Field" />
       <Label layoutX="247.0" layoutY="239.0" text="Subject" />
+      <ScrollPane layoutX="42.0" layoutY="254.0" prefHeight="95.0" prefWidth="175.0">
+        <content>
+          <AnchorPane fx:id="fieldChecklist" minHeight="0.0" minWidth="0.0" prefHeight="89.0" prefWidth="170.0" />
+        </content>
+      </ScrollPane>
+      <ScrollPane layoutX="247.0" layoutY="253.0" prefHeight="95.0" prefWidth="175.0">
+         <content>
+            <AnchorPane fx:id="subjectChecklist" minHeight="0.0" minWidth="0.0" prefHeight="88.0" prefWidth="172.0" />
+         </content>
+      </ScrollPane>
+      <ScrollPane layoutX="448.0" layoutY="252.0" prefHeight="95.0" prefWidth="175.0">
+         <content>
+            <AnchorPane fx:id="authorChecklist" minHeight="0.0" minWidth="0.0" prefHeight="89.0" prefWidth="172.0" />
+         </content>
+      </ScrollPane>
+      <Label layoutX="448.0" layoutY="173.0" text="Summary" />
+      <TextArea fx:id="summaryField" layoutX="447.0" layoutY="194.0" prefHeight="42.0" prefWidth="407.0" />
+      <Label layoutX="649.0" layoutY="239.0" text="Table of contents" />
+      <TextArea fx:id="tableField" layoutX="649.0" layoutY="254.0" prefHeight="95.0" prefWidth="200.0" />
       <AnchorPane fx:id="menuAnchor" layoutX="-182.0" layoutY="244.0" prefHeight="131.0" prefWidth="191.0">
          <children>
             <AnchorPane fx:id="searchBookButton" layoutX="1.0">
@@ -168,24 +187,14 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <ScrollPane layoutX="42.0" layoutY="254.0" prefHeight="182.0" prefWidth="175.0">
-        <content>
-          <AnchorPane fx:id="fieldChecklist" minHeight="0.0" minWidth="0.0" prefHeight="184.0" prefWidth="170.0" />
-        </content>
-      </ScrollPane>
-      <ScrollPane layoutX="247.0" layoutY="253.0" prefHeight="182.0" prefWidth="175.0">
-         <content>
-            <AnchorPane fx:id="subjectChecklist" minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="172.0" />
-         </content>
-      </ScrollPane>
-      <ScrollPane layoutX="448.0" layoutY="252.0" prefHeight="182.0" prefWidth="175.0">
-         <content>
-            <AnchorPane fx:id="authorChecklist" minHeight="0.0" minWidth="0.0" prefHeight="207.0" prefWidth="172.0" />
-         </content>
-      </ScrollPane>
-      <Label layoutX="448.0" layoutY="173.0" text="Summary" />
-      <TextArea layoutX="447.0" layoutY="189.0" prefHeight="42.0" prefWidth="302.0" />
-      <Label layoutX="649.0" layoutY="239.0" text="Table of contents" />
-      <TextArea layoutX="649.0" layoutY="254.0" prefHeight="182.0" prefWidth="200.0" />
+      <Button layoutX="473.0" layoutY="391.0" mnemonicParsing="false" onAction="#uploadImageOnClick" text="Upload " />
+      <TextField fx:id="imageField" editable="false" layoutX="248.0" layoutY="391.0" prefHeight="25.0" prefWidth="222.0" />
+      <Label layoutX="249.0" layoutY="368.0" text="Image" />
+      <Label layoutX="43.0" layoutY="441.0" text="pdf" />
+      <TextField fx:id="pdfField" editable="false" layoutX="42.0" layoutY="464.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="docField" editable="false" layoutX="286.0" layoutY="463.0" prefHeight="25.0" prefWidth="222.0" />
+      <Label layoutX="287.0" layoutY="440.0" text="doc" />
+      <Label layoutX="541.0" layoutY="439.0" text="fb2" />
+      <TextField fx:id="fb2Field" editable="false" layoutX="540.0" layoutY="462.0" prefHeight="25.0" prefWidth="222.0" />
    </children>
 </AnchorPane>

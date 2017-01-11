@@ -47,7 +47,7 @@ import org.hibernate.*;
  * page the user (Client and/or Manager) is logging into the system.
  * 
  * @author guyzi
- *
+ *					
  */
 public class LoginController extends AbstractController {
 
