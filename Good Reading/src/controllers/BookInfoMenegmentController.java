@@ -46,6 +46,8 @@ public class BookInfoMenegmentController extends SystemController {
 	public static Field[] fields;
 	private boolean[] checkFields;
 	private boolean fieldFlag=false;
+	private boolean flag=false;
+	private boolean subjectFlag=false;
 	private Field field= null;
 
 	@FXML
@@ -60,9 +62,12 @@ public class BookInfoMenegmentController extends SystemController {
 	private ImageView saveButtonImage;
 	@FXML
 	private CheckBox newFieldCheck;
+	@FXML
+	private ChoiceBox<String> cb;
 
 	public void initialize() {
 		super.initialize();
+		//field.setField("");
 		Message msg = new Message("add book info", 1);
 		try {
 			Client.instance.sendToServer(msg);
@@ -70,17 +75,34 @@ public class BookInfoMenegmentController extends SystemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		fieldChecklist.setPrefHeight(1);
+
 	}
 
 	public void saveBookInfoOnClick() {
+		
 		Message msg;
+		if(subjectFlag&&field==null&&cb.getSelectionModel().getSelectedItem().equals("None")){
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Add Book Information");
+					alert.setContentText("You must Choose a Field for the new subject.");
+					alert.showAndWait();
+				}
+		});
+			}
+		else{
 		Object[] o= new Object[4];
 		o[0]=authorField.getText();
 		o[1]=fieldField.getText();
 		o[2]=subjectField.getText();
-		o[3]=field;
-			 msg = new Message("book info menegment", 2, o);
+		o[3]=fields[cb.getSelectionModel().getSelectedIndex()];
+		if (field!=null)
+			o[3]=field;
+		 msg = new Message("book info menegment", 2, o);
+		if(flag)
+			 msg.setFunc(3);
 		
 		try {
 			Client.instance.sendToServer(msg);
@@ -89,20 +111,43 @@ public class BookInfoMenegmentController extends SystemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		}
 	}
 	
 public void subjectOnInput(){
 	if(!(subjectField.getText().equals("")))
+	{
+		subjectFlag=true;
 		if(fieldFlag)
 			newFieldCheck.setVisible(true);
+		newFieldCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+				if (new_val) {
+					field=new Field();
+					field.setField(fieldField.toString());
+					flag=true;
+	
+				}
+			}
+		});
+	}
 			
 	}
 	
 public void fieldOnInput(){
 	if(!(fieldField.getText().equals(""))){
 		fieldFlag=true;
-		if(!(subjectField.getText().equals("")))
+		if(subjectFlag)
 			newFieldCheck.setVisible(true);
+		newFieldCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+				if (new_val) {
+					field=new Field();
+					field.setField(fieldField.toString());
+					flag=true;
+				}
+			}
+		});
 	}
 		
 }
@@ -129,19 +174,9 @@ public void fieldOnInput(){
 				}
 			});
 			break;
-		case 2:
-			if(msg.getCont().equals("null field")){
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Add Book Information");
-					alert.setContentText("You must Choose a Field for the new subject.");
-					alert.showAndWait();
-				}
-			});
-			}
-			if(msg.getCont().equals("ad")){
+		}
+	
+			if(msg.getMsg().equals("ad")){
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -152,7 +187,7 @@ public void fieldOnInput(){
 					}
 				});
 			}
-			if(msg.getCont().equals("sd")){
+			if(msg.getMsg().equals("sd")){
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -163,7 +198,7 @@ public void fieldOnInput(){
 					}
 				});
 			}
-			if(msg.getCont().equals("fd")){
+			if(msg.getMsg().equals("fd")){
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -174,7 +209,7 @@ public void fieldOnInput(){
 					}
 				});
 			}
-			if(msg.getCont().equals("s")){
+			if(msg.getMsg().equals("s")){
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -185,34 +220,18 @@ public void fieldOnInput(){
 					}
 				});
 			}
-		}
+		
 	}
 
 	public void setCheckboxes(Object[] o) {
-		for (int i = 0; i < o.length; i++) {
-			CheckBox cb = new CheckBox();
-			Field f;
-				f = (Field) o[i];
-				cb.setText(f.getField());
-				cb.setUserData(i);
-				cb.setLayoutY(i * 20);
-				cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
-					public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
-						if (new_val) {
-							int sin = (int) cb.getUserData();
-							checkFields[sin] = true;
-							
-						} else {
-							int sin = (int) cb.getUserData();
-							checkFields[sin] = false;
-						field=f;
-						}
-					}
-
-				});
-				fieldChecklist.getChildren().add(cb);
-				fieldChecklist.setPrefHeight(21 * fields.length);
-				
-		}	
+	
+		ObservableList<String> olf = FXCollections.observableArrayList();
+		olf.add("None");
+		for (int i = 0; i < fields.length; i++) {
+			olf.add(fields[i].getField());
+		}
+		cb.setItems(olf);
+		cb.getSelectionModel().selectFirst();
+		
 	}
 }
