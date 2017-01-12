@@ -211,7 +211,7 @@ CREATE TABLE `generaluser` (
 
 LOCK TABLES `generaluser` WRITE;
 /*!40000 ALTER TABLE `generaluser` DISABLE KEYS */;
-INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,'234567','offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,'345678','offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User');
+INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,'234567','offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,'345678','offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User'),('5','Malki','Grossman','777',1,NULL,NULL,'Librarian','567891','offline','Employee'),('6','Avi','Sofer','000',2,NULL,NULL,'Library Manager','678912','offline','Employee');
 /*!40000 ALTER TABLE `generaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -344,7 +344,7 @@ CREATE TABLE `review` (
   PRIMARY KEY (`ID`),
   KEY `FKReview85949` (`User_BookBookID`,`User_BookGeneralUserID`),
   CONSTRAINT `FKReview85949` FOREIGN KEY (`User_BookBookID`, `User_BookGeneralUserID`) REFERENCES `user_book` (`BookID`, `GeneralUserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -353,7 +353,7 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
-INSERT INTO `review` VALUES (2,'I hate this book','approved','2',1),(3,'This book is wow','approved','3',1),(4,'I don\'t know how to read','approved','4',1),(9,'wallack ahla sefer','approved','1',1),(10,'she knew nothing','approved','1',28);
+INSERT INTO `review` VALUES (2,'I hate this book','approved','2',1),(3,'This book is wow','approved','3',1),(4,'I don\'t know how to read','approved','4',1),(9,'wallack ahla sefer','approved','1',1),(10,'she knew nothing','approved','1',28),(11,'yofi yofi','approved','1',2),(12,'i cried like a baby','approved','1',3),(13,'stupid book, stopped  reading at the third page','approved','1',4),(14,'tried one recipe, died of sugar cancer','approved','1',5),(15,'i love dogs! like, rly love them','approved','1',6),(16,'too sexual','approved','1',7),(17,'boring! good book for falling asleep','approved','1',8);
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -479,4 +479,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-12 20:21:16
+-- Dump completed on 2017-01-12 22:42:06

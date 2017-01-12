@@ -217,9 +217,7 @@ public class UserHomepageController extends SystemController {
 	public void handleMessage(Message msg) {
 		switch(msg.getFunc()){
 		case 1:
-			System.out.println("han");
 			books = (Book[])msg.getMsg();
-			System.out.println(books[12].getPrice());
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {

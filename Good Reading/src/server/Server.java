@@ -114,13 +114,13 @@ public class Server extends AbstractServer {
 			GeneralUser u = null;
 			try {
 				u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
-			} catch (PersistentException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				a[1] = "wrong username";
 				msg.setMsg(a);
 				try {
 					client.sendToClient(msg);
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

@@ -20,6 +20,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import i_book.Author;
 import i_book.Book;
+import i_book.Employee;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import i_book.User;
@@ -169,8 +170,14 @@ public class LoginController extends AbstractController {
 					System.out.println(u.getStatus());
 					return;
 				}
+				ClientUI.setScene("UserHomepageGUI.fxml");
 			}
-			ClientUI.setScene("UserHomepageGUI.fxml");
+			if (ClientUI.user instanceof Employee){
+				Employee emp = (Employee)ClientUI.user;
+				if(emp.getPosition().equals("Librarian")||emp.getPosition().equals("Library Manager")){
+					ClientUI.setScene("LibrarianHomepageGUI.fxml");
+				}
+			}
 			break;
 		}
 	}
