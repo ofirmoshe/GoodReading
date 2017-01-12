@@ -87,83 +87,86 @@ public class Server extends AbstractServer {
 	}
 
 	private void BookInfoMessageHandler(Message msg, ConnectionToClient client) {
-		boolean flag = true;
-		switch (msg.getFunc()) {
-		case 2:
-			try {
-				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
-				Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
-				Subject[][] subjects = new Subject[fields.length][];
-				for (int i = 0; i < fields.length; i++) {
-					subjects[i] = fields[i].subject.toArray();
-				}
-				Object[] o = (Object[]) msg.getMsg();
-				for (int i = 0; i < authors.length; i++) {
-					if (authors[i].equals(o[0])) {
-						msg.setCont("ad");
-						sendToAllClients(msg);
-						return;
-					}
-				}
-				for (int i = 0; i < fields.length; i++) {
-					if (fields[i].equals(o[1])) {
-						msg.setCont("fd");
-						sendToAllClients(msg);
-						return;
-					}
-				}
-				for (int j = 0; j < fields.length; j++)
-					for (int i = 0; i < subjects.length; i++) {
-						if (subjects[i].equals(o[2])) {
-							msg.setCont("sd");
-							sendToAllClients(msg);
-							return;
-						}
-					}
-				session.beginTransaction();
-				if (!o[0].equals("")) {
-					Author a = Author.createAuthor();
-					a.setName(o[0].toString());
-					a.save();
-				}
-				if (!o[1].equals("")) {
-					Field f = Field.createField();
-					f.setField(o[1].toString());
-					f.save();
-				}
-				if (!o[2].equals("")) {
-					Subject s = Subject.createSubject();
-					s.setSub(o[2].toString());
-					if (!o[3].equals("")) {
-						s.setField((Field) o[3]);
-					} else {
-						msg.setCont("null field");
-						client.sendToClient(msg);
-						flag = false;
-					}
-					if (flag) {
-						s.save();
-					}
-				}
-				session.getTransaction().commit();
-				msg.setCont("s");
-				client.sendToClient(msg);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				try {
-					e.printStackTrace();
-					session.getTransaction().rollback();
-					msg.setMsg("f");
-					client.sendToClient(msg);
-				} catch (Exception e1) {
-					e1.printStackTrace();
+		Field f = null;
+		boolean af = true;
+		boolean ff = true;
+		boolean sf = true;
+
+		try {
+			Field[] fields = Field.listFieldByQuery("ID>0", "ID");
+			Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
+			Subject[][] subjects = new Subject[fields.length][];
+			for (int i = 0; i < fields.length; i++) {
+				subjects[i] = fields[i].subject.toArray();
+			}
+			Object[] o = (Object[]) msg.getMsg();
+			for (int i = 0; i < authors.length; i++) {
+				if (authors[i].getName().equals(o[0])) {
+					af = false;
+					msg.setMsg("ad");
+					sendToAllClients(msg);
+					return;
 				}
 			}
-			break;
+			for (int i = 0; i < fields.length; i++) {
+				if (fields[i].getField().equals(o[1])) {
+					msg.setMsg("fd");
+					ff = false;
+					sendToAllClients(msg);
+					return;
+				}
+			}
+			for (int j = 0; j < fields.length; j++)
+				for (int i = 0; i < subjects[j].length; i++) {
+					if (subjects[j][i].getSub().equals(o[2])) {
+						sf = false;
+						msg.setMsg("sd");
+						sendToAllClients(msg);
+						return;
+					}
+				}
+			session.beginTransaction();
+			if (!o[0].equals("") && af) {
+				Author a = Author.createAuthor();
+				a.setName(o[0].toString());
+				a.save();
+			}
+			if (!o[1].equals("") && ff) {
+				f = Field.createField();
+				f.setField(o[1].toString());
+				f.save();
+				session.getTransaction().commit();
+				session.beginTransaction();
+			}
+			if (!o[2].equals("") && sf) {
+
+				Subject s = Subject.createSubject();
+				s.setSub(o[2].toString());
+				if (msg.getFunc() == 2)
+					s.setField((Field) o[3]);
+				else if (f != null && msg.getFunc() == 3) {
+					s.setField(f);
+
+				}
+
+				s.save();
+			}
+			session.getTransaction().commit();
+			msg.setMsg("s");
+			client.sendToClient(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			try {
+				e.printStackTrace();
+				session.getTransaction().rollback();
+				msg.setMsg("f");
+				client.sendToClient(msg);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
 
 	}
-	
 
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
