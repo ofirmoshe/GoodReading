@@ -163,6 +163,7 @@ public class Server extends AbstractServer {
 		}
 
 	}
+	
 
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
