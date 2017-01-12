@@ -64,7 +64,7 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void searchReviewOnClick() {
-		ClientUI.setScene("AddNewBookGUI.fxml");
+		ClientUI.setScene("SearchReviewGUI.fxml");
 	}
 
 	public void membershipOnClick() {

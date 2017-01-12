@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookInfoMenegmentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchReviewController">
    <children>
       <ImageView>
          <image>
@@ -46,55 +46,19 @@
          </cursor>
       </AnchorPane>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="446.0" layoutX="-2.0" layoutY="161.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="905.0" />
-      <TextField fx:id="authorField" layoutX="125.0" layoutY="198.0" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="125.0" layoutY="177.0" text="Add Author Name" />
-      <AnchorPane fx:id="chooseFieldAnchor" layoutX="480.0" layoutY="254.0" visible="false">
-         <children>
-            <Label text="Choos Fileld for this subject" />
-            <ChoiceBox fx:id="cb" layoutY="22.0" prefWidth="150.0" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="796.0" layoutY="21.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
-         <children>
-            <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
-               <image>
-                  <Image url="@../graphics/orange_button.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="15.0" layoutY="3.0" text="go back" textFill="WHITE">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
-         </children>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane layoutX="247.0" layoutY="38.0" onMouseReleased="#logoOnClick" prefHeight="79.0" prefWidth="376.0">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </AnchorPane>
-      <AnchorPane fx:id="saveImage" layoutX="399.0" layoutY="514.0" onMouseEntered="#saveOnHover" onMouseExited="#saveOffHover" onMouseMoved="#saveOnHover" onMouseReleased="#saveBookInfoOnClick">
-         <children>
-            <ImageView fx:id="saveButtonImage">
-               <image>
-                  <Image url="@../graphics/button.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="34.0" layoutY="6.0" prefHeight="20.0" prefWidth="76.0" text="Save" textFill="#fcfafa">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-      <TextField fx:id="fieldField" layoutX="480.0" layoutY="195.0" onInputMethodTextChanged="#fieldOnInput" onKeyPressed="#fieldOnInput" onKeyReleased="#fieldOnInput" onKeyTyped="#fieldOnInput" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="480.0" layoutY="177.0" text="Add Field Name" />
-      <TextField fx:id="subjectField" layoutX="126.0" layoutY="288.0" onInputMethodTextChanged="#subjectOnInput" onKeyPressed="#subjectOnInput" onKeyReleased="#subjectOnInput" onKeyTyped="#subjectOnInput" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="129.0" layoutY="262.0" text="Add Subject Name" />
-      <CheckBox fx:id="newFieldCheck" layoutX="143.0" layoutY="329.0" mnemonicParsing="false" text="Do you want to add this subject for new Field?" textFill="#030303" visible="false" />
+      <TextField fx:id="titleField" layoutX="42.0" layoutY="196.0" onAction="#searchOnEnterPressed" prefHeight="25.0" prefWidth="150.0" />
+      <TextField fx:id="authorField" layoutX="204.0" layoutY="196.0" onAction="#searchOnEnterPressed" />
+      <Label layoutX="42.0" layoutY="175.0" text="Title" />
+      <Label layoutX="204.0" layoutY="175.0" text="Author" />
+      <ChoiceBox fx:id="optionBox" layoutX="547.0" layoutY="250.0" prefHeight="25.0" prefWidth="64.0" visible="false" />
+      <Button layoutX="547.0" layoutY="196.0" mnemonicParsing="false" onAction="#searchOnEnterPressed" text="Search" />
+      <TextField fx:id="keywordField" layoutX="373.0" layoutY="196.0" onAction="#searchOnEnterPressed" />
+      <Label layoutX="372.0" layoutY="174.0" text="Keywords" />
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="235.0" prefHeight="366.0" prefWidth="900.0">
+         <content>
+          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="356.0" prefWidth="894.0" />
+         </content>
+      </ScrollPane>
       <AnchorPane fx:id="menuAnchor" layoutX="-182.0" layoutY="244.0" prefHeight="131.0" prefWidth="191.0">
          <children>
             <AnchorPane fx:id="searchBookButton" layoutX="1.0">
@@ -184,6 +148,28 @@
                </cursor>
             </AnchorPane>
          </children>
+      </AnchorPane>
+      <AnchorPane layoutX="796.0" layoutY="21.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
+         <children>
+            <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/orange_button.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="15.0" layoutY="3.0" text="go back" textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane layoutX="247.0" layoutY="38.0" onMouseReleased="#logoOnClick" prefHeight="79.0" prefWidth="376.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </AnchorPane>
    </children>
 </AnchorPane>

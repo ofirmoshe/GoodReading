@@ -41,7 +41,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class BookInfoMenegmentController extends SystemController {
+public class InventoryManagementController extends SystemController {
 
 	public static Field[] fields;
 	private boolean[] checkFields;
@@ -70,7 +70,7 @@ public class BookInfoMenegmentController extends SystemController {
 	public void initialize() {
 		super.initialize();
 		// field.setField("");
-		Message msg = new Message("add book info", 1);
+		Message msg = new Message("add book", 1);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
@@ -110,7 +110,7 @@ public class BookInfoMenegmentController extends SystemController {
 				alert.showAndWait();
 				return;
 			}
-			msg = new Message("book info menegment", 2, o);
+			msg = new Message("inventory management", 2, o);
 			if (flag)
 				msg.setFunc(3);
 

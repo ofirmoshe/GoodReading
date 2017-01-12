@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `i-book` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `i-book`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: i-book
@@ -26,7 +28,7 @@ CREATE TABLE `author` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +37,7 @@ CREATE TABLE `author` (
 
 LOCK TABLES `author` WRITE;
 /*!40000 ALTER TABLE `author` DISABLE KEYS */;
-INSERT INTO `author` VALUES (1,'JK Rowling'),(2,'Matthew Iden'),(3,'John Green'),(4,'Amy Ewing'),(5,'Miriam Pascal'),(6,'W. Bruce Cameron'),(7,'Jodi Picoult'),(8,'Ann Patchett'),(9,'Nicholas Sparks'),(10,'James Luceno'),(11,'George Orwell'),(12,'Brian Freeman');
+INSERT INTO `author` VALUES (1,'JK Rowling'),(2,'Matthew Iden'),(3,'John Green'),(4,'Amy Ewing'),(5,'Miriam Pascal'),(6,'W. Bruce Cameron'),(7,'Jodi Picoult'),(8,'Ann Patchett'),(9,'Nicholas Sparks'),(10,'James Luceno'),(11,'George Orwell'),(12,'Brian Freeman'),(13,'Gilly Macmillan');
 /*!40000 ALTER TABLE `author` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +87,7 @@ CREATE TABLE `book` (
   `Doc` varchar(255) DEFAULT NULL,
   `Fb2` varchar(255) DEFAULT NULL,
   `Price` float NOT NULL,
-  `Status` varchar(255) DEFAULT NULL,
+  `Status` varchar(255) DEFAULT 'visible',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -369,7 +371,7 @@ CREATE TABLE `subject` (
   PRIMARY KEY (`ID`),
   KEY `FKSubject46610` (`FieldID`),
   CONSTRAINT `FKSubject46610` FOREIGN KEY (`FieldID`) REFERENCES `field` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -408,7 +410,7 @@ CREATE TABLE `user_book` (
 
 LOCK TABLES `user_book` WRITE;
 /*!40000 ALTER TABLE `user_book` DISABLE KEYS */;
-INSERT INTO `user_book` VALUES (NULL,NULL,1,'1'),(NULL,NULL,1,'2'),(NULL,NULL,1,'3'),(NULL,NULL,1,'4'),(NULL,NULL,28,'1');
+INSERT INTO `user_book` VALUES (NULL,NULL,1,'1'),(NULL,NULL,1,'2'),(NULL,NULL,1,'3'),(NULL,NULL,1,'4'),(NULL,NULL,2,'1'),(NULL,NULL,2,'2'),(NULL,NULL,2,'3'),(NULL,NULL,2,'4'),(NULL,NULL,3,'1'),(NULL,NULL,3,'2'),(NULL,NULL,3,'3'),(NULL,NULL,3,'4'),(NULL,NULL,4,'1'),(NULL,NULL,4,'2'),(NULL,NULL,4,'3'),(NULL,NULL,4,'4'),(NULL,NULL,5,'1'),(NULL,NULL,5,'2'),(NULL,NULL,5,'3'),(NULL,NULL,5,'4'),(NULL,NULL,6,'1'),(NULL,NULL,6,'2'),(NULL,NULL,6,'3'),(NULL,NULL,6,'4'),(NULL,NULL,7,'1'),(NULL,NULL,7,'2'),(NULL,NULL,7,'3'),(NULL,NULL,7,'4'),(NULL,NULL,8,'1'),(NULL,NULL,8,'2'),(NULL,NULL,8,'3'),(NULL,NULL,8,'4'),(NULL,NULL,9,'1'),(NULL,NULL,9,'2'),(NULL,NULL,9,'3'),(NULL,NULL,9,'4'),(NULL,NULL,28,'1');
 /*!40000 ALTER TABLE `user_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -477,4 +479,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-12 17:48:09
+-- Dump completed on 2017-01-12 20:21:16

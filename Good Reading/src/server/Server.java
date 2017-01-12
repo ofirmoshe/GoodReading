@@ -77,95 +77,12 @@ public class Server extends AbstractServer {
 		case "add book":
 			addBookMessageHandler(m, client);
 			break;
-		case "book info menegment":
-			BookInfoMessageHandler(m, client);
+		case "inventory management":
+			inventoryManagementMessageHandler(m, client);
 			break;
-		case "add book info":
-			addBookMessageHandler(m, client);
-			break;
+		case "search review":
+			searchReviewMessageHandler(m, client);
 		}
-	}
-
-	private void BookInfoMessageHandler(Message msg, ConnectionToClient client) {
-		Field f = null;
-		boolean af = true;
-		boolean ff = true;
-		boolean sf = true;
-
-		try {
-			Field[] fields = Field.listFieldByQuery("ID>0", "ID");
-			Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
-			Subject[][] subjects = new Subject[fields.length][];
-			for (int i = 0; i < fields.length; i++) {
-				subjects[i] = fields[i].subject.toArray();
-			}
-			Object[] o = (Object[]) msg.getMsg();
-			for (int i = 0; i < authors.length; i++) {
-				if (authors[i].getName().equals(o[0])) {
-					af = false;
-					msg.setMsg("ad");
-					sendToAllClients(msg);
-					return;
-				}
-			}
-			for (int i = 0; i < fields.length; i++) {
-				if (fields[i].getField().equals(o[1])) {
-					msg.setMsg("fd");
-					ff = false;
-					sendToAllClients(msg);
-					return;
-				}
-			}
-			for (int j = 0; j < fields.length; j++)
-				for (int i = 0; i < subjects[j].length; i++) {
-					if (subjects[j][i].getSub().equals(o[2])) {
-						sf = false;
-						msg.setMsg("sd");
-						sendToAllClients(msg);
-						return;
-					}
-				}
-			session.beginTransaction();
-			if (!o[0].equals("") && af) {
-				Author a = Author.createAuthor();
-				a.setName(o[0].toString());
-				a.save();
-			}
-			if (!o[1].equals("") && ff) {
-				f = Field.createField();
-				f.setField(o[1].toString());
-				f.save();
-				session.getTransaction().commit();
-				session.beginTransaction();
-			}
-			if (!o[2].equals("") && sf) {
-
-				Subject s = Subject.createSubject();
-				s.setSub(o[2].toString());
-				if (msg.getFunc() == 2)
-					s.setField((Field) o[3]);
-				else if (f != null && msg.getFunc() == 3) {
-					s.setField(f);
-
-				}
-
-				s.save();
-			}
-			session.getTransaction().commit();
-			msg.setMsg("s");
-			client.sendToClient(msg);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			try {
-				e.printStackTrace();
-				session.getTransaction().rollback();
-				msg.setMsg("f");
-				client.sendToClient(msg);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-
 	}
 
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
@@ -320,7 +237,8 @@ public class Server extends AbstractServer {
 				Review rev = Review.createReview();
 				rev.setUsersbook(ub);
 				rev.setText((String) o[2]);
-				rev.setStatus("waiting");
+				//rev.setStatus("waiting");
+				rev.setStatus("approved");
 				rev.save();
 				session.getTransaction().commit();
 				msg.setMsg("s");
@@ -502,6 +420,120 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	public void userHomepageMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				Book[] books = Book.listBookByQuery("ID>0", "ID");
+				msg.setMsg(books);
+				client.sendToClient(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
+
+	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				Object[] o = (Object[]) msg.getMsg();
+				User u = User.loadUserByORMID((String) o[0]);
+				PaymentRequest[] p = u.paymentrequest.toArray();
+				for (int i = 0; i < p.length; i++) {
+					Book b = p[i].getBook();
+					if (b != null) {
+						if (b.getID() == (int) o[1] && p[i].getStatus().equals("waiting")) {
+							msg.setMsg("d");
+							client.sendToClient(msg);
+							return;
+						}
+					}
+				}
+				session.beginTransaction();
+				PaymentRequest pr = PaymentRequest.createPaymentRequest();
+				pr.setUser(u);
+				pr.setBook(Book.loadBookByORMID((int) o[1]));
+				pr.setPaymentInfo((String) o[2]);
+				pr.setDate(new Date());
+				pr.setStatus("waiting");
+				pr.save();
+				session.getTransaction().commit();
+				msg.setMsg("s");
+				client.sendToClient(msg);
+
+			} catch (Exception e) {
+				try {
+					e.printStackTrace();
+					session.getTransaction().rollback();
+					msg.setMsg("f");
+					client.sendToClient(msg);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
+		}
+	}
+
+	private void membershipPaymentMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				Object[] o = (Object[]) msg.getMsg();
+				User u = User.loadUserByORMID((String) o[0]);
+				PaymentRequest[] p = u.paymentrequest.toArray();
+				for (int i = 0; i < p.length; i++) {
+					Membership m = p[i].getMembership();
+					if (m != null) {
+						if (p[i].getStatus().equals("waiting")) {
+							msg.setMsg("d");
+							client.sendToClient(msg);
+							return;
+						}
+					}
+				}
+				session.beginTransaction();
+				PaymentRequest pr = PaymentRequest.createPaymentRequest();
+				pr.setUser(u);
+				pr.setMembership(Membership.loadMembershipByORMID((int) o[1]));
+				pr.setPaymentInfo((String) o[2]);
+				pr.setDate(new Date());
+				pr.setStatus("waiting");
+				pr.save();
+				session.getTransaction().commit();
+				msg.setMsg("s");
+				client.sendToClient(msg);
+
+			} catch (Exception e) {
+				try {
+					e.printStackTrace();
+					session.getTransaction().rollback();
+					msg.setMsg("f");
+					client.sendToClient(msg);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
+		}
+	}
+
+	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
+		try {
+			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
+			msg.setMsg(m);
+			client.sendToClient(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public void addBookMessageHandler(Message msg, ConnectionToClient client) {
 
 		switch (msg.getFunc()) {
@@ -601,121 +633,150 @@ public class Server extends AbstractServer {
 
 		}
 	}
-	// <<<<<<< HEAD
 
-	public void userHomepageMessageHandler(Message msg, ConnectionToClient client) {
+	private void inventoryManagementMessageHandler(Message msg, ConnectionToClient client) {
+		Field f = null;
+		boolean af = true;
+		boolean ff = true;
+		boolean sf = true;
+
+		try {
+			Field[] fields = Field.listFieldByQuery("ID>0", "ID");
+			Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
+			Subject[][] subjects = new Subject[fields.length][];
+			for (int i = 0; i < fields.length; i++) {
+				subjects[i] = fields[i].subject.toArray();
+			}
+			Object[] o = (Object[]) msg.getMsg();
+			for (int i = 0; i < authors.length; i++) {
+				if (authors[i].getName().equals(o[0])) {
+					af = false;
+					msg.setMsg("ad");
+					sendToAllClients(msg);
+					return;
+				}
+			}
+			for (int i = 0; i < fields.length; i++) {
+				if (fields[i].getField().equals(o[1])) {
+					msg.setMsg("fd");
+					ff = false;
+					sendToAllClients(msg);
+					return;
+				}
+			}
+			for (int j = 0; j < fields.length; j++)
+				for (int i = 0; i < subjects[j].length; i++) {
+					if (subjects[j][i].getSub().equals(o[2])) {
+						sf = false;
+						msg.setMsg("sd");
+						sendToAllClients(msg);
+						return;
+					}
+				}
+			session.beginTransaction();
+			if (!o[0].equals("") && af) {
+				Author a = Author.createAuthor();
+				a.setName(o[0].toString());
+				a.save();
+			}
+			if (!o[1].equals("") && ff) {
+				f = Field.createField();
+				f.setField(o[1].toString());
+				f.save();
+				session.getTransaction().commit();
+				session.beginTransaction();
+			}
+			if (!o[2].equals("") && sf) {
+
+				Subject s = Subject.createSubject();
+				s.setSub(o[2].toString());
+				if (msg.getFunc() == 2)
+					s.setField((Field) o[3]);
+				else if (f != null && msg.getFunc() == 3) {
+					s.setField(f);
+
+				}
+
+				s.save();
+			}
+			session.getTransaction().commit();
+			msg.setMsg("s");
+			client.sendToClient(msg);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			try {
+				e.printStackTrace();
+				session.getTransaction().rollback();
+				msg.setMsg("f");
+				client.sendToClient(msg);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+
+	}
+
+	private void searchReviewMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 			try {
-				Book[] books = Book.listBookByQuery("ID>0", "ID");
-				msg.setMsg(books);
+				System.out.println("server");
+				Review[] reviews = Review.listReviewByQuery("ID>0", "ID");
+				System.out.println("reviws");
+				ArrayList<Review> searchResult = new ArrayList<Review>();
+				String[] query = (String[]) msg.getMsg();
+				Author author = null;
+				if (!query[2].equals("")) {
+					author = Author.loadAuthorByQuery("Name='" + query[2] + "'", "ID");
+					if (author == null) {
+						msg.setMsg(null);
+						client.sendToClient(msg);
+						return;
+					}
+				}
+				String[] words = new String[0];
+				if (!query[3].equals(""))
+					words = query[3].split(" ");
+				Keyword[] keywords = new Keyword[words.length];
+				for (int i = 0; i < words.length; i++) {
+					keywords[i] = Keyword.loadKeywordByQuery("Word='" + words[i] + "'", "ID");
+				}
+				for (int i = 0; i < reviews.length; i++) {
+					boolean inFlag = true;
+					Book b = reviews[i].getUsersbook().getBook();
+					if (!reviews[i].getStatus().equals("approved"))
+						inFlag = false;
+					if (!query[1].equals("") && !b.getTitle().equalsIgnoreCase(query[1]))
+						inFlag = false;
+					if (!query[2].equals("") && !b.author.contains(author))
+						inFlag = false;
+					for (int j = 0; j < keywords.length; j++) {
+						if (keywords[j] != null && !b.keyword.contains(keywords[j]))
+							inFlag = false;
+					}
+					if (inFlag)
+						searchResult.add(reviews[i]);
+				}
+				String[] rev = new String[searchResult.size()];
+				String[] titles = new String[rev.length];
+				String[] unames = new String[rev.length];
+				for (int i = 0; i < rev.length; i++) {
+					rev[i] = searchResult.get(i).getText();
+					titles[i] = searchResult.get(i).getUsersbook().getBook().getTitle();
+					unames[i] = searchResult.get(i).getUsersbook().getUser().getFname() + " "
+							+ searchResult.get(i).getUsersbook().getUser().getLname();
+				}
+				String[][] s = new String[3][];
+				s[0] = rev;
+				s[1] = titles;
+				s[2] = unames;
+				msg.setMsg(s);
 				client.sendToClient(msg);
+				System.out.println("sent");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
-		}
-	}
-
-	// =======
-
-	// >>>>>>> refs/remotes/origin/master
-	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
-		switch (msg.getFunc()) {
-		case 1:
-			try {
-				Object[] o = (Object[]) msg.getMsg();
-				User u = User.loadUserByORMID((String) o[0]);
-				PaymentRequest[] p = u.paymentrequest.toArray();
-				for (int i = 0; i < p.length; i++) {
-					Book b = p[i].getBook();
-					if (b != null) {
-						if (b.getID() == (int) o[1] && p[i].getStatus().equals("waiting")) {
-							msg.setMsg("d");
-							client.sendToClient(msg);
-							return;
-						}
-					}
-				}
-				session.beginTransaction();
-				PaymentRequest pr = PaymentRequest.createPaymentRequest();
-				pr.setUser(u);
-				pr.setBook(Book.loadBookByORMID((int) o[1]));
-				pr.setPaymentInfo((String) o[2]);
-				pr.setDate(new Date());
-				pr.setStatus("waiting");
-				pr.save();
-				session.getTransaction().commit();
-				msg.setMsg("s");
-				client.sendToClient(msg);
-
-			} catch (Exception e) {
-				try {
-					e.printStackTrace();
-					session.getTransaction().rollback();
-					msg.setMsg("f");
-					client.sendToClient(msg);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
-			}
-
-		}
-	}
-
-	private void membershipPaymentMessageHandler(Message msg, ConnectionToClient client) {
-		switch (msg.getFunc()) {
-		case 1:
-			try {
-				Object[] o = (Object[]) msg.getMsg();
-				User u = User.loadUserByORMID((String) o[0]);
-				PaymentRequest[] p = u.paymentrequest.toArray();
-				for (int i = 0; i < p.length; i++) {
-					Membership m = p[i].getMembership();
-					if (m != null) {
-						if (p[i].getStatus().equals("waiting")) {
-							msg.setMsg("d");
-							client.sendToClient(msg);
-							return;
-						}
-					}
-				}
-				session.beginTransaction();
-				PaymentRequest pr = PaymentRequest.createPaymentRequest();
-				pr.setUser(u);
-				pr.setMembership(Membership.loadMembershipByORMID((int) o[1]));
-				pr.setPaymentInfo((String) o[2]);
-				pr.setDate(new Date());
-				pr.setStatus("waiting");
-				pr.save();
-				session.getTransaction().commit();
-				msg.setMsg("s");
-				client.sendToClient(msg);
-
-			} catch (Exception e) {
-				try {
-					e.printStackTrace();
-					session.getTransaction().rollback();
-					msg.setMsg("f");
-					client.sendToClient(msg);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
-			}
-
-		}
-	}
-
-	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
-		try {
-			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
-			msg.setMsg(m);
-			client.sendToClient(msg);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}

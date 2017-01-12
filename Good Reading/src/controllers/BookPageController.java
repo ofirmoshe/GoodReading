@@ -101,31 +101,31 @@ public class BookPageController extends SystemController {
 	 */
 	public void initialize() {
 		super.initialize();
-		try{
-		Object[] o = new Object[2];
-		o[0] = book.getID();
-		o[1] = ClientUI.user.getID();
-		Message msg = new Message("book page", 1, o);
-		Client.instance.sendToServer(msg);
-		currBook = book;
-		ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
-		BufferedImage read;
-		read = ImageIO.read(in);
-		Image img = SwingFXUtils.toFXImage(read, null);
-		bookImage.setImage(img);
-		bookImage.setFitWidth(180);
-		bookImage.setFitHeight(270);
-		bookNameLabel.setText(book.getTitle());
-		String s = new String();
-		float f = book.getPrice();
-		if (f == (long) f)
-			s = String.format("%d", (long) f);
-		else
-			s = String.format("%s", f);
-		priceLabel.setText(s + "$");
-		summaryText.setText(book.getSummary());
-		tableText.setText(book.getTable_of_contents());
-		}catch(Exception e){
+		try {
+			Object[] o = new Object[2];
+			o[0] = book.getID();
+			o[1] = ClientUI.user.getID();
+			Message msg = new Message("book page", 1, o);
+			Client.instance.sendToServer(msg);
+			currBook = book;
+			ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
+			BufferedImage read;
+			read = ImageIO.read(in);
+			Image img = SwingFXUtils.toFXImage(read, null);
+			bookImage.setImage(img);
+			bookImage.setFitWidth(180);
+			bookImage.setFitHeight(270);
+			bookNameLabel.setText(book.getTitle());
+			String s = new String();
+			float f = book.getPrice();
+			if (f == (long) f)
+				s = String.format("%d", (long) f);
+			else
+				s = String.format("%s", f);
+			priceLabel.setText(s + "$");
+			summaryText.setText(book.getSummary());
+			tableText.setText(book.getTable_of_contents());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -134,10 +134,10 @@ public class BookPageController extends SystemController {
 	 * This method is called when "Get this book" button is clicked.
 	 */
 	public void getBookOnClick() {
-		//if user owns the book
-		if(formatAnchor.isVisible()){
+		// if user owns the book
+		if (formatAnchor.isVisible()) {
 			String f = (String) formatBox.getSelectionModel().getSelectedItem();
-			switch(f){
+			switch (f) {
 			case "pdf":
 				ClientUI.instance.getHostServices().showDocument(currBook.getPdf());
 				break;
@@ -252,14 +252,14 @@ public class BookPageController extends SystemController {
 					}
 					if (reviews.length != 0)
 						setReviewGrid();
-					if(!canReview.equals("no")){
+					if (!canReview.equals("no")) {
 						priceAnchor.setVisible(false);
 						ObservableList<String> formats = FXCollections.observableArrayList();
-						if(currBook.getPdf()!=null)
+						if (currBook.getPdf() != null)
 							formats.add("pdf");
-						if(currBook.getDoc()!=null)
+						if (currBook.getDoc() != null)
 							formats.add("doc");
-						if(currBook.getFb2()!=null)
+						if (currBook.getFb2() != null)
 							formats.add("fb2");
 						formatBox.setItems(formats);
 						formatBox.getSelectionModel().selectFirst();
