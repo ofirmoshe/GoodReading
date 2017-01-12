@@ -47,7 +47,7 @@ import org.hibernate.*;
  * page the user (Client and/or Manager) is logging into the system.
  * 
  * @author guyzi
- *					
+ *
  */
 public class LoginController extends AbstractController {
 
@@ -198,7 +198,8 @@ public class LoginController extends AbstractController {
 					return;
 				}
 			}
-			ClientUI.setScene("UserHomepageGUI.fxml");
+			//ClientUI.setScene("UserHomepageGUI.fxml");
+			ClientUI.setScene("BookInfoMenegmentGUI.fxml");
 			break;
 		}
 	}
