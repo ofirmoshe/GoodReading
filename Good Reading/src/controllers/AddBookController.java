@@ -158,7 +158,6 @@ public class AddBookController extends SystemController {
 			}
 		}
 		o[4] = selectedAuthors;
-		
 		o[5]=keywordField.getText();
 		o[6]=bimg;
 		o[7]=summaryField.getText();
