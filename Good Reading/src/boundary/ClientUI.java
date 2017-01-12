@@ -43,9 +43,11 @@ public class ClientUI extends Application {
 	public static Parent lastRoot;
 	public static GeneralUser user;
 	public static Stack<Parent> pageStack = new Stack<Parent>();
+	public static  ClientUI instance;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
+		instance = this;
 		ClientUI.primaryStage = primaryStage;
 		primaryStage.setTitle("I-Book - Good Reading");
 		primaryStage.setResizable(false);
@@ -89,6 +91,7 @@ public class ClientUI extends Application {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public static void goBack() {
 		primaryStage.getScene().setRoot(pageStack.pop());

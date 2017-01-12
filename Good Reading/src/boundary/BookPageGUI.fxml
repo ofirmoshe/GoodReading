@@ -65,7 +65,7 @@
                   </Label>
                   <Label fx:id="fieldLabel" layoutX="228.0" layoutY="59.0" text="Field Name" />
                   <Label fx:id="authorLabel" layoutX="228.0" layoutY="42.0" text="By Author Name" />
-                  <AnchorPane layoutX="682.0" layoutY="42.0" onMouseReleased="#getBookOnClick">
+                  <AnchorPane layoutX="673.0" layoutY="38.0" onMouseReleased="#getBookOnClick">
                      <children>
                         <ImageView fitHeight="42.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -82,16 +82,20 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </AnchorPane>
-                  <Label layoutX="708.0" layoutY="17.0" text="Price: ">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="priceLabel" layoutX="746.0" layoutY="18.0" text="14$" textFill="RED">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
+                  <AnchorPane fx:id="priceAnchor" layoutX="701.0" layoutY="14.0">
+                     <children>
+                        <Label text="Price: ">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="priceLabel" layoutX="38.0" layoutY="1.0" text="14$" textFill="RED">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
                   <Label fx:id="subjectLabel" layoutX="228.0" layoutY="76.0" text="Subject Name" />
                   <Label layoutX="221.0" layoutY="229.0" text="Reviews">
                      <font>
@@ -118,7 +122,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <TextArea fx:id="summaryText1" editable="false" prefHeight="94.0" prefWidth="572.0" wrapText="true" />
+                                    <TextArea fx:id="tableText" editable="false" prefHeight="94.0" prefWidth="572.0" wrapText="true" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -137,6 +141,16 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
+                  <AnchorPane fx:id="formatAnchor" layoutX="572.0" layoutY="20.0" visible="false">
+                     <children>
+                        <Label text="Format:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <ChoiceBox fx:id="formatBox" layoutY="25.0" prefHeight="25.0" prefWidth="79.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </content>

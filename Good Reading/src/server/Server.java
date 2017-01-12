@@ -87,9 +87,8 @@ public class Server extends AbstractServer {
 	}
 
 	private void BookInfoMessageHandler(Message msg, ConnectionToClient client) {
-		boolean flag=true;
-		switch(msg.getFunc())
-		{
+		boolean flag = true;
+		switch (msg.getFunc()) {
 		case 2:
 			try {
 				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
@@ -98,59 +97,58 @@ public class Server extends AbstractServer {
 				for (int i = 0; i < fields.length; i++) {
 					subjects[i] = fields[i].subject.toArray();
 				}
-				Object[] o =(Object[]) msg.getMsg();
-				for(int i=0;i<authors.length;i++){
-					if(authors[i].equals(o[0])){
+				Object[] o = (Object[]) msg.getMsg();
+				for (int i = 0; i < authors.length; i++) {
+					if (authors[i].equals(o[0])) {
 						msg.setCont("ad");
 						sendToAllClients(msg);
 						return;
 					}
 				}
-				for(int i=0;i<fields.length;i++){
-					if(fields[i].equals(o[1])){
+				for (int i = 0; i < fields.length; i++) {
+					if (fields[i].equals(o[1])) {
 						msg.setCont("fd");
 						sendToAllClients(msg);
 						return;
 					}
 				}
-				for(int j=0;j<fields.length;j++)
-					for(int i=0;i<subjects.length;i++){
-						if(subjects[i].equals(o[2])){
+				for (int j = 0; j < fields.length; j++)
+					for (int i = 0; i < subjects.length; i++) {
+						if (subjects[i].equals(o[2])) {
 							msg.setCont("sd");
 							sendToAllClients(msg);
 							return;
 						}
 					}
 				session.beginTransaction();
-				if(!o[0].equals("")){
-					Author a= Author.createAuthor();
+				if (!o[0].equals("")) {
+					Author a = Author.createAuthor();
 					a.setName(o[0].toString());
 					a.save();
 				}
-				if(!o[1].equals("")){
-					Field f=Field.createField();
+				if (!o[1].equals("")) {
+					Field f = Field.createField();
 					f.setField(o[1].toString());
 					f.save();
 				}
-				if(!o[2].equals("")){
-					Subject s=Subject.createSubject();
+				if (!o[2].equals("")) {
+					Subject s = Subject.createSubject();
 					s.setSub(o[2].toString());
-						if(!o[3].equals("")){
-								s.setField((Field)o[3]);
-						}else{
-							msg.setCont("null field");
-							client.sendToClient(msg);
-							flag=false;
-						}
-					if(flag){
+					if (!o[3].equals("")) {
+						s.setField((Field) o[3]);
+					} else {
+						msg.setCont("null field");
+						client.sendToClient(msg);
+						flag = false;
+					}
+					if (flag) {
 						s.save();
 					}
 				}
 				session.getTransaction().commit();
 				msg.setCont("s");
 				client.sendToClient(msg);
-					}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				try {
 					e.printStackTrace();
@@ -163,7 +161,7 @@ public class Server extends AbstractServer {
 			}
 			break;
 		}
-		
+
 	}
 
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
@@ -191,7 +189,6 @@ public class Server extends AbstractServer {
 			} catch (PersistentException e1) {
 				System.out.println("Can't load book list.");
 			}
-			msg.setFunc(1);
 			GeneralUser login = (GeneralUser) msg.getMsg();
 			GeneralUser u = null;
 			try {
@@ -262,8 +259,6 @@ public class Server extends AbstractServer {
 
 		}
 	}
-
-
 
 	public void bookPageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
@@ -535,6 +530,22 @@ public class Server extends AbstractServer {
 				newBook.setImage((byte[]) o[6]);
 				newBook.setSummary((String) o[7]);
 				newBook.setTable_of_contents((String) o[8]);
+				newBook.setPrice((float) o[9]);
+				// PDF
+				String downloadLink = (String) o[10];
+				if (!downloadLink.equals("")) {
+					newBook.setPdf(downloadLink);
+				}
+				// DOC
+				downloadLink = (String) o[11];
+				if (!downloadLink.equals("")) {
+					newBook.setDoc(downloadLink);
+				}
+				// FB2
+				downloadLink = (String) o[12];
+				if (!downloadLink.equals("")) {
+					newBook.setFb2(downloadLink);
+				}
 				newBook.save();
 				session.getTransaction().commit();
 				Author[] authors = (Author[]) o[4];
@@ -578,6 +589,7 @@ public class Server extends AbstractServer {
 						stmt.executeUpdate(sql);
 					}
 				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				session.getTransaction().rollback();
@@ -585,17 +597,25 @@ public class Server extends AbstractServer {
 
 		}
 	}
-//<<<<<<< HEAD
-	
+	// <<<<<<< HEAD
+
 	public void userHomepageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
+			try {
+				Book[] books = Book.listBookByQuery("ID>0", "ID");
+				msg.setMsg(books);
+				client.sendToClient(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
 		}
 	}
-	
-//=======
 
-//>>>>>>> refs/remotes/origin/master
+	// =======
+
+	// >>>>>>> refs/remotes/origin/master
 	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:

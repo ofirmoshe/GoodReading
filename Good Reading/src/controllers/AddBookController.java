@@ -24,12 +24,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -42,6 +45,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -75,6 +80,14 @@ public class AddBookController extends SystemController {
 	private TextArea summaryField;
 	@FXML
 	private TextArea tableField;
+	@FXML
+	private TextField priceField;
+	@FXML
+	private TextField pdfField;
+	@FXML
+	private TextField docField;
+	@FXML
+	private TextField fb2Field;
 
 	public void initialize() {
 		super.initialize();
@@ -109,13 +122,23 @@ public class AddBookController extends SystemController {
 	}
 
 	public void addBookOnClick() {
-		Object[] o = new Object[9];
-		o[0] = titleField.getText();
-		o[1] = langField.getText();
+		// ClientUI.instance.getHostServices().showDocument(docField.getText());
+		Object[] o = new Object[13];
+		boolean mustFlag = false;
+		if (!titleField.getText().equals(""))
+			o[0] = titleField.getText();
+		else
+			mustFlag = true;
+		if (!langField.getText().equals(""))
+			o[1] = langField.getText();
+		else
+			mustFlag = true;
 		int count = 0;
 		for (int i = 0; i < checkFields.length; i++)
 			if (checkFields[i])
 				count++;
+		if (count == 0)
+			mustFlag = true;
 		Field[] selectedFields = new Field[count];
 		int index = 0;
 		for (int i = 0; i < checkFields.length; i++) {
@@ -125,7 +148,7 @@ public class AddBookController extends SystemController {
 			}
 		}
 		o[2] = selectedFields;
-		
+
 		count = 0;
 		for (int i = 0; i < checkSubjects.length; i++) {
 			for (int j = 0; j < checkSubjects[i].length; j++) {
@@ -144,11 +167,13 @@ public class AddBookController extends SystemController {
 			}
 		}
 		o[3] = selectedSubjects;
-		
+
 		count = 0;
 		for (int i = 0; i < checkAuthors.length; i++)
 			if (checkAuthors[i])
 				count++;
+		if (count == 0)
+			mustFlag = true;
 		Author[] selectedAuthors = new Author[count];
 		index = 0;
 		for (int i = 0; i < checkAuthors.length; i++) {
@@ -158,11 +183,46 @@ public class AddBookController extends SystemController {
 			}
 		}
 		o[4] = selectedAuthors;
-		o[5]=keywordField.getText();
-		o[6]=bimg;
-		o[7]=summaryField.getText();
-		o[8]=tableField.getText();
-		Message msg = new Message("add book",2,o);
+		o[5] = keywordField.getText();
+		o[6] = bimg;
+		o[7] = summaryField.getText();
+		o[8] = tableField.getText();
+		boolean InvalidPrice = false;
+		if (!priceField.getText().equals("")) {
+			try {
+				o[9] = Float.parseFloat(priceField.getText());
+				if ((float) o[9] < 0) {
+					InvalidPrice = true;
+				}
+			} catch (Exception e) {
+				InvalidPrice = true;
+			}
+		} else
+			mustFlag = true;
+		if (InvalidPrice) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Add Book Failed");
+			alert.setHeaderText("Invalid Price");
+			alert.setContentText("Please check you entered a valid price and try again.");
+			alert.showAndWait();
+			return;
+		}
+		if (pdfField.getText().equals("") && docField.getText().equals("") && fb2Field.getText().equals(""))
+			mustFlag = true;
+		else {
+			o[10] = pdfField.getText();
+			o[11] = docField.getText();
+			o[12] = fb2Field.getText();
+		}
+		if (mustFlag) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Add Book Failed");
+			alert.setHeaderText("Can not add book");
+			alert.setContentText("One or more required fields are empty.");
+			alert.showAndWait();
+			return;
+		}
+		Message msg = new Message("add book", 2, o);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
@@ -179,8 +239,8 @@ public class AddBookController extends SystemController {
 			fields = (Field[]) ob[0];
 			checkFields = new boolean[fields.length];
 			subjects = (Subject[][]) ob[1];
-			checkSubjects =new boolean[fields.length][];
-			for(int i=0; i<fields.length; i++){
+			checkSubjects = new boolean[fields.length][];
+			for (int i = 0; i < fields.length; i++) {
 				checkSubjects[i] = new boolean[subjects[i].length];
 			}
 			authors = (Author[]) ob[2];
@@ -214,8 +274,8 @@ public class AddBookController extends SystemController {
 						} else {
 							int sin = (int) cb.getUserData();
 							checkFields[sin] = false;
-							for(int i=0; i<checkSubjects[sin].length; i++){
-								checkSubjects[sin][i]=false;
+							for (int i = 0; i < checkSubjects[sin].length; i++) {
+								checkSubjects[sin][i] = false;
 							}
 							setSubjects();
 						}
@@ -259,9 +319,9 @@ public class AddBookController extends SystemController {
 				for (int j = 0; j < s.length; j++, currSubCount++) {
 					CheckBox cb = new CheckBox();
 					cb.setText(s[j].getSub());
-					if(checkSubjects[i][j])
+					if (checkSubjects[i][j])
 						cb.setSelected(true);
-					int[] in = {i,j};
+					int[] in = { i, j };
 					cb.setUserData(in);
 					cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
 						public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {

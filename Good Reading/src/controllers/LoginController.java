@@ -100,7 +100,6 @@ public class LoginController extends AbstractController {
 		wrongUser.setVisible(false);
 		wrongPass.setVisible(false);
 		try {
-			Client client;
 			String host = hostField.getText();
 			String id = idField.getText();
 			String pass = passField.getText();
@@ -108,39 +107,12 @@ public class LoginController extends AbstractController {
 			if (Client.instance != null) {
 				Client.instance.closeConnection();
 			}
-			client = new Client(host, DEFAULT_PORT);
+			new Client(host, DEFAULT_PORT);
 			u.setID(id);
 			u.setPassword(pass);
 			Message msg = null;
 			msg = new Message("login", 1, u);
 			Client.instance.sendToServer(msg);
-			/*FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Open Resource File");
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-					new ExtensionFilter("All Files", "*.*"));
-			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
-			if (selectedFile != null) {
-				System.out.println(selectedFile.getName());
-				try {
-					Image img = new Image(selectedFile.toURI().toString());
-					BufferedImage bImage = SwingFXUtils.fromFXImage(img, null);
-					ByteArrayOutputStream s = new ByteArrayOutputStream();
-					ImageIO.write(bImage, "jpg", s);
-					Object[] o=new Object[2];
-					o[0]=selectedFile.getName();
-					byte[] res = s.toByteArray();
-					o[1]=res;
-					Message m = new Message("login", 2, o);
-					Client.instance.sendToServer(m);
-					/*ByteArrayInputStream in = new ByteArrayInputStream(res);
-					BufferedImage read = ImageIO.read(in);
-					Image image = SwingFXUtils.toFXImage(read, null);
-					ImageView iv = new ImageView(image);
-					mainAnchor.getChildren().add(iv);*/
-			/*	} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}*/
 		} catch (Exception e) {
 			wrongHost.setVisible(true);
 		}
@@ -198,8 +170,7 @@ public class LoginController extends AbstractController {
 					return;
 				}
 			}
-			//ClientUI.setScene("UserHomepageGUI.fxml");
-			ClientUI.setScene("BookInfoMenegmentGUI.fxml");
+			ClientUI.setScene("UserHomepageGUI.fxml");
 			break;
 		}
 	}

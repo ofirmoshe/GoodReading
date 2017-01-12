@@ -83,6 +83,14 @@ public class UserHomepageController extends SystemController {
 		super.initialize();
 		// initBookGrid();
 		setBookGrid();
+		Client.refresh();
+		Message msg = new Message("user homepage",1);
+		try {
+			Client.instance.sendToServer(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -207,6 +215,18 @@ public class UserHomepageController extends SystemController {
 
 	@Override
 	public void handleMessage(Message msg) {
+		switch(msg.getFunc()){
+		case 1:
+			System.out.println("han");
+			books = (Book[])msg.getMsg();
+			System.out.println(books[12].getPrice());
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					setBookGrid();
+				}
+			});
+		}
 	}
 
 }

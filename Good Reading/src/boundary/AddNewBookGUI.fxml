@@ -48,13 +48,13 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="446.0" layoutX="-2.0" layoutY="161.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="905.0" />
       <TextField fx:id="titleField" layoutX="42.0" layoutY="194.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="langField" layoutX="247.0" layoutY="194.0" prefHeight="25.0" prefWidth="150.0" />
-      <Label layoutX="42.0" layoutY="173.0" text="Title" />
-      <Label layoutX="247.0" layoutY="173.0" text="Language" />
-      <Label layoutX="448.0" layoutY="238.0" text="Author" />
+      <Label layoutX="42.0" layoutY="173.0" text="Title*" />
+      <Label layoutX="247.0" layoutY="173.0" text="Language*" />
+      <Label layoutX="448.0" layoutY="238.0" text="Author*" />
       <Button layoutX="400.0" layoutY="560.0" mnemonicParsing="false" onAction="#addBookOnClick" text="Add Book" />
       <TextField fx:id="keywordField" layoutX="43.0" layoutY="391.0" />
       <Label layoutX="42.0" layoutY="368.0" text="Keywords" />
-      <Label layoutX="45.0" layoutY="239.0" text="Field" />
+      <Label layoutX="45.0" layoutY="239.0" text="Field*" />
       <Label layoutX="247.0" layoutY="239.0" text="Subject" />
       <ScrollPane layoutX="42.0" layoutY="254.0" prefHeight="95.0" prefWidth="175.0">
         <content>
@@ -191,10 +191,13 @@
       <TextField fx:id="imageField" editable="false" layoutX="248.0" layoutY="391.0" prefHeight="25.0" prefWidth="222.0" />
       <Label layoutX="249.0" layoutY="368.0" text="Image" />
       <Label layoutX="43.0" layoutY="441.0" text="pdf" />
-      <TextField fx:id="pdfField" editable="false" layoutX="42.0" layoutY="464.0" prefHeight="25.0" prefWidth="222.0" />
-      <TextField fx:id="docField" editable="false" layoutX="286.0" layoutY="463.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="pdfField" layoutX="42.0" layoutY="464.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="docField" layoutX="286.0" layoutY="463.0" prefHeight="25.0" prefWidth="222.0" />
       <Label layoutX="287.0" layoutY="440.0" text="doc" />
       <Label layoutX="541.0" layoutY="439.0" text="fb2" />
-      <TextField fx:id="fb2Field" editable="false" layoutX="540.0" layoutY="462.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="fb2Field" layoutX="540.0" layoutY="462.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="priceField" layoutX="589.0" layoutY="391.0" prefHeight="25.0" prefWidth="94.0" />
+      <Label layoutX="589.0" layoutY="371.0" text="Price*" />
+      <Label layoutX="46.0" layoutY="515.0" text="*Required field" />
    </children>
 </AnchorPane>

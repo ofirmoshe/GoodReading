@@ -19,11 +19,14 @@ import i_book.Subject;
 import i_book.User;
 import i_book.User_Book;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.effect.InnerShadow;
@@ -83,6 +86,14 @@ public class BookPageController extends SystemController {
 	Label addReviewLabel;
 	@FXML
 	Button addReviewButton;
+	@FXML
+	AnchorPane priceAnchor;
+	@FXML
+	AnchorPane formatAnchor;
+	@FXML
+	ChoiceBox<String> formatBox;
+	@FXML
+	TextArea tableText;
 
 	/**
 	 * This method initializes the controller, sends a message to server to get
@@ -113,6 +124,7 @@ public class BookPageController extends SystemController {
 			s = String.format("%s", f);
 		priceLabel.setText(s + "$");
 		summaryText.setText(book.getSummary());
+		tableText.setText(book.getTable_of_contents());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -122,6 +134,22 @@ public class BookPageController extends SystemController {
 	 * This method is called when "Get this book" button is clicked.
 	 */
 	public void getBookOnClick() {
+		//if user owns the book
+		if(formatAnchor.isVisible()){
+			String f = (String) formatBox.getSelectionModel().getSelectedItem();
+			switch(f){
+			case "pdf":
+				ClientUI.instance.getHostServices().showDocument(currBook.getPdf());
+				break;
+			case "doc":
+				ClientUI.instance.getHostServices().showDocument(currBook.getDoc());
+				break;
+			case "fb2":
+				ClientUI.instance.getHostServices().showDocument(currBook.getFb2());
+				break;
+			}
+			return;
+		}
 		BookPaymentController.book = currBook;
 		BookPaymentController.authors = authors;
 		ClientUI.setScene("BookPaymentGUI.fxml");
@@ -224,6 +252,19 @@ public class BookPageController extends SystemController {
 					}
 					if (reviews.length != 0)
 						setReviewGrid();
+					if(!canReview.equals("no")){
+						priceAnchor.setVisible(false);
+						ObservableList<String> formats = FXCollections.observableArrayList();
+						if(currBook.getPdf()!=null)
+							formats.add("pdf");
+						if(currBook.getDoc()!=null)
+							formats.add("doc");
+						if(currBook.getFb2()!=null)
+							formats.add("fb2");
+						formatBox.setItems(formats);
+						formatBox.getSelectionModel().selectFirst();
+						formatAnchor.setVisible(true);
+					}
 				}
 
 			});

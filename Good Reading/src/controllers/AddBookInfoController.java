@@ -41,7 +41,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class BookInfoMenegmentController extends SystemController {
+public class AddBookInfoController extends SystemController {
 
 	public static Field[] fields;
 	private boolean[] checkFields;
