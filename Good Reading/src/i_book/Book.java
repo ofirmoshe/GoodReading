@@ -35,7 +35,6 @@ public class Book implements Serializable{
 			return loadBookByORMID(session, ID);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}
@@ -78,7 +77,6 @@ public class Book implements Serializable{
 			return (Book) session.load(i_book.Book.class, new Integer(ID));
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}

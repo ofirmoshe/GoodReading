@@ -10,7 +10,7 @@ License Type: Academic
 			<generator class="native">
 			</generator>
 		</id>
-		<property name="text" column="Text" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="text" column="Text" type="text" not-null="false" lazy="false"/>
 		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
 		<many-to-one name="usersbook" cascade="lock" class="i_book.User_Book" not-null="true" lazy="proxy" access="field">
 			<column name="User_BookBookID"/>

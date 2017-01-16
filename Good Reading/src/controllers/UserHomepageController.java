@@ -129,6 +129,8 @@ public class UserHomepageController extends SystemController {
 		if (books.length < 5) {
 			length = 1;
 			width = books.length;
+		}else if(books.length%5==0){
+			length= books.length/5;
 		}
 		for (int y = 0; y < length; y++) {
 			for (int x = 0; x < width; x++) {

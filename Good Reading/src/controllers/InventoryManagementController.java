@@ -99,7 +99,7 @@ public class InventoryManagementController extends SystemController {
 			o[0] = authorField.getText();
 			o[1] = fieldField.getText();
 			o[2] = subjectField.getText();
-			o[3] = fields[cb.getSelectionModel().getSelectedIndex()-1];
+			o[3] = fields[cb.getSelectionModel().getSelectedIndex()];
 			if (field != null)
 				o[3] = field;
 			if(o[0].equals("") && o[1].equals("") && o[2].equals(""))
@@ -116,7 +116,6 @@ public class InventoryManagementController extends SystemController {
 
 			try {
 				Client.instance.sendToServer(msg);
-				System.out.println("sent");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

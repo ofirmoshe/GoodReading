@@ -35,7 +35,6 @@ public class GeneralUser  implements Serializable{
 			return loadGeneralUserByORMID(session, ID);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}
@@ -78,7 +77,6 @@ public class GeneralUser  implements Serializable{
 			return (GeneralUser) session.load(i_book.GeneralUser.class, ID);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}
@@ -88,7 +86,6 @@ public class GeneralUser  implements Serializable{
 			return (GeneralUser) session.get(i_book.GeneralUser.class, ID);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			throw new PersistentException(e);
 		}
 	}

@@ -107,9 +107,6 @@ public class SearchBookController extends SystemController {
 	 */
 	public void searchOnEnterPressed() {
 		query[0] = optionBox.getSelectionModel().getSelectedItem();
-		// The amount of books in DB.
-		Book[] b=UserHomepageController.books;
-		query[1] = "" + b[b.length-1].getID();
 		query[2] = titleField.getText();
 		query[3] = langField.getText();
 		query[4] = authorField.getText();

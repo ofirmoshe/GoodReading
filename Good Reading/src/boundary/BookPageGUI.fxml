@@ -151,6 +151,12 @@
                         <ChoiceBox fx:id="formatBox" layoutY="25.0" prefHeight="25.0" prefWidth="79.0" />
                      </children>
                   </AnchorPane>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b20f0f" height="19.0" layoutX="25.0" layoutY="232.0" stroke="TRANSPARENT" strokeType="INSIDE" width="69.0" />
+                  <Label fx:id="langLabel" layoutX="34.0" layoutY="232.0" text="English" textFill="WHITE">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </content>

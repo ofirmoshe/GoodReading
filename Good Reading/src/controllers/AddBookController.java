@@ -252,6 +252,19 @@ public class AddBookController extends SystemController {
 					setCheckboxes(authors);
 				}
 			});
+			break;
+		case 2:
+			if(msg.getMsg().equals("s")){
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Add Book Succeed");
+						alert.setContentText("New book was added to Good Reading");
+						alert.showAndWait();
+					}
+				});
+			}
 		}
 	}
 

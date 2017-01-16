@@ -11,6 +11,7 @@ import org.orm.PersistentException;
 import boundary.ClientUI;
 import client.Client;
 import common.Message;
+import graphics.GraphicsImporter;
 import i_book.Author;
 import i_book.Book;
 import i_book.Field;
@@ -77,6 +78,8 @@ public class BookPageController extends SystemController {
 	@FXML
 	AnchorPane mainAnchor;
 	@FXML
+	Label langLabel;
+	@FXML
 	AnchorPane reviewAnchor;
 	@FXML
 	TextArea addReviewText;
@@ -108,10 +111,14 @@ public class BookPageController extends SystemController {
 			Message msg = new Message("book page", 1, o);
 			Client.instance.sendToServer(msg);
 			currBook = book;
-			ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
-			BufferedImage read;
-			read = ImageIO.read(in);
-			Image img = SwingFXUtils.toFXImage(read, null);
+			Image img;
+			if (book.getImage() != null) {
+				ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
+				BufferedImage read;
+				read = ImageIO.read(in);
+				img = SwingFXUtils.toFXImage(read, null);
+			}else
+				img = new Image(GraphicsImporter.class.getResource("loading_book.jpg").toString());
 			bookImage.setImage(img);
 			bookImage.setFitWidth(180);
 			bookImage.setFitHeight(270);
@@ -123,6 +130,7 @@ public class BookPageController extends SystemController {
 			else
 				s = String.format("%s", f);
 			priceLabel.setText(s + "$");
+			langLabel.setText(book.getLanguage());
 			summaryText.setText(book.getSummary());
 			tableText.setText(book.getTable_of_contents());
 		} catch (Exception e) {

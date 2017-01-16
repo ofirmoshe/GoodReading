@@ -6,6 +6,7 @@ import boundary.ClientUI;
 import client.Client;
 import common.Message;
 import graphics.GraphicsImporter;
+import i_book.Employee;
 import i_book.User;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -48,7 +49,20 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void goBackOnClick() {
-		ClientUI.goBack();
+		if (ClientUI.user instanceof User) {
+			ClientUI.goBack();
+		}
+		if (ClientUI.user instanceof Employee) {
+			Employee emp = (Employee) ClientUI.user;
+			switch (emp.getPosition()) {
+			case "Librarian":
+				ClientUI.setScene("LibrarianHomepageGUI.fxml");
+				break;
+			case "Library Manager":
+				ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
+				break;
+			}
+		}
 	}
 
 	public void goBackOnHover() {
@@ -82,7 +96,7 @@ public abstract class SystemController extends AbstractController {
 		// scrollPane.setLayoutX(0);
 		toggleMenuAnchor.setVisible(false);
 		arrowLabel.setVisible(true);
-		moveAnchor(-175,-15);
+		moveAnchor(-175, -15);
 	}
 
 	public void moveAnchor(int x, int d) {
@@ -104,8 +118,7 @@ public abstract class SystemController extends AbstractController {
 						menuAnchor.setLayoutX(menuAnchor.getLayoutX() + d);
 						moveAnchor(x, d);
 					}
-				}
-				else{
+				} else {
 					if (menuAnchor.getLayoutX() > x) {
 						menuAnchor.setLayoutX(menuAnchor.getLayoutX() + d);
 						moveAnchor(x, d);
@@ -153,9 +166,22 @@ public abstract class SystemController extends AbstractController {
 			Client.instance.sendToServer(msg);
 		}
 	}
-	
-	public void logoOnClick(){
-		ClientUI.setScene("UserHomepageGUI.fxml");
+
+	public void logoOnClick() {
+		if (ClientUI.user instanceof User) {
+			ClientUI.setScene("UserHomepageGUI.fxml");
+		}
+		if (ClientUI.user instanceof Employee) {
+			Employee emp = (Employee) ClientUI.user;
+			switch (emp.getPosition()) {
+			case "Librarian":
+				ClientUI.setScene("LibrarianHomepageGUI.fxml");
+				break;
+			case "Library Manager":
+				ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
+				break;
+			}
+		}
 	}
 
 }

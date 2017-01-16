@@ -167,10 +167,13 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <AnchorPane layoutX="246.0" layoutY="34.0" onMouseEntered="#logoOnClick" prefHeight="85.0" prefWidth="378.0">
+      <AnchorPane layoutX="246.0" layoutY="34.0" onMouseClicked="#logoOnClick" prefHeight="85.0" prefWidth="378.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
    </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
 </AnchorPane>

@@ -46,8 +46,7 @@ public class ClientUI extends Application {
 	public static  ClientUI instance;
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
-		instance = this;
+	public void start(Stage primaryStage) throws IOException {		instance = this;
 		ClientUI.primaryStage = primaryStage;
 		primaryStage.setTitle("I-Book - Good Reading");
 		primaryStage.setResizable(false);

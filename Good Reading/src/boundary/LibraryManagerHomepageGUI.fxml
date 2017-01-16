@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LibrarianHomepageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LibraryManagerHomepageController">
    <children>
       <ImageView>
          <image>
@@ -53,9 +53,8 @@
                   <Button layoutX="454.0" layoutY="161.0" mnemonicParsing="false" onAction="#editBookOnClick" text="Edit Book" />
                   <Button layoutX="379.0" layoutY="249.0" mnemonicParsing="false" onMouseClicked="#manageReviewOnClick" prefHeight="25.0" prefWidth="142.0" text="Review Management" />
                   <Button layoutX="379.0" layoutY="205.0" mnemonicParsing="false" onAction="#inventoryOnClick" prefHeight="25.0" prefWidth="142.0" text="Inventory Management" />
-                  <Button fx:id="addUserButton" layoutX="378.0" layoutY="289.0" mnemonicParsing="false" onAction="#addUserOnClick" prefHeight="25.0" prefWidth="145.0" text="Add User" />
                   <TextField fx:id="editBookField" layoutX="381.0" layoutY="161.0" prefHeight="25.0" prefWidth="65.0" />
-                  <Label fx:id="posLabel" layoutX="397.0" layoutY="49.0" text="Librarians">
+                  <Label fx:id="posLabel" layoutX="360.0" layoutY="49.0" text="Library Manager">
                      <font>
                         <Font size="25.0" />
                      </font>

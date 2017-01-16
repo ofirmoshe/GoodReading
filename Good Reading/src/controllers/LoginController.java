@@ -174,8 +174,13 @@ public class LoginController extends AbstractController {
 			}
 			if (ClientUI.user instanceof Employee){
 				Employee emp = (Employee)ClientUI.user;
-				if(emp.getPosition().equals("Librarian")||emp.getPosition().equals("Library Manager")){
+				switch(emp.getPosition()){
+				case "Librarian":
 					ClientUI.setScene("LibrarianHomepageGUI.fxml");
+					break;
+				case "Library Manager":
+					ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
+					break;
 				}
 			}
 			break;
