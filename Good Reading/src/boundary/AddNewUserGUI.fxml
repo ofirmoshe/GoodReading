@@ -63,5 +63,22 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
+      <AnchorPane layoutX="806.0" layoutY="32.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
+         <children>
+            <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/orange_button.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="16.0" layoutY="4.0" text="go back" textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
    </children>
 </AnchorPane>

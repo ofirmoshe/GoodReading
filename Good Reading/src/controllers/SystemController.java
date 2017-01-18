@@ -61,6 +61,8 @@ public abstract class SystemController extends AbstractController {
 			case "Library Manager":
 				ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
 				break;
+			case "Library Employee":
+				ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
 			}
 		}
 	}
@@ -180,6 +182,8 @@ public abstract class SystemController extends AbstractController {
 			case "Library Manager":
 				ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
 				break;
+			case "Library Employee":
+				ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
 			}
 		}
 	}

@@ -181,9 +181,11 @@ public class LoginController extends AbstractController {
 				case "Library Manager":
 					ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
 					break;
+				case "Library Employee":
+					ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
+					break;
 				}
 			}
-			break;
 		}
 	}
 

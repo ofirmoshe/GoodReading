@@ -89,7 +89,7 @@ CREATE TABLE `book` (
   `Price` float NOT NULL,
   `Status` varchar(255) DEFAULT 'visible',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +169,7 @@ CREATE TABLE `field` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Field` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,7 +211,7 @@ CREATE TABLE `generaluser` (
 
 LOCK TABLES `generaluser` WRITE;
 /*!40000 ALTER TABLE `generaluser` DISABLE KEYS */;
-INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,NULL,'234567','offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,'345678','offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User'),('5','Malki','Grossman','777',1,NULL,NULL,'Librarian','','offline','Employee'),('6','Avi','Sofer','000',2,NULL,NULL,'Library Manager','909090','offline','Employee'),('7','Shlomi','Kahba','321',NULL,NULL,NULL,NULL,'9035985','offline','User'),('8','Mendel','Puma','100',NULL,NULL,NULL,NULL,'284923','offline','User'),('9','Tzviki','Fushkash','999',NULL,NULL,NULL,NULL,'012311','offline','User');
+INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,'Library Employee','234567','offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,'345678','offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User'),('5','Malki','Grossman','777',1,NULL,NULL,'Librarian','','offline','Employee'),('6','Avi','Sofer','000',2,NULL,NULL,'Library Employee','909090','offline','Employee'),('7','Shlomi','Kahba','321',NULL,NULL,NULL,NULL,'9035985','offline','User'),('8','Mendel','Puma','100',NULL,NULL,NULL,NULL,'284923','offline','User'),('9','Tzviki','Fushkash','999',NULL,NULL,NULL,NULL,'012311','offline','User');
 /*!40000 ALTER TABLE `generaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -315,7 +315,7 @@ CREATE TABLE `paymentrequest` (
   CONSTRAINT `FKPaymentReq235996` FOREIGN KEY (`MembershipID`) REFERENCES `membership` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FKPaymentReq551000` FOREIGN KEY (`BookID`) REFERENCES `book` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FKPaymentReq760019` FOREIGN KEY (`GeneralUserID`) REFERENCES `generaluser` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -324,7 +324,7 @@ CREATE TABLE `paymentrequest` (
 
 LOCK TABLES `paymentrequest` WRITE;
 /*!40000 ALTER TABLE `paymentrequest` DISABLE KEYS */;
-INSERT INTO `paymentrequest` VALUES (59,NULL,2,'3','2017-01-10','345678','waiting'),(60,NULL,1,'1','2017-01-11','123456','waiting'),(61,NULL,13,'4','2017-01-15','456789','waiting');
+INSERT INTO `paymentrequest` VALUES (59,NULL,2,'3','2017-01-10','345678','approved'),(60,NULL,1,'1','2017-01-11','123456','approved'),(61,NULL,13,'4','2017-01-15','456789','denied'),(62,1,NULL,'1','2017-01-18','123456','approved'),(63,1,NULL,'3','2017-01-18','345678','approved'),(64,2,NULL,'4','2017-01-18','456789','approved'),(65,NULL,13,'4','2017-01-18','456789','approved'),(66,NULL,9,'4','2017-01-18','456789','approved'),(67,NULL,6,'4','2017-01-18','456789','approved');
 /*!40000 ALTER TABLE `paymentrequest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -344,7 +344,7 @@ CREATE TABLE `review` (
   PRIMARY KEY (`ID`),
   KEY `FKReview85949` (`User_BookBookID`,`User_BookGeneralUserID`),
   CONSTRAINT `FKReview85949` FOREIGN KEY (`User_BookBookID`, `User_BookGeneralUserID`) REFERENCES `user_book` (`BookID`, `GeneralUserID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -353,7 +353,7 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
-INSERT INTO `review` VALUES (2,'I hate this book','approved','2',1),(3,'This book is wow','approved','3',1),(4,'I don\'t know how to read','approved','4',1),(9,'wallack ahla sefer','approved','1',1),(11,'Moshe shtok! ','approved','1',2),(12,'i cried like a baby','approved','1',3),(13,'stupid book, stopped  reading at the third page','approved','1',4),(14,'tried one recipe, died of sugar cancer','approved','1',5),(15,'i love dogs! like, rly love them','approved','1',6),(17,'boring! good book for falling asleep','approved','1',8),(18,'lo karati','approved','1',10),(20,'she shouldn\'t continue this franchise','approved','1',12),(22,'fantastic book!!!','approved','1',11);
+INSERT INTO `review` VALUES (1,'Very nice book...','approved','4',13);
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -371,7 +371,7 @@ CREATE TABLE `subject` (
   PRIMARY KEY (`ID`),
   KEY `FKSubject46610` (`FieldID`),
   CONSTRAINT `FKSubject46610` FOREIGN KEY (`FieldID`) REFERENCES `field` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -410,7 +410,7 @@ CREATE TABLE `user_book` (
 
 LOCK TABLES `user_book` WRITE;
 /*!40000 ALTER TABLE `user_book` DISABLE KEYS */;
-INSERT INTO `user_book` VALUES (NULL,NULL,1,'1'),(NULL,NULL,1,'2'),(NULL,NULL,1,'3'),(NULL,NULL,1,'4'),(NULL,NULL,2,'1'),(NULL,NULL,2,'2'),(NULL,NULL,2,'3'),(NULL,NULL,2,'4'),(NULL,NULL,3,'1'),(NULL,NULL,3,'2'),(NULL,NULL,3,'3'),(NULL,NULL,3,'4'),(NULL,NULL,4,'1'),(NULL,NULL,4,'2'),(NULL,NULL,4,'3'),(NULL,NULL,4,'4'),(NULL,NULL,5,'1'),(NULL,NULL,5,'2'),(NULL,NULL,5,'3'),(NULL,NULL,5,'4'),(NULL,NULL,6,'1'),(NULL,NULL,6,'2'),(NULL,NULL,6,'3'),(NULL,NULL,6,'4'),(NULL,NULL,7,'1'),(NULL,NULL,7,'2'),(NULL,NULL,7,'3'),(NULL,NULL,7,'4'),(NULL,NULL,8,'1'),(NULL,NULL,8,'2'),(NULL,NULL,8,'3'),(NULL,NULL,8,'4'),(NULL,NULL,9,'1'),(NULL,NULL,9,'2'),(NULL,NULL,9,'3'),(NULL,NULL,9,'4'),(NULL,NULL,10,'1'),(NULL,NULL,11,'1'),(NULL,NULL,12,'1');
+INSERT INTO `user_book` VALUES ('2017-01-18',NULL,1,'1'),('2017-01-18',NULL,2,'3'),('2017-01-18',NULL,6,'4'),('2017-01-18',NULL,9,'4'),('2017-01-18',NULL,13,'4');
 /*!40000 ALTER TABLE `user_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -441,6 +441,7 @@ CREATE TABLE `user_membership` (
 
 LOCK TABLES `user_membership` WRITE;
 /*!40000 ALTER TABLE `user_membership` DISABLE KEYS */;
+INSERT INTO `user_membership` VALUES ('2017-01-18','2017-02-17',NULL,1,'1'),('2017-01-18','2017-02-17',NULL,1,'3'),('2017-01-18','2018-01-18',NULL,2,'4');
 /*!40000 ALTER TABLE `user_membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -479,4 +480,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-16 23:13:34
+-- Dump completed on 2017-01-19  0:09:24

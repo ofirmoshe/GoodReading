@@ -60,6 +60,7 @@ public class BookPageController extends SystemController {
 	private Review[] reviews;
 	private String[] usernames;
 	private String canReview;
+	private String hasMembership;
 
 	@FXML
 	private ImageView bookImage;
@@ -230,6 +231,7 @@ public class BookPageController extends SystemController {
 			reviews = (Review[]) m[3];
 			usernames = (String[]) m[4];
 			canReview = (String) m[5];
+			hasMembership = (String)m[6];
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -260,7 +262,7 @@ public class BookPageController extends SystemController {
 					}
 					if (reviews.length != 0)
 						setReviewGrid();
-					if (!canReview.equals("no")) {
+					if ((!canReview.equals("no"))||(!hasMembership.equals("no"))) {
 						priceAnchor.setVisible(false);
 						ObservableList<String> formats = FXCollections.observableArrayList();
 						if (currBook.getPdf() != null)

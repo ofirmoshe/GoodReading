@@ -29,6 +29,7 @@ import i_book.Review;
 import i_book.Subject;
 import i_book.User;
 import i_book.User_Book;
+import i_book.User_Membership;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -94,6 +95,10 @@ public class Server extends AbstractServer {
 			break;
 		case "add user":
 			addUserMessageHandler(m, client);
+			break;
+		case "employee homepage":
+			employeeHomepageMessageHandler(m, client);
+			break;
 		}
 	}
 
@@ -208,6 +213,7 @@ public class Server extends AbstractServer {
 					user = r[i].getUsersbook().getUser();
 					u[i] = user.getFname() + " " + user.getLname();
 				}
+
 				String canReview = "no";
 				String userID = (String) o[1];
 				user = User.loadUserByORMID(userID);
@@ -222,14 +228,24 @@ public class Server extends AbstractServer {
 						}
 					}
 				}
+				
+				String hasMembership ="no";
+				User_Membership[] um = user.user_Memberships.toArray();
+				if(um.length!=0){
+					if(um[um.length-1].getE_date().after(new Date()))
+						hasMembership ="yes";
+				}
+				
 
-				o = new Object[6];
+
+				o = new Object[7];
 				o[0] = a;
 				o[1] = f;
 				o[2] = s;
 				o[3] = r;
 				o[4] = u;
 				o[5] = canReview;
+				o[6]= hasMembership;
 				msg.setMsg(o);
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -274,7 +290,7 @@ public class Server extends AbstractServer {
 		switch (msg.getFunc()) {
 		case 1:
 			String[] query = (String[]) msg.getMsg();
-			int maxID=0;
+			int maxID = 0;
 			try {
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("select MAX(ID) from book");
@@ -284,7 +300,7 @@ public class Server extends AbstractServer {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			int[] counter = new int[maxID+1];
+			int[] counter = new int[maxID + 1];
 			ArrayList<Book> searchResult = new ArrayList<Book>();
 			Book[] importer;
 			int queryCounter = 0;
@@ -320,7 +336,7 @@ public class Server extends AbstractServer {
 					if (a != null) {
 						importer = a.book.toArray();
 						for (int i = 0; i < importer.length; i++) {
-							if(importer[i].getStatus().equals("visible"))
+							if (importer[i].getStatus().equals("visible"))
 								counter[importer[i].getID()]++;
 						}
 					}
@@ -337,7 +353,7 @@ public class Server extends AbstractServer {
 						if (k != null) {
 							importer = k.book.toArray();
 							for (int j = 0; j < importer.length; j++) {
-								if(importer[i].getStatus().equals("visible"))
+								if (importer[i].getStatus().equals("visible"))
 									counter[importer[j].getID()]++;
 							}
 						}
@@ -354,7 +370,7 @@ public class Server extends AbstractServer {
 					if (f != null) {
 						importer = f.book.toArray();
 						for (int i = 0; i < importer.length; i++) {
-							if(importer[i].getStatus().equals("visible"))
+							if (importer[i].getStatus().equals("visible"))
 								counter[importer[i].getID()]++;
 						}
 					}
@@ -369,7 +385,7 @@ public class Server extends AbstractServer {
 					if (s != null) {
 						importer = s.book.toArray();
 						for (int i = 0; i < importer.length; i++) {
-							if(importer[i].getStatus().equals("visible"))
+							if (importer[i].getStatus().equals("visible"))
 								counter[importer[i].getID()]++;
 						}
 					}
@@ -771,8 +787,8 @@ public class Server extends AbstractServer {
 				for (int i = 0; i < reviews.length; i++) {
 					boolean inFlag = true;
 					Book b = reviews[i].getUsersbook().getBook();
-					if(b.getStatus().equals("hidden"))
-						inFlag=false;
+					if (b.getStatus().equals("hidden"))
+						inFlag = false;
 					if (!query[1].equals("") && !b.getTitle().equalsIgnoreCase(query[1]))
 						inFlag = false;
 					if (!query[2].equals("") && !b.author.contains(author))
@@ -945,9 +961,9 @@ public class Server extends AbstractServer {
 			break;
 		case 4:
 			try {
-				Book b = Book.loadBookByORMID((int)msg.getMsg());
+				Book b = Book.loadBookByORMID((int) msg.getMsg());
 				session.beginTransaction();
-				if(b.getStatus().equals("visible"))
+				if (b.getStatus().equals("visible"))
 					b.setStatus("hidden");
 				else
 					b.setStatus("visible");
@@ -957,7 +973,7 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 				session.getTransaction().rollback();
 			}
-			
+
 		}
 	}
 
@@ -1111,6 +1127,95 @@ public class Server extends AbstractServer {
 			break;
 		}
 
+	}
+
+	@SuppressWarnings("deprecation")
+	private void employeeHomepageMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				PaymentRequest[] pr = PaymentRequest.listPaymentRequestByQuery("Status='waiting'", "ID");
+				Book[] books = new Book[pr.length];
+				GeneralUser[] users = new GeneralUser[pr.length];
+				Membership[] memberships = new Membership[pr.length];
+
+				for (int i = 0; i < pr.length; i++) {
+					users[i] = GeneralUser.loadGeneralUserByORMID(pr[i].getUser().getID());
+					if (pr[i].getBook() != null)
+						books[i] = Book.loadBookByORMID(pr[i].getBook().getID());
+					else
+						books[i] = null;
+					if (pr[i].getMembership() != null)
+						memberships[i] = Membership.loadMembershipByORMID(pr[i].getMembership().getID());
+					else
+						memberships[i] = null;
+				}
+
+				Object[] o = new Object[4];
+				o[0] = pr;
+				o[1] = users;
+				o[2] = books;
+				o[3] = memberships;
+				msg.setMsg(o);
+				client.sendToClient(msg);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case 2:
+			int pid = (int) msg.getMsg();
+			try {
+				session.beginTransaction();
+				PaymentRequest pr = PaymentRequest.loadPaymentRequestByORMID(pid);
+				if (pr.getBook() != null) {
+					User_Book ub = User_Book.createUser_Book();
+					ub.setBook(pr.getBook());
+					ub.setUser(pr.getUser());
+					ub.setpDate(new Date());
+					ub.save();
+				} else {
+					User_Membership um = User_Membership.createUser_Membership();
+					um.setMembership(pr.getMembership());
+					um.setS_date(new Date());
+					Date d = new Date();
+					d.setDate(d.getDate() + pr.getMembership().getDays());
+					um.setE_date(d);
+					um.setUser(pr.getUser());
+					um.save();
+				}
+				pr.setStatus("approved");
+				User user = User.loadUserByORMID(pr.getUser().getID());
+				user.setPaymentInfo(pr.getPaymentInfo());
+				user.save();
+				pr.save();
+				session.getTransaction().commit();
+				msg.setFunc(1);
+				employeeHomepageMessageHandler(msg,client);
+			} catch (PersistentException e) {
+				e.printStackTrace();
+				session.getTransaction().rollback();
+			}
+			break;
+		case 3:
+			int prid=(int)msg.getMsg();
+			PaymentRequest pr;
+			try {
+				session.beginTransaction();
+				pr = PaymentRequest.loadPaymentRequestByORMID(prid);
+				pr.setStatus("denied");
+				pr.save();
+				session.getTransaction().commit();
+				msg.setFunc(1);
+				employeeHomepageMessageHandler(msg,client);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
+			
+		}
 	}
 
 	protected void serverStarted() {

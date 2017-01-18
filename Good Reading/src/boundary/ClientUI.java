@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Stack;
 
 import javax.imageio.ImageIO;
@@ -78,6 +79,8 @@ public class ClientUI extends Application {
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
+		Date d = new Date();
+
 	}
 
 	public static void setScene(String fxml) {

@@ -27,7 +27,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="hostField" layoutX="364.0" layoutY="271.0" prefHeight="25.0" prefWidth="195.0" />
+            <TextField fx:id="hostField" layoutX="364.0" layoutY="271.0" prefHeight="25.0" prefWidth="195.0" text="localhost" />
             <TextField fx:id="idField" layoutX="364.0" layoutY="312.0" prefHeight="25.0" prefWidth="195.0" />
             <PasswordField fx:id="passField" layoutX="364.0" layoutY="354.0" onAction="#loginOnClick" prefHeight="25.0" prefWidth="195.0" />
             <Label layoutX="293.0" layoutY="315.0" text="username" textFill="#656565">
@@ -40,7 +40,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <AnchorPane layoutX="420.0" layoutY="402.0" onMouseReleased="#loginOnClick" onMouseEntered="#loginOnHover" onMouseExited="#loginOffHover">
+            <AnchorPane layoutX="420.0" layoutY="402.0" onMouseEntered="#loginOnHover" onMouseExited="#loginOffHover" onMouseReleased="#loginOnClick">
                <children>
                   <ImageView fx:id="loginButton" fitHeight="33.0" fitWidth="84.0" preserveRatio="true">
                      <image>
