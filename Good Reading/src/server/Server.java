@@ -99,6 +99,9 @@ public class Server extends AbstractServer {
 		case "employee homepage":
 			employeeHomepageMessageHandler(m, client);
 			break;
+		case "user membership":
+			userMembershipMessageHandler(m, client);
+			break;
 		}
 	}
 
@@ -213,31 +216,32 @@ public class Server extends AbstractServer {
 					user = r[i].getUsersbook().getUser();
 					u[i] = user.getFname() + " " + user.getLname();
 				}
-
+				String canDownload="no";
 				String canReview = "no";
 				String userID = (String) o[1];
 				user = User.loadUserByORMID(userID);
 				User_Book[] ub = user.user_Books.toArray();
 				for (int i = 0; i < ub.length; i++) {
 					if (ub[i].getBook().getID() == b.getID()) {
-						canReview = "yes";
+						canDownload="yes";
+						if(ub[i].getStatus().equals("downloaded")) canReview = "yes";
 						Review[] ur = ub[i].review.toArray();
 						if (ur.length != 0) {
-							// Only the last review can be active.
-							canReview = ur[ur.length - 1].getStatus();
+							if(ur[0].getStatus().equals("waiting"))
+									canReview="waiting";
+							if(ur[0].getStatus().equals("approved"))
+								canReview="no";
+									
 						}
 					}
 				}
 				
-				String hasMembership ="no";
 				User_Membership[] um = user.user_Memberships.toArray();
 				if(um.length!=0){
 					if(um[um.length-1].getE_date().after(new Date()))
-						hasMembership ="yes";
+						canDownload ="yes";
 				}
 				
-
-
 				o = new Object[7];
 				o[0] = a;
 				o[1] = f;
@@ -245,7 +249,7 @@ public class Server extends AbstractServer {
 				o[3] = r;
 				o[4] = u;
 				o[5] = canReview;
-				o[6]= hasMembership;
+				o[6]= canDownload;
 				msg.setMsg(o);
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -253,7 +257,6 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-
 		case 2:
 			try {
 				Object[] o = (Object[]) msg.getMsg();
@@ -281,6 +284,31 @@ public class Server extends AbstractServer {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
+			break;
+		case 3:
+			Object[] o=(Object[])msg.getMsg();
+			try {
+				session.beginTransaction();
+				int bookID=(int)o[0];
+				String userID=(String)o[1];
+				User_Book ub=User_Book.loadUser_BookByQuery("BookID="+bookID+" AND GeneralUserID="+userID, "BookID");
+				if(ub==null) // user is membership and he is downloading this book for the first time.
+				{
+					ub=User_Book.createUser_Book();
+					ub.setBook(Book.loadBookByORMID(bookID));
+					ub.setUser(User.getUserByORMID(userID));
+					ub.setStatus("downloaded");
+					ub.setpDate(new Date());
+					ub.save();	
+				}
+				if(ub.getStatus().equals("paid"))
+					ub.setStatus("downloaded");
+				ub.save();
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				session.getTransaction().rollback();
+				e.printStackTrace();
 			}
 
 		}
@@ -566,7 +594,14 @@ public class Server extends AbstractServer {
 	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
 		try {
 			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
-			msg.setMsg(m);
+			User user=User.loadUserByORMID((String)msg.getMsg());
+			User_Membership[] um = user.user_Memberships.toArray();
+			if(um.length!=0)
+			{
+				if(um[um.length-1].getE_date().after(new Date()))
+					msg.setMsg("already membership");
+			}
+			else msg.setMsg(m);
 			client.sendToClient(msg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1218,6 +1253,29 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	private void userMembershipMessageHandler(Message msg, ConnectionToClient client)
+	{
+		switch(msg.getFunc())
+		{
+		case 1:
+			try{
+			User user=User.loadUserByORMID((String)msg.getMsg());
+			User_Membership[] um=user.user_Memberships.toArray();
+			User_Membership usermem=null;
+			if(um.length!=0)
+			{
+				usermem=um[um.length-1];
+			}
+			msg.setMsg(usermem);
+			client.sendToClient(msg);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			break;
+		}
+	}
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}

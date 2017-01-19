@@ -60,7 +60,7 @@ public class BookPageController extends SystemController {
 	private Review[] reviews;
 	private String[] usernames;
 	private String canReview;
-	private String hasMembership;
+	private String canDownload;
 
 	@FXML
 	private ImageView bookImage;
@@ -157,8 +157,21 @@ public class BookPageController extends SystemController {
 				ClientUI.instance.getHostServices().showDocument(currBook.getFb2());
 				break;
 			}
+			// if it's a first download, change status in user_book table.
+			Object[] m=new Object[2];
+			m[0]=currBook.getID();
+			m[1]=ClientUI.user.getID();
+			Message msg=new Message("book page", 3, m);
+			try {
+				Client.instance.sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
+			
 		}
+		// user does not own the book -> move to payment request
 		BookPaymentController.book = currBook;
 		BookPaymentController.authors = authors;
 		ClientUI.setScene("BookPaymentGUI.fxml");
@@ -231,7 +244,7 @@ public class BookPageController extends SystemController {
 			reviews = (Review[]) m[3];
 			usernames = (String[]) m[4];
 			canReview = (String) m[5];
-			hasMembership = (String)m[6];
+			canDownload = (String)m[6];
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -250,7 +263,7 @@ public class BookPageController extends SystemController {
 						subjectLabel.setText(s);
 					} else
 						subjectLabel.setText("");
-					if (canReview.equals("no") || canReview.equals("waiting") || canReview.equals("approved")) {
+					if (!canReview.equals("yes")) {
 						scrollAnchor.setPrefHeight(438);
 						addReviewText.setVisible(false);
 						addReviewLabel.setVisible(false);
@@ -262,7 +275,7 @@ public class BookPageController extends SystemController {
 					}
 					if (reviews.length != 0)
 						setReviewGrid();
-					if ((!canReview.equals("no"))||(!hasMembership.equals("no"))) {
+					if (canDownload.equals("yes")) {
 						priceAnchor.setVisible(false);
 						ObservableList<String> formats = FXCollections.observableArrayList();
 						if (currBook.getPdf() != null)
