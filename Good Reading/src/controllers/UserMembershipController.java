@@ -11,7 +11,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class userMembershipController extends SystemController {
+public class UserMembershipController extends SystemController {
 
 	@FXML
 	private Label nameLabel;

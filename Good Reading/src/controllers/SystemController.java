@@ -76,6 +76,7 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void searchBookOnClick() {
+		SearchBookController.what = "search book";
 		ClientUI.setScene("SearchBookGUI.fxml");
 	}
 

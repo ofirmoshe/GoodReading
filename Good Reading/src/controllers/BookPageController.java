@@ -40,6 +40,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 /**
  * Book page controller is the controller of all the book pages. The controller
@@ -195,6 +197,7 @@ public class BookPageController extends SystemController {
 
 	public void setReviewGrid() {
 		reviewGrid = new GridPane();
+		double gridHeight = 0;
 		for (int y = 0; y < reviews.length; y++) {
 			AnchorPane ap = new AnchorPane();
 			ap.setPrefHeight(60);
@@ -212,15 +215,22 @@ public class BookPageController extends SystemController {
 			ap.getChildren().add(username);
 			username.setLayoutX(10);
 			username.setLayoutY(10);
-			Label rev = new Label(reviews[y].getText());
+			Text rev = new Text(reviews[y].getText());
 			rev.setFont(Font.font("System", 12));
-			rev.setLayoutX(10);
-			rev.setLayoutY(30);
-			rev.setWrapText(true);
-			ap.getChildren().add(rev);
+			TextFlow tf = new TextFlow(rev);
+			tf.setLayoutX(10);
+			tf.setLayoutY(30);
+			tf.setPrefWidth(540);
+			ap.getChildren().add(tf);
 			reviewGrid.add(ap, 0, y);
+			double revHeight = rev.getText().length()/4.5+50;
+			if(tf.getBoundsInLocal().getHeight()+50>revHeight)
+				revHeight=tf.getBoundsInLocal().getHeight()*1.15+50;
+			rect.setHeight(revHeight);
+			ap.setPrefHeight(revHeight);
+			gridHeight = gridHeight+revHeight;
 		}
-		reviewAnchor.setPrefHeight(60 * reviews.length);
+		reviewAnchor.setPrefHeight(gridHeight);
 		reviewAnchor.getChildren().add(reviewGrid);
 	}
 

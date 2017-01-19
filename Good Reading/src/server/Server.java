@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 import org.orm.PersistentException;
@@ -102,6 +104,9 @@ public class Server extends AbstractServer {
 		case "user membership":
 			userMembershipMessageHandler(m, client);
 			break;
+		case "user report":
+			userReportMessageHandler(m, client);
+			break;
 		}
 	}
 
@@ -175,28 +180,6 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-
-		case 2:
-			Object[] o = (Object[]) msg.getMsg();
-			String name = (String) o[0];
-			name = name.substring(0, name.length() - 4);
-			System.out.println(name);
-			byte[] res = (byte[]) o[1];
-			try {
-				Book b = Book.loadBookByQuery("Title='" + name + "'", "ID");
-				session.beginTransaction();
-				b.setImage(res);
-				b.save();
-				session.getTransaction().commit();
-				b = Book.loadBookByQuery("Title='" + name + "'", "ID");
-				if (b.getImage() == null)
-					System.out.println("null");
-				System.out.println(b.getImage().toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-				session.getTransaction().rollback();
-			}
-
 		}
 	}
 
@@ -216,32 +199,33 @@ public class Server extends AbstractServer {
 					user = r[i].getUsersbook().getUser();
 					u[i] = user.getFname() + " " + user.getLname();
 				}
-				String canDownload="no";
+				String canDownload = "no";
 				String canReview = "no";
 				String userID = (String) o[1];
 				user = User.loadUserByORMID(userID);
 				User_Book[] ub = user.user_Books.toArray();
 				for (int i = 0; i < ub.length; i++) {
 					if (ub[i].getBook().getID() == b.getID()) {
-						canDownload="yes";
-						if(ub[i].getStatus().equals("downloaded")) canReview = "yes";
+						canDownload = "yes";
+						if (ub[i].getStatus().equals("downloaded"))
+							canReview = "yes";
 						Review[] ur = ub[i].review.toArray();
 						if (ur.length != 0) {
-							if(ur[0].getStatus().equals("waiting"))
-									canReview="waiting";
-							if(ur[0].getStatus().equals("approved"))
-								canReview="no";
-									
+							if (ur[0].getStatus().equals("waiting"))
+								canReview = "waiting";
+							if (ur[0].getStatus().equals("approved"))
+								canReview = "no";
+
 						}
 					}
 				}
-				
+
 				User_Membership[] um = user.user_Memberships.toArray();
-				if(um.length!=0){
-					if(um[um.length-1].getE_date().after(new Date()))
-						canDownload ="yes";
+				if (um.length != 0) {
+					if (um[um.length - 1].getE_date().after(new Date()))
+						canDownload = "yes";
 				}
-				
+
 				o = new Object[7];
 				o[0] = a;
 				o[1] = f;
@@ -249,7 +233,7 @@ public class Server extends AbstractServer {
 				o[3] = r;
 				o[4] = u;
 				o[5] = canReview;
-				o[6]= canDownload;
+				o[6] = canDownload;
 				msg.setMsg(o);
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -287,22 +271,24 @@ public class Server extends AbstractServer {
 			}
 			break;
 		case 3:
-			Object[] o=(Object[])msg.getMsg();
+			Object[] o = (Object[]) msg.getMsg();
 			try {
 				session.beginTransaction();
-				int bookID=(int)o[0];
-				String userID=(String)o[1];
-				User_Book ub=User_Book.loadUser_BookByQuery("BookID="+bookID+" AND GeneralUserID="+userID, "BookID");
-				if(ub==null) // user is membership and he is downloading this book for the first time.
+				int bookID = (int) o[0];
+				String userID = (String) o[1];
+				User_Book ub = User_Book.loadUser_BookByQuery("BookID=" + bookID + " AND GeneralUserID=" + userID,
+						"BookID");
+				if (ub == null) // user is membership and he is downloading this
+								// book for the first time.
 				{
-					ub=User_Book.createUser_Book();
+					ub = User_Book.createUser_Book();
 					ub.setBook(Book.loadBookByORMID(bookID));
 					ub.setUser(User.getUserByORMID(userID));
 					ub.setStatus("downloaded");
 					ub.setpDate(new Date());
-					ub.save();	
+					ub.save();
 				}
-				if(ub.getStatus().equals("paid"))
+				if (ub.getStatus().equals("paid"))
 					ub.setStatus("downloaded");
 				ub.save();
 				session.getTransaction().commit();
@@ -336,9 +322,11 @@ public class Server extends AbstractServer {
 			if (!query[2].equals("")) {
 				queryCounter++;
 				try {
-					importer = Book.listBookByQuery("Status='visible' AND Title=" + "'" + query[2] + "'", "ID");
+					importer = Book.listBookByQuery("ID>0", "ID");
+					String title = (String) query[2];
 					for (int i = 0; i < importer.length; i++) {
-						counter[importer[i].getID()]++;
+						if (importer[i].getTitle().toLowerCase().contains(title.toLowerCase()))
+							counter[importer[i].getID()]++;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -348,7 +336,7 @@ public class Server extends AbstractServer {
 			if (!query[3].equals("")) {
 				queryCounter++;
 				try {
-					importer = Book.listBookByQuery("Status='visible' AND Language=" + "'" + query[3] + "'", "ID");
+					importer = Book.listBookByQuery("Language=" + "'" + query[3] + "'", "ID");
 					for (int i = 0; i < importer.length; i++) {
 						counter[importer[i].getID()]++;
 					}
@@ -360,12 +348,14 @@ public class Server extends AbstractServer {
 			if (!query[4].equals("")) {
 				queryCounter++;
 				try {
-					Author a = Author.loadAuthorByQuery("Name='" + query[4] + "'", "ID");
-					if (a != null) {
-						importer = a.book.toArray();
-						for (int i = 0; i < importer.length; i++) {
-							if (importer[i].getStatus().equals("visible"))
-								counter[importer[i].getID()]++;
+					Author[] a = Author.listAuthorByQuery("ID>0", "ID");
+					String name = (String) query[4];
+					for (int i = 0; i < a.length; i++) {
+						if (a[i].getName().toLowerCase().contains(name.toLowerCase())) {
+							importer = a[i].book.toArray();
+							for (int j = 0; j < importer.length; j++) {
+								counter[importer[j].getID()]++;
+							}
 						}
 					}
 				} catch (Exception e) {
@@ -381,8 +371,7 @@ public class Server extends AbstractServer {
 						if (k != null) {
 							importer = k.book.toArray();
 							for (int j = 0; j < importer.length; j++) {
-								if (importer[i].getStatus().equals("visible"))
-									counter[importer[j].getID()]++;
+								counter[importer[j].getID()]++;
 							}
 						}
 					} catch (PersistentException e) {
@@ -398,8 +387,7 @@ public class Server extends AbstractServer {
 					if (f != null) {
 						importer = f.book.toArray();
 						for (int i = 0; i < importer.length; i++) {
-							if (importer[i].getStatus().equals("visible"))
-								counter[importer[i].getID()]++;
+							counter[importer[i].getID()]++;
 						}
 					}
 				} catch (Exception e) {
@@ -413,8 +401,7 @@ public class Server extends AbstractServer {
 					if (s != null) {
 						importer = s.book.toArray();
 						for (int i = 0; i < importer.length; i++) {
-							if (importer[i].getStatus().equals("visible"))
-								counter[importer[i].getID()]++;
+							counter[importer[i].getID()]++;
 						}
 					}
 				} catch (Exception e) {
@@ -426,7 +413,9 @@ public class Server extends AbstractServer {
 				for (int i = 1; i < counter.length; i++) {
 					if (counter[i] >= queryCounter)
 						try {
-							searchResult.add(Book.getBookByORMID(i));
+							Book b = Book.getBookByORMID(i);
+							if (query[8].equals("yes") || b.getStatus().equals("visible"))
+								searchResult.add(b);
 						} catch (PersistentException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -476,9 +465,44 @@ public class Server extends AbstractServer {
 				for (int i = 0; i < fields.length; i++) {
 					subjects[i] = fields[i].subject.toArray();
 				}
-				Object[] ob = new Object[2];
+				Object[] ob = new Object[4];
 				ob[0] = fields;
 				ob[1] = subjects;
+				Book[] books = Book.listBookByQuery("ID>0", "ID");
+				int[][] purchases = new int[books.length][2];
+				for (int i = 0; i < books.length; i++) {
+					purchases[i][0] = books[i].getID();
+					purchases[i][1] = books[i].user_Books.size();
+				}
+				Arrays.sort(purchases, new Comparator<int[]>() {
+					@Override
+					public int compare(int[] o1, int[] o2) {
+						return Integer.compare(o2[1], o1[1]);
+					}
+				});
+				int[] ranks = new int[books[books.length - 1].getID() + 1];
+				for (int i = 0; i < books.length; i++) {
+					ranks[purchases[i][0]] = i+1;
+				}
+				ob[2]=ranks;
+				int[][] fieldRanks = new int[fields.length][ranks.length];
+				for(int i =0; i<fields.length; i++){
+					Book[] fbooks = fields[i].book.toArray();
+					purchases = new int[fbooks.length][2];
+					for(int j=0; j<fbooks.length; j++){
+						purchases[j][0] = fbooks[j].getID();
+						purchases[j][1] = fbooks[j].user_Books.size();
+					}
+					Arrays.sort(purchases, new Comparator<int[]>() {
+						@Override
+						public int compare(int[] o1, int[] o2) {
+							return Integer.compare(o2[1], o1[1]);
+						}
+					});
+					for(int j=0; j<fbooks.length; j++)
+						fieldRanks[i][purchases[j][0]]=j+1;
+				}
+				ob[3]=fieldRanks;
 				msg.setMsg(ob);
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -594,14 +618,13 @@ public class Server extends AbstractServer {
 	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
 		try {
 			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
-			User user=User.loadUserByORMID((String)msg.getMsg());
+			User user = User.loadUserByORMID((String) msg.getMsg());
 			User_Membership[] um = user.user_Memberships.toArray();
-			if(um.length!=0)
-			{
-				if(um[um.length-1].getE_date().after(new Date()))
+			if (um.length != 0) {
+				if (um[um.length - 1].getE_date().after(new Date()))
 					msg.setMsg("already membership");
-			}
-			else msg.setMsg(m);
+			} else
+				msg.setMsg(m);
 			client.sendToClient(msg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -822,9 +845,10 @@ public class Server extends AbstractServer {
 				for (int i = 0; i < reviews.length; i++) {
 					boolean inFlag = true;
 					Book b = reviews[i].getUsersbook().getBook();
+					String title = (String) query[1];
 					if (b.getStatus().equals("hidden"))
 						inFlag = false;
-					if (!query[1].equals("") && !b.getTitle().equalsIgnoreCase(query[1]))
+					if (!query[1].equals("") && !b.getTitle().toLowerCase().contains(title.toLowerCase()))
 						inFlag = false;
 					if (!query[2].equals("") && !b.author.contains(author))
 						inFlag = false;
@@ -891,6 +915,7 @@ public class Server extends AbstractServer {
 				Object[] o = (Object[]) msg.getMsg();
 				session.beginTransaction();
 				Book b = Book.loadBookByORMID((int) o[13]);
+				String status = b.getStatus();
 				b.delete();
 				Book newBook = Book.createBook();
 				newBook.setTitle((String) o[0]);
@@ -914,28 +939,29 @@ public class Server extends AbstractServer {
 				if (!downloadLink.equals("")) {
 					newBook.setFb2(downloadLink);
 				}
+				newBook.setStatus(status);
 				newBook.save();
 				session.getTransaction().commit();
+				Statement stmt = con.createStatement();
+				String sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
+				stmt.executeUpdate(sql);
 				Author[] authors = (Author[]) o[4];
 				for (int i = 0; i < authors.length; i++) {
-					Statement stmt = con.createStatement();
-					String sql = "INSERT INTO author_book " + "VALUES (" + authors[i].getID() + ", " + newBook.getID()
-							+ ")";
+					stmt = con.createStatement();
+					sql = "INSERT INTO author_book " + "VALUES (" + authors[i].getID() + ", " + b.getID() + ")";
 					stmt.executeUpdate(sql);
 				}
 				Field[] fields = (Field[]) o[2];
 				for (int i = 0; i < fields.length; i++) {
-					Statement stmt = con.createStatement();
-					String sql = "INSERT INTO book_field " + "VALUES (" + newBook.getID() + ", " + fields[i].getID()
-							+ ")";
+					stmt = con.createStatement();
+					sql = "INSERT INTO book_field " + "VALUES (" + b.getID() + ", " + fields[i].getID() + ")";
 					stmt.executeUpdate(sql);
 				}
 				Subject[] subjects = (Subject[]) o[3];
 				if (subjects.length != 0) {
 					for (int i = 0; i < subjects.length; i++) {
-						Statement stmt = con.createStatement();
-						String sql = "INSERT INTO book_subject " + "VALUES (" + newBook.getID() + ", "
-								+ subjects[i].getID() + ")";
+						stmt = con.createStatement();
+						sql = "INSERT INTO book_subject " + "VALUES (" + b.getID() + ", " + subjects[i].getID() + ")";
 						stmt.executeUpdate(sql);
 					}
 				}
@@ -951,15 +977,11 @@ public class Server extends AbstractServer {
 							kw.save();
 							session.getTransaction().commit();
 						}
-						Statement stmt = con.createStatement();
-						String sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + newBook.getID()
-								+ ")";
+						stmt = con.createStatement();
+						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + b.getID() + ")";
 						stmt.executeUpdate(sql);
 					}
 				}
-				Statement stmt = con.createStatement();
-				String sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
-				stmt.executeUpdate(sql);
 				msg.setMsg("s");
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -1208,6 +1230,7 @@ public class Server extends AbstractServer {
 					ub.setBook(pr.getBook());
 					ub.setUser(pr.getUser());
 					ub.setpDate(new Date());
+					ub.setStatus("paid");
 					ub.save();
 				} else {
 					User_Membership um = User_Membership.createUser_Membership();
@@ -1226,14 +1249,14 @@ public class Server extends AbstractServer {
 				pr.save();
 				session.getTransaction().commit();
 				msg.setFunc(1);
-				employeeHomepageMessageHandler(msg,client);
+				employeeHomepageMessageHandler(msg, client);
 			} catch (PersistentException e) {
 				e.printStackTrace();
 				session.getTransaction().rollback();
 			}
 			break;
 		case 3:
-			int prid=(int)msg.getMsg();
+			int prid = (int) msg.getMsg();
 			PaymentRequest pr;
 			try {
 				session.beginTransaction();
@@ -1242,40 +1265,81 @@ public class Server extends AbstractServer {
 				pr.save();
 				session.getTransaction().commit();
 				msg.setFunc(1);
-				employeeHomepageMessageHandler(msg,client);
+				employeeHomepageMessageHandler(msg, client);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			
-			
 		}
 	}
 
-	private void userMembershipMessageHandler(Message msg, ConnectionToClient client)
-	{
-		switch(msg.getFunc())
-		{
+	private void userMembershipMessageHandler(Message msg, ConnectionToClient client) {
+		switch (msg.getFunc()) {
 		case 1:
-			try{
-			User user=User.loadUserByORMID((String)msg.getMsg());
-			User_Membership[] um=user.user_Memberships.toArray();
-			User_Membership usermem=null;
-			if(um.length!=0)
-			{
-				usermem=um[um.length-1];
-			}
-			msg.setMsg(usermem);
-			client.sendToClient(msg);
-			}
-			catch(Exception e)
-			{
+			try {
+				User user = User.loadUserByORMID((String) msg.getMsg());
+				User_Membership[] um = user.user_Memberships.toArray();
+				User_Membership usermem = null;
+				if (um.length != 0) {
+					usermem = um[um.length - 1];
+				}
+				msg.setMsg(usermem);
+				client.sendToClient(msg);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		}
 	}
+
+	private void userReportMessageHandler(Message m, ConnectionToClient client) {
+		switch (m.getFunc()) {
+		case 1:
+			User u = null;
+			try {
+				u = User.loadUserByORMID((String) m.getMsg());
+			} catch (Exception e) {
+				m.setMsg("f");
+				m.setFunc(2);
+				try {
+					client.sendToClient(m);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				return;
+			}
+			try {
+				User_Book[] ub = u.user_Books.toArray();
+				Book[] books = new Book[ub.length];
+
+				for (int i = 0; i < ub.length; i++)
+					books[i] = ub[i].getBook();
+
+				Author[][] a = new Author[books.length][];
+				Field[][] f = new Field[books.length][];
+				Subject[][] s = new Subject[books.length][];
+				for (int i = 0; i < books.length; i++) {
+					a[i] = books[i].author.toArray();
+					f[i] = books[i].field.toArray();
+					s[i] = books[i].subject.toArray();
+				}
+				Object[] o = new Object[4];
+				o[0] = books;
+				o[1] = a;
+				o[2] = f;
+				o[3] = s;
+				m.setMsg(o);
+				client.sendToClient(m);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}

@@ -160,7 +160,7 @@ public class LoginController extends AbstractController {
 				@Override
 				public void run() {
 					loginLabel.setText("loading");
-					loginLabel.setTranslateX(-5);
+					loginLabel.setTranslateX(-7);
 				}
 			});
 			ClientUI.user = (GeneralUser) a[1];
@@ -184,6 +184,8 @@ public class LoginController extends AbstractController {
 				case "Library Employee":
 					ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
 					break;
+				case "Editor":
+					ClientUI.setScene("ManageReviewGUI.fxml");
 				}
 			}
 		}

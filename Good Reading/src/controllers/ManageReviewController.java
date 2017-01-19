@@ -13,6 +13,7 @@ import client.Client;
 import common.Message;
 import i_book.Author;
 import i_book.Book;
+import i_book.Employee;
 import i_book.Field;
 import i_book.Review;
 import i_book.Subject;
@@ -71,6 +72,8 @@ public class ManageReviewController extends SystemController {
 	private AnchorPane scrollAnchor;
 	@FXML
 	private TextField keywordField;
+	@FXML
+	private AnchorPane goBackButton;
 
 	/**
 	 * This method initializes the controller.
@@ -78,14 +81,15 @@ public class ManageReviewController extends SystemController {
 	public void initialize() {
 		super.initialize();
 		scrollAnchor.setPrefHeight(200);
-		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
-		optionBox.getSelectionModel().selectFirst();
 		try {
 			Client.instance.sendToServer(new Message("manage review", 1));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Employee emp = (Employee)ClientUI.user;
+		if(emp.getPosition().equals("Editor"))
+			goBackButton.setVisible(false);
 	}
 
 	/**

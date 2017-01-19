@@ -25,7 +25,7 @@ public class LibrarianHomepageController extends SystemController {
 		super.initialize();
 		Client.refresh();
 	}
-	
+
 	public void addBookOnClick() {
 		ClientUI.setScene("AddNewBookGUI.fxml");
 	}
@@ -33,41 +33,28 @@ public class LibrarianHomepageController extends SystemController {
 	public void inventoryOnClick() {
 		ClientUI.setScene("InventoryManagementGUI.fxml");
 	}
-	
+
 	public void manageReviewOnClick() {
 		ClientUI.setScene("ManageReviewGUI.fxml");
 	}
 
 	public void editBookOnClick() {
-		try {
-			Message msg = new Message("librarian homepage",1,Integer.parseInt(editBookField.getText()));
-			Client.instance.sendToServer(msg);
-		} catch (Exception e) {
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Edit Book");
-					alert.setContentText("Non valid book id, try again.");
-					alert.showAndWait();
-				}
-			});
-
-		}
+		SearchBookController.what="edit book";
+		ClientUI.setScene("SearchBookGUI.fxml");
 	}
-	
-	public void addUserOnClick(){
+
+	public void addUserOnClick() {
 		ClientUI.setScene("AddNewUserGUI.fxml");
 	}
 
 	@Override
 	public void handleMessage(Message msg) {
-		switch(msg.getFunc()){
+		switch (msg.getFunc()) {
 		case 1:
-			if(msg.getMsg().equals("s")){
+			if (msg.getMsg().equals("s")) {
 				EditBookController.book_id = Integer.parseInt(editBookField.getText());
 				ClientUI.setScene("EditBookGUI.fxml");
-			}else{
+			} else {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -80,7 +67,6 @@ public class LibrarianHomepageController extends SystemController {
 			}
 			break;
 		}
-
 	}
 
 }

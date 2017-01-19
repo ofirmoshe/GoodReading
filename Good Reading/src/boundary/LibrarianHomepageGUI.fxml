@@ -50,11 +50,10 @@
           <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="900.0">
                <children>
                   <Button layoutX="379.0" layoutY="121.0" mnemonicParsing="false" onAction="#addBookOnClick" prefHeight="25.0" prefWidth="143.0" text="Add Book" />
-                  <Button layoutX="454.0" layoutY="161.0" mnemonicParsing="false" onAction="#editBookOnClick" text="Edit Book" />
+                  <Button layoutX="379.0" layoutY="161.0" mnemonicParsing="false" onAction="#editBookOnClick" prefHeight="25.0" prefWidth="142.0" text="Search &amp; Edit Book" />
                   <Button layoutX="379.0" layoutY="249.0" mnemonicParsing="false" onMouseClicked="#manageReviewOnClick" prefHeight="25.0" prefWidth="142.0" text="Review Management" />
                   <Button layoutX="379.0" layoutY="205.0" mnemonicParsing="false" onAction="#inventoryOnClick" prefHeight="25.0" prefWidth="142.0" text="Inventory Management" />
                   <Button fx:id="addUserButton" layoutX="378.0" layoutY="289.0" mnemonicParsing="false" onAction="#addUserOnClick" prefHeight="25.0" prefWidth="145.0" text="Add User" />
-                  <TextField fx:id="editBookField" layoutX="381.0" layoutY="161.0" prefHeight="25.0" prefWidth="65.0" />
                   <Label fx:id="posLabel" layoutX="397.0" layoutY="49.0" text="Librarians">
                      <font>
                         <Font size="25.0" />

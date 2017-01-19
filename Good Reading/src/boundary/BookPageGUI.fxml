@@ -129,7 +129,7 @@
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <TextArea fx:id="addReviewText" layoutX="220.0" layoutY="396.0" prefHeight="74.0" prefWidth="583.0" />
+                  <TextArea fx:id="addReviewText" layoutX="220.0" layoutY="396.0" prefHeight="74.0" prefWidth="583.0" wrapText="true" />
                   <Label fx:id="addReviewLabel" layoutX="221.0" layoutY="368.0" text="Add new review">
                      <font>
                         <Font name="System Bold" size="14.0" />

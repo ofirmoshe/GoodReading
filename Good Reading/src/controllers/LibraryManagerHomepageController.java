@@ -14,9 +14,32 @@ import javafx.scene.control.Alert.AlertType;
 
 public class LibraryManagerHomepageController extends LibrarianHomepageController {
 
-	public void initialize(){
+	@FXML
+	private TextField userReportField;
+
+	public void initialize() {
 		super.initialize();
 	}
+
+	public void getUserReportOnClick() {
+		if (!userReportField.getText().equals("")) {
+			UserReportController.userID = userReportField.getText();
+			ClientUI.setScene("UserReportGUI.fxml");
+		} else {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Empty Field.");
+					alert.showAndWait();
+				}
+			});
+
+		}
+	}
 	
-	
+	public void bookReportOnClick(){
+		SearchBookController.what  = "book report";
+		ClientUI.setScene("SearchBookGUI.fxml");
+	}
 }
