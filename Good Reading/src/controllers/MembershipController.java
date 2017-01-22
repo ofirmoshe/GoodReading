@@ -14,7 +14,7 @@ public class MembershipController extends SystemController {
 
 	public void initialize() {
 		super.initialize();
-		Message msg = new Message("membership", 1, ClientUI.user.getID());
+		Message msg = new Message("membership", 1);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
@@ -49,13 +49,8 @@ public class MembershipController extends SystemController {
 
 	@Override
 	public void handleMessage(Message msg) {
-		if(msg.getMsg() instanceof Membership)
-			memberships = (Membership[]) msg.getMsg();
-		else
-		{
-			ClientUI.setScene("userMembershipGUI.fxml");
-		}
-			
+		memberships = (Membership[]) msg.getMsg();
+
 	}
 
 }

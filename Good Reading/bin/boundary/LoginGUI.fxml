@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="900.0">
+         <image>
+            <Image url="@../Graphics/bg_with_logo.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutY="-1.0" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+         <children>
+            <Label layoutX="310.0" layoutY="274.0" text="host" textFill="#656565">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="hostField" layoutX="364.0" layoutY="271.0" prefHeight="25.0" prefWidth="195.0" text="localhost" />
+            <TextField fx:id="idField" layoutX="364.0" layoutY="312.0" prefHeight="25.0" prefWidth="195.0" />
+            <PasswordField fx:id="passField" layoutX="364.0" layoutY="354.0" onAction="#loginOnClick" prefHeight="25.0" prefWidth="195.0" />
+            <Label layoutX="293.0" layoutY="315.0" text="username" textFill="#656565">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="294.0" layoutY="357.0" text="password" textFill="#656565">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="420.0" layoutY="402.0" onMouseEntered="#loginOnHover" onMouseExited="#loginOffHover" onMouseReleased="#loginOnClick">
+               <children>
+                  <ImageView fx:id="loginButton" fitHeight="33.0" fitWidth="84.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/button.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </ImageView>
+                  <Label fx:id="loginLabel" layoutX="23.0" layoutY="3.0" prefHeight="21.0" prefWidth="59.0" text="login" textFill="WHITE">
+                     <font>
+                        <Font name="Calibri" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <ImageView fx:id="wrongHost" fitHeight="20.0" fitWidth="14.0" layoutX="567.0" layoutY="277.0" preserveRatio="true" visible="false">
+               <effect>
+                  <ColorAdjust brightness="0.35" contrast="0.46" hue="0.07" saturation="0.16" />
+               </effect>
+               <image>
+                  <Image url="@../graphics/Red_X.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="wrongUser" fitHeight="20.0" fitWidth="14.0" layoutX="567.0" layoutY="318.0" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../graphics/Red_X.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="0.35" contrast="0.46" hue="0.07" saturation="0.16" />
+               </effect>
+            </ImageView>
+            <ImageView fx:id="wrongPass" fitHeight="20.0" fitWidth="14.0" layoutX="567.0" layoutY="360.0" preserveRatio="true" visible="false">
+               <effect>
+                  <ColorAdjust brightness="0.35" contrast="0.46" hue="0.07" saturation="0.16" />
+               </effect>
+               <image>
+                  <Image url="@../graphics/Red_X.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -1,10 +1,2 @@
-/IBookInc.ddl
-/boundary/
-/client/
-/common/
 /controllers/
-/graphics/
-/i_book/
-/ocsf/
-/ormmapping/
 /server/

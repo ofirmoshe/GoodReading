@@ -120,6 +120,7 @@ public class LibraryEmployeeHomepageController extends SystemController {
 	public void registerOnClick() {
 		ClientUI.setScene("AddNewUserGUI.fxml");
 	}
+
 	/**
 	 * This method sets the book grid with books, and event handlers for each
 	 * book. The book grid is added to the scroll anchor.

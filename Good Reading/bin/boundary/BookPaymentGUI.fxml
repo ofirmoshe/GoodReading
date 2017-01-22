@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookPaymentController">
+   <children>
+      <ImageView>
+         <image>
+            <Image url="@../graphics/hp_bg.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="userLabel" alignment="CENTER" layoutX="-42.0" layoutY="65.0" prefHeight="36.0" prefWidth="205.0" text="User" textFill="#5b5b5b">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="36.0" fitWidth="42.0" layoutX="42.0" layoutY="34.0" preserveRatio="true">
+         <image>
+            <Image url="@../graphics/user.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="42.0" layoutY="92.0" onMouseReleased="#logoutOnClick" prefHeight="36.0" prefWidth="36.0">
+         <children>
+            <ImageView fitHeight="21.0" fitWidth="20.0" layoutX="8.0" layoutY="8.0" opacity="0.28" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/logout.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="161.0" prefHeight="440.0" prefWidth="900.0">
+         <content>
+          <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="432.0" prefWidth="900.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="583.0" layoutX="-3.0" layoutY="-15.0" stroke="BLACK" strokeType="INSIDE" width="916.0" />
+                  <Label layoutX="43.0" layoutY="21.0" text="You are about to purchase...">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="bookImage" fitHeight="197.0" fitWidth="130.0" layoutX="43.0" layoutY="72.0">
+                     <image>
+                        <Image url="@../graphics/loading_book.jpg" />
+                     </image>
+                     <effect>
+                        <Reflection fraction="0.62" topOpacity="0.13" />
+                     </effect>
+                  </ImageView>
+                  <Label fx:id="bookNameLabel" layoutX="185.0" layoutY="72.0" text="Book Name">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="authorLabel" layoutX="185.0" layoutY="102.0" text="By Author Name" />
+                  <Label layoutX="185.0" layoutY="122.0" text="Price: ">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="priceLabel" layoutX="227.0" layoutY="118.0" text="14$" textFill="RED">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="paymentInfoField" layoutX="229.0" layoutY="188.0" prefHeight="36.0" prefWidth="199.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </TextField>
+                  <Label layoutX="229.0" layoutY="163.0" text="Payment Info:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane layoutX="246.0" layoutY="242.0" onMouseReleased="#paymentOnClick">
+                     <children>
+                        <ImageView fitHeight="27.0" fitWidth="79.0" onMouseReleased="#paymentOnClick" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/button.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <Label layoutX="16.0" layoutY="4.0" text="Proceed" textFill="WHITE">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+                  <Line endY="400.0" layoutX="480.0" layoutY="20.0" opacity="0.44" />
+                  <Label layoutX="514.0" layoutY="21.0" text="You may also like...">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane layoutX="504.0" layoutY="59.0" onMouseReleased="#membershipOnClick" prefHeight="353.0" prefWidth="387.0">
+                     <children>
+                        <ImageView fitHeight="306.0" fitWidth="275.0" layoutX="58.0" layoutY="35.0" preserveRatio="true" rotate="10.0">
+                           <image>
+                              <Image url="@../graphics/hara.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <Label layoutX="179.0" layoutY="153.0" text="Click for more details!">
+                           <font>
+                              <Font name="System Italic" size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+                  <AnchorPane layoutX="340.0" layoutY="242.0" onMouseReleased="#goBackOnClick">
+                     <children>
+                        <ImageView fx:id="cancelImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../graphics/orange_button.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="20.0" layoutY="4.0" text="Cancel" textFill="WHITE">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+      <AnchorPane fx:id="menuAnchor" layoutX="-182.0" layoutY="244.0" prefHeight="131.0" prefWidth="191.0">
+         <children>
+            <AnchorPane fx:id="searchBookButton" layoutX="1.0">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="173.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/blue_book.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="43.0" layoutY="8.0" text="Search Book" textFill="#6f6f6f">
+                     <font>
+                        <Font name="Corbel Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="searchReviewButton" layoutY="36.0">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="188.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/yellow_book.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="36.0" layoutY="8.0" text="Search Review" textFill="#6f6f6f">
+                     <font>
+                        <Font name="Corbel Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="membershipButton" layoutX="1.0" layoutY="72.0" prefHeight="36.0" prefWidth="173.0">
+               <children>
+                  <ImageView fitHeight="61.0" fitWidth="173.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/red_book.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="38.0" layoutY="8.0" text="Memberships" textFill="#6b6b6b">
+                     <font>
+                        <Font name="Corbel Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <ImageView fitHeight="21.0" fitWidth="364.0" layoutX="-162.0" layoutY="108.0">
+               <image>
+                  <Image url="@../graphics/shelf.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="arrowLabel" layoutX="185.0" layoutY="103.0" onMouseReleased="#toggleMenuOnHover" prefHeight="27.0" prefWidth="20.0" text="&gt;" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane fx:id="toggleMenuAnchor" layoutY="159.0" onMouseExited="#toggleMenuOffHover" prefHeight="440.0" prefWidth="239.0" visible="false">
+         <children>
+            <AnchorPane fx:id="searchBookClick" layoutY="85.0" onMouseReleased="#searchBookOnClick" onMouseEntered="#searchBookOnHover" onMouseExited="#searchBookOffHover" onMouseMoved="#searchBookOnHover" prefHeight="36.0" prefWidth="239.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="searchReviewClick" layoutY="120.0" onMouseReleased="#searchReviewOnClick" onMouseEntered="#searchReviewOnHover" onMouseExited="#searchReviewOffHover" onMouseMoved="#searchReviewOnHover" prefHeight="36.0" prefWidth="239.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+            <AnchorPane fx:id="membershipClick" layoutX="-1.0" layoutY="155.0" onMouseReleased="#membershipOnClick" onMouseEntered="#membershipOnHover" onMouseExited="#membershipOffHover" onMouseMoved="#membershipOnHover" prefHeight="36.0" prefWidth="239.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="logoAnchor" layoutX="248.0" layoutY="35.0" onMouseReleased="#logoOnClick" prefHeight="85.0" prefWidth="373.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></AnchorPane>
+      <AnchorPane layoutX="796.0" layoutY="22.0" onMouseReleased="#goBackOnClick" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover">
+         <children>
+            <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/orange_button.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="16.0" layoutY="4.0" text="go back" textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+   </children>
+</AnchorPane>

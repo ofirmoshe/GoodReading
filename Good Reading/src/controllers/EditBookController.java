@@ -101,6 +101,8 @@ public class EditBookController extends SystemController {
 
 	public void initialize() {
 		super.initialize();
+		formatField.setEditable(false);
+		formatField.deselect();
 		Message msg = new Message("edit book", 1, book_id);
 		try {
 			Client.instance.sendToServer(msg);
@@ -109,7 +111,7 @@ public class EditBookController extends SystemController {
 			e.printStackTrace();
 		}
 		Employee emp = (Employee) ClientUI.user;
-		if(emp.getPosition().equals("Library Manager"))
+		if (emp.getPosition().equals("Library Manager"))
 			hideButton.setVisible(true);
 	}
 
@@ -143,7 +145,7 @@ public class EditBookController extends SystemController {
 					new ExtensionFilter("All Files", "*.*"));
 			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
 			if (selectedFile != null) {
-				path=selectedFile.toPath();
+				path = selectedFile.toPath();
 				switch (f) {
 				case "pdf":
 					pdfData = Files.readAllBytes(path);
@@ -163,9 +165,7 @@ public class EditBookController extends SystemController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
 	}
 
 	public void removeFormatOnClick() {
@@ -173,15 +173,20 @@ public class EditBookController extends SystemController {
 		switch (f) {
 		case "pdf":
 			pdfData = null;
+			pdfPath="pdf format doesn't exist";
+			formatField.setPromptText(pdfPath);
 			break;
 		case "doc":
 			docData = null;
+			docPath="doc format doesn't exist";
+			formatField.setPromptText(docPath);
 			break;
 		case "fb2":
 			fb2Data = null;
+			fb2Path="fb2 format doesn't exist";
+			formatField.setPromptText(fb2Path);
 			break;
 		}
-		formatField.setText("");
 	}
 
 	public void removeBookOnClick() {
@@ -203,16 +208,16 @@ public class EditBookController extends SystemController {
 			return;
 		}
 	}
-	
-	public void hideBookOnClick(){
-		Message msg = new Message("edit book",4,book_id);
+
+	public void hideBookOnClick() {
+		Message msg = new Message("edit book", 4, book_id);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(hideLabel.getText().equals("Hide Book"))
+		if (hideLabel.getText().equals("Hide Book"))
 			hideLabel.setText("Show Book");
 		else
 			hideLabel.setText("Hide Book");
@@ -296,7 +301,7 @@ public class EditBookController extends SystemController {
 			alert.showAndWait();
 			return;
 		}
-		if (pdfData==null && docData==null && fb2Data==null)
+		if (pdfData == null && docData == null && fb2Data == null)
 			mustFlag = true;
 		else {
 			o[10] = pdfData;
@@ -332,7 +337,7 @@ public class EditBookController extends SystemController {
 				public void run() {
 					titleField.setText(book.getTitle());
 					langField.setText(book.getLanguage());
-					if(book.getStatus().equals("hidden"))
+					if (book.getStatus().equals("hidden"))
 						hideLabel.setText("Show Book");
 					Keyword[] kw = (Keyword[]) ob[7];
 					String s = "";
@@ -372,24 +377,24 @@ public class EditBookController extends SystemController {
 					formats.add("fb2");
 					formatBox.setItems(formats);
 					formatBox.getSelectionModel().selectFirst();
-					if(book.getPdf()!=null)
-					{
-						pdfPath="pdf format exists";
+					if (book.getPdf() != null) {
+						pdfData = book.getPdf();
+						pdfPath = "pdf format exists";
+						formatField.setPromptText(pdfPath);
+					} else {
+						pdfPath = "pdf format doesn't exist";
 						formatField.setPromptText(pdfPath);
 					}
-					else
-					{
-						pdfPath="pdf format doesn't exist";
-						formatField.setPromptText(pdfPath);
-					}
-					if(book.getDoc()!=null)
-						docPath="doc format exists";
-					else
-						docPath="doc format doesn't exist";
-					if(book.getFb2()!=null)
-						fb2Path="fb2 format exists";
-					else
-						fb2Path="fb2 format doesn't exist";
+					if (book.getDoc() != null) {
+						docData = book.getDoc();
+						docPath = "doc format exists";
+					} else
+						docPath = "doc format doesn't exist";
+					if (book.getFb2() != null) {
+						fb2Data = book.getFb2();
+						fb2Path = "fb2 format exists";
+					} else
+						fb2Path = "fb2 format doesn't exist";
 
 					formatBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 						public void changed(ObservableValue ov, Number value, Number new_value) {

@@ -22,33 +22,14 @@ public class UserMembershipController extends SystemController {
 
 	public void initialize() {
 		super.initialize();
-		Message msg = new Message("user membership", 1, ClientUI.user.getID());
-		try {
-			Client.instance.sendToServer(msg);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		nameLabel.setText(ClientUI.user.getFname()+" "+ClientUI.user.getLname()+",");
+		startDateLabel.setText("Since: "+ClientUI.member.getS_date().toString());
+		endDateLabel.setText("Until: "+ClientUI.member.getE_date().toString());
 	}
 
 	
 	@Override
-	public void goBackOnClick() {
-		ClientUI.setScene("UserHomepageGUI.fxml");
-	}
-	
-	@Override
 	public void handleMessage(Message msg) {
-		User_Membership um=(User_Membership)msg.getMsg();
-		Platform.runLater(new Runnable(){
-			@Override
-			public void run()
-			{
-				nameLabel.setText(ClientUI.user.getFname()+" "+ClientUI.user.getLname()+",");
-				startDateLabel.setText("Since: "+um.getS_date().toString());
-				endDateLabel.setText("Until: "+um.getE_date().toString());
-			}
-		});
 	}
 
 }

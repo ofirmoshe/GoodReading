@@ -24,6 +24,7 @@ import i_book.Employee;
 import i_book.GeneralUser;
 import i_book.IBookIncPersistentManager;
 import i_book.User;
+import i_book.User_Membership;
 
 import org.orm.*;
 
@@ -170,6 +171,8 @@ public class LoginController extends AbstractController {
 					System.out.println(u.getStatus());
 					return;
 				}
+				if(a[2]!=null)
+					ClientUI.member=(User_Membership)a[2];
 				ClientUI.setScene("UserHomepageGUI.fxml");
 			}
 			if (ClientUI.user instanceof Employee){

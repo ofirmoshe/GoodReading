@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddUserController">
+   <children>
+      <ImageView>
+         <image>
+            <Image url="@../graphics/hp_bg.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="userLabel" alignment="CENTER" layoutX="-42.0" layoutY="65.0" prefHeight="36.0" prefWidth="205.0" text="User" textFill="#5b5b5b">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="36.0" fitWidth="42.0" layoutX="42.0" layoutY="34.0" preserveRatio="true">
+         <image>
+            <Image url="@../graphics/user.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="42.0" layoutY="92.0" onMouseReleased="#logoutOnClick" prefHeight="36.0" prefWidth="36.0">
+         <children>
+            <ImageView fitHeight="21.0" fitWidth="20.0" layoutX="8.0" layoutY="8.0" opacity="0.28" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/logout.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2edd9" height="446.0" layoutX="-2.0" layoutY="161.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="905.0" />
+      <TextField fx:id="fnameField" layoutX="275.0" layoutY="208.0" prefHeight="25.0" prefWidth="144.0" />
+      <TextField fx:id="lnameField" layoutX="567.0" layoutY="208.0" prefHeight="25.0" prefWidth="144.0" />
+      <Label layoutX="190.0" layoutY="212.0" text="First Name*" />
+      <Label layoutX="482.0" layoutY="212.0" text="Last Name*" />
+      <Button layoutX="450.0" layoutY="413.0" mnemonicParsing="false" onAction="#addUserOnClick" text="Add User" />
+      <TextField fx:id="passField" layoutX="569.0" layoutY="268.0" prefHeight="25.0" prefWidth="144.0" />
+      <Label layoutX="485.0" layoutY="272.0" text="Password*" />
+      <TextField fx:id="payField" layoutX="404.0" layoutY="341.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="idField" layoutX="275.0" layoutY="268.0" prefHeight="25.0" prefWidth="144.0" />
+      <Label layoutX="310.0" layoutY="345.0" text="Payment Info" />
+      <Label layoutX="96.0" layoutY="517.0" text="*Required field" />
+      <Label layoutX="216.0" layoutY="272.0" text="ID*" />
+      <AnchorPane layoutX="245.0" layoutY="34.0" onMouseReleased="#logoOnClick" prefHeight="83.0" prefWidth="381.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+      <AnchorPane layoutX="806.0" layoutY="32.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
+         <children>
+            <ImageView fx:id="goBackImage" fitHeight="27.0" fitWidth="87.0" preserveRatio="true">
+               <image>
+                  <Image url="@../graphics/orange_button.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="16.0" layoutY="4.0" text="go back" textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </AnchorPane>
+   </children>
+</AnchorPane>

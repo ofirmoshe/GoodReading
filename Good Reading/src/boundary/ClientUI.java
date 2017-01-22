@@ -34,6 +34,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import i_book.GeneralUser;
 import i_book.User;
+import i_book.User_Membership;
 import i_book.Author;
 import i_book.Book;
 
@@ -45,6 +46,7 @@ public class ClientUI extends Application {
 	public static GeneralUser user;
 	public static Stack<Parent> pageStack = new Stack<Parent>();
 	public static  ClientUI instance;
+	public static User_Membership member;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {		instance = this;

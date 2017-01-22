@@ -63,7 +63,7 @@ public class AddBookController extends SystemController {
 	private boolean[][] checkSubjects;
 	private boolean[] checkAuthors;
 	private byte[] bimg = null;
-	private byte[] format=null;
+	private byte[][] formats=new byte[3][];
 
 	@FXML
 	private TextField titleField;
@@ -124,7 +124,7 @@ public class AddBookController extends SystemController {
 		}
 	}
 
-	public void uploadFormatOnClick() {
+	public void uploadPDFOnClick() {
 		try {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open Resource File");
@@ -133,7 +133,7 @@ public class AddBookController extends SystemController {
 			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
 			if (selectedFile != null) {
 				Path path=selectedFile.toPath();
-				format = Files.readAllBytes(path);
+				formats[0] = Files.readAllBytes(path);
 				pdfField.setText(selectedFile.getPath());
 			}
 		} catch (Exception e) {
@@ -141,6 +141,39 @@ public class AddBookController extends SystemController {
 		}
 	} 
 	
+	public void uploadDOCOnClick() {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("E-Book Files", "*.doc", "*.pdf", "*.fb2"),
+					new ExtensionFilter("All Files", "*.*"));
+			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
+			if (selectedFile != null) {
+				Path path=selectedFile.toPath();
+				formats[1] = Files.readAllBytes(path);
+				docField.setText(selectedFile.getPath());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} 
+	
+	public void uploadFB2OnClick() {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("E-Book Files", "*.doc", "*.pdf", "*.fb2"),
+					new ExtensionFilter("All Files", "*.*"));
+			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
+			if (selectedFile != null) {
+				Path path=selectedFile.toPath();
+				formats[2] = Files.readAllBytes(path);
+				docField.setText(selectedFile.getPath());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} 
 	public void addBookOnClick() {
 		// ClientUI.instance.getHostServices().showDocument(docField.getText());
 		Object[] o = new Object[13];
@@ -227,12 +260,12 @@ public class AddBookController extends SystemController {
 			alert.showAndWait();
 			return;
 		}
-		if (pdfField.getText().equals("") && docField.getText().equals("") && fb2Field.getText().equals(""))
+		if (formats[0]==null && formats[1]==null && formats[2]==null)
 			mustFlag = true;
 		else {
-			o[10] = format;
-			o[11] = docField.getText();
-			o[12] = fb2Field.getText();
+			o[10] = formats[0];
+			o[11] = formats[1];
+			o[12] = formats[2];
 		}
 		if (mustFlag) {
 			Alert alert = new Alert(AlertType.WARNING);

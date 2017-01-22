@@ -128,7 +128,7 @@ public class Server extends AbstractServer {
 	public void loginMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
-			Object[] a = new Object[2];
+			Object[] a = new Object[3];
 			try {
 				Book[] books = Book.listBookByQuery("Status='visible'", "-ID");
 				a[0] = books;
@@ -153,6 +153,17 @@ public class Server extends AbstractServer {
 			}
 			if (u.getPassword().equals(login.getPassword())) {
 				a[1] = u;
+				if (u instanceof User) {
+					User user = (User) u;
+					User_Membership[] um = user.user_Memberships.toArray();
+					if (um.length != 0) {
+						if (um[um.length - 1].getE_date().before(new Date()))
+							a[2] = null;
+						else
+							a[2] = um[um.length - 1];
+					} else
+						a[2] = null;
+				}
 				msg.setMsg(a);
 				try {
 					client.sendToClient(msg);
@@ -483,14 +494,14 @@ public class Server extends AbstractServer {
 				});
 				int[] ranks = new int[books[books.length - 1].getID() + 1];
 				for (int i = 0; i < books.length; i++) {
-					ranks[purchases[i][0]] = i+1;
+					ranks[purchases[i][0]] = i + 1;
 				}
-				ob[2]=ranks;
+				ob[2] = ranks;
 				int[][] fieldRanks = new int[fields.length][ranks.length];
-				for(int i =0; i<fields.length; i++){
+				for (int i = 0; i < fields.length; i++) {
 					Book[] fbooks = fields[i].book.toArray();
 					purchases = new int[fbooks.length][2];
-					for(int j=0; j<fbooks.length; j++){
+					for (int j = 0; j < fbooks.length; j++) {
 						purchases[j][0] = fbooks[j].getID();
 						purchases[j][1] = fbooks[j].user_Books.size();
 					}
@@ -500,10 +511,10 @@ public class Server extends AbstractServer {
 							return Integer.compare(o2[1], o1[1]);
 						}
 					});
-					for(int j=0; j<fbooks.length; j++)
-						fieldRanks[i][purchases[j][0]]=j+1;
+					for (int j = 0; j < fbooks.length; j++)
+						fieldRanks[i][purchases[j][0]] = j + 1;
 				}
-				ob[3]=fieldRanks;
+				ob[3] = fieldRanks;
 				msg.setMsg(ob);
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -619,13 +630,7 @@ public class Server extends AbstractServer {
 	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
 		try {
 			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
-			User user = User.loadUserByORMID((String) msg.getMsg());
-			User_Membership[] um = user.user_Memberships.toArray();
-			if (um.length != 0) {
-				if (um[um.length - 1].getE_date().after(new Date()))
-					msg.setMsg("already membership");
-			} else
-				msg.setMsg(m);
+			msg.setMsg(m);
 			client.sendToClient(msg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -670,17 +675,17 @@ public class Server extends AbstractServer {
 				newBook.setStatus("visible");
 				// PDF
 				byte[] format = (byte[]) o[10];
-				if (format!=null) {
+				if (format != null) {
 					newBook.setPdf(format);
 				}
 				// DOC
 				format = (byte[]) o[11];
-				if (format!=null) {
+				if (format != null) {
 					newBook.setDoc(format);
 				}
 				// FB2
 				format = (byte[]) o[12];
-				if (format!=null) {
+				if (format != null) {
 					newBook.setFb2(format);
 				}
 				newBook.save();
@@ -928,17 +933,17 @@ public class Server extends AbstractServer {
 				newBook.setPrice((float) o[9]);
 				// PDF
 				byte[] format = (byte[]) o[10];
-				if (format!=null) {
+				if (format != null) {
 					newBook.setPdf(format);
 				}
 				// DOC
 				format = (byte[]) o[11];
-				if (format!=null) {
+				if (format != null) {
 					newBook.setDoc(format);
 				}
 				// FB2
 				format = (byte[]) o[12];
-				if (format!=null) {
+				if (format != null) {
 					newBook.setFb2(format);
 				}
 				newBook.setStatus(status);
@@ -947,7 +952,6 @@ public class Server extends AbstractServer {
 				Statement stmt = con.createStatement();
 				String sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
 				stmt.executeUpdate(sql);
-				session.beginTransaction();
 				Author[] authors = (Author[]) o[4];
 				for (int i = 0; i < authors.length; i++) {
 					stmt = con.createStatement();
@@ -974,7 +978,6 @@ public class Server extends AbstractServer {
 					for (int i = 0; i < keywords.length; i++) {
 						Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
 						if (kw == null) {
-							session.getTransaction().commit();
 							session.beginTransaction();
 							kw = Keyword.createKeyword();
 							kw.setWord(keywords[i]);
@@ -982,7 +985,7 @@ public class Server extends AbstractServer {
 							session.getTransaction().commit();
 						}
 						stmt = con.createStatement();
-						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + (int)o[13] + ")";
+						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + (int) o[13] + ")";
 						stmt.executeUpdate(sql);
 					}
 				}
@@ -1281,18 +1284,6 @@ public class Server extends AbstractServer {
 	private void userMembershipMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
-			try {
-				User user = User.loadUserByORMID((String) msg.getMsg());
-				User_Membership[] um = user.user_Memberships.toArray();
-				User_Membership usermem = null;
-				if (um.length != 0) {
-					usermem = um[um.length - 1];
-				}
-				msg.setMsg(usermem);
-				client.sendToClient(msg);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			break;
 		}
 	}
