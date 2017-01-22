@@ -2,7 +2,12 @@ package controllers;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 
@@ -42,6 +47,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * Book page controller is the controller of all the book pages. The controller
@@ -148,15 +156,54 @@ public class BookPageController extends SystemController {
 		// if user owns the book
 		if (formatAnchor.isVisible()) {
 			String f = (String) formatBox.getSelectionModel().getSelectedItem();
+            FileChooser fileChooser = new FileChooser();
+            File file=null;
 			switch (f) {
 			case "pdf":
-				ClientUI.instance.getHostServices().showDocument(currBook.getPdf());
+	            fileChooser.setTitle("Save Book");
+	            fileChooser.setInitialFileName(currBook.getTitle()+" downloaded by GoodReading");
+	            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.pdf"));
+	            file = fileChooser.showSaveDialog(ClientUI.primaryStage);
+	            if (file != null) {
+	                try {
+	                	OutputStream out = new FileOutputStream(file);
+	                	out.write(currBook.getPdf());
+	                	out.close();
+	                } catch (IOException ex) {
+	                    System.out.println(ex.getMessage());
+	                }	     
+	            }
+		       
 				break;
 			case "doc":
-				ClientUI.instance.getHostServices().showDocument(currBook.getDoc());
+				fileChooser.setTitle("Save Book");
+	            fileChooser.setInitialFileName(currBook.getTitle()+" downloaded by GoodReading");
+	            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.doc"));
+	            file = fileChooser.showSaveDialog(ClientUI.primaryStage);
+	            if (file != null) {
+	                try {
+	                	OutputStream out = new FileOutputStream(file);
+	                	out.write(currBook.getDoc());
+	                	out.close();
+	                } catch (IOException ex) {
+	                    System.out.println(ex.getMessage());
+	                }	     
+	            }
 				break;
 			case "fb2":
-				ClientUI.instance.getHostServices().showDocument(currBook.getFb2());
+				fileChooser.setTitle("Save Book");
+	            fileChooser.setInitialFileName(currBook.getTitle()+" downloaded by GoodReading");
+	            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.fb2"));
+	            file = fileChooser.showSaveDialog(ClientUI.primaryStage);
+	            if (file != null) {
+	                try {
+	                	OutputStream out = new FileOutputStream(file);
+	                	out.write(currBook.getFb2());
+	                	out.close();
+	                } catch (IOException ex) {
+	                    System.out.println(ex.getMessage());
+	                }	     
+	            }
 				break;
 			}
 			// if it's a first download, change status in user_book table.

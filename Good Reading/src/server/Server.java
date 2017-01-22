@@ -273,6 +273,7 @@ public class Server extends AbstractServer {
 		case 3:
 			Object[] o = (Object[]) msg.getMsg();
 			try {
+				session.getTransaction().commit();
 				session.beginTransaction();
 				int bookID = (int) o[0];
 				String userID = (String) o[1];
@@ -666,20 +667,21 @@ public class Server extends AbstractServer {
 				newBook.setSummary((String) o[7]);
 				newBook.setTable_of_contents((String) o[8]);
 				newBook.setPrice((float) o[9]);
+				newBook.setStatus("visible");
 				// PDF
-				String downloadLink = (String) o[10];
-				if (!downloadLink.equals("")) {
-					newBook.setPdf(downloadLink);
+				byte[] format = (byte[]) o[10];
+				if (format!=null) {
+					newBook.setPdf(format);
 				}
 				// DOC
-				downloadLink = (String) o[11];
-				if (!downloadLink.equals("")) {
-					newBook.setDoc(downloadLink);
+				format = (byte[]) o[11];
+				if (format!=null) {
+					newBook.setDoc(format);
 				}
 				// FB2
-				downloadLink = (String) o[12];
-				if (!downloadLink.equals("")) {
-					newBook.setFb2(downloadLink);
+				format = (byte[]) o[12];
+				if (format!=null) {
+					newBook.setFb2(format);
 				}
 				newBook.save();
 				session.getTransaction().commit();
@@ -916,7 +918,7 @@ public class Server extends AbstractServer {
 				session.beginTransaction();
 				Book b = Book.loadBookByORMID((int) o[13]);
 				String status = b.getStatus();
-				b.delete();
+				b.deleteAndDissociate();
 				Book newBook = Book.createBook();
 				newBook.setTitle((String) o[0]);
 				newBook.setLanguage((String) o[1]);
@@ -925,19 +927,19 @@ public class Server extends AbstractServer {
 				newBook.setTable_of_contents((String) o[8]);
 				newBook.setPrice((float) o[9]);
 				// PDF
-				String downloadLink = (String) o[10];
-				if (!downloadLink.equals("")) {
-					newBook.setPdf(downloadLink);
+				byte[] format = (byte[]) o[10];
+				if (format!=null) {
+					newBook.setPdf(format);
 				}
 				// DOC
-				downloadLink = (String) o[11];
-				if (!downloadLink.equals("")) {
-					newBook.setDoc(downloadLink);
+				format = (byte[]) o[11];
+				if (format!=null) {
+					newBook.setDoc(format);
 				}
 				// FB2
-				downloadLink = (String) o[12];
-				if (!downloadLink.equals("")) {
-					newBook.setFb2(downloadLink);
+				format = (byte[]) o[12];
+				if (format!=null) {
+					newBook.setFb2(format);
 				}
 				newBook.setStatus(status);
 				newBook.save();
@@ -945,6 +947,7 @@ public class Server extends AbstractServer {
 				Statement stmt = con.createStatement();
 				String sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
 				stmt.executeUpdate(sql);
+				session.beginTransaction();
 				Author[] authors = (Author[]) o[4];
 				for (int i = 0; i < authors.length; i++) {
 					stmt = con.createStatement();
@@ -971,6 +974,7 @@ public class Server extends AbstractServer {
 					for (int i = 0; i < keywords.length; i++) {
 						Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
 						if (kw == null) {
+							session.getTransaction().commit();
 							session.beginTransaction();
 							kw = Keyword.createKeyword();
 							kw.setWord(keywords[i]);
@@ -978,7 +982,7 @@ public class Server extends AbstractServer {
 							session.getTransaction().commit();
 						}
 						stmt = con.createStatement();
-						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + b.getID() + ")";
+						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + (int)o[13] + ")";
 						stmt.executeUpdate(sql);
 					}
 				}

@@ -79,11 +79,11 @@
       <TextField fx:id="imageField" editable="false" layoutX="248.0" layoutY="391.0" prefHeight="25.0" prefWidth="222.0" />
       <Label layoutX="249.0" layoutY="368.0" text="Image" />
       <Label layoutX="43.0" layoutY="441.0" text="pdf" />
-      <TextField fx:id="pdfField" layoutX="42.0" layoutY="464.0" prefHeight="25.0" prefWidth="222.0" />
-      <TextField fx:id="docField" layoutX="286.0" layoutY="463.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="pdfField" layoutX="42.0" layoutY="464.0" prefHeight="25.0" prefWidth="175.0" />
+      <TextField fx:id="docField" layoutX="286.0" layoutY="463.0" prefHeight="25.0" prefWidth="175.0" />
       <Label layoutX="287.0" layoutY="440.0" text="doc" />
       <Label layoutX="541.0" layoutY="439.0" text="fb2" />
-      <TextField fx:id="fb2Field" layoutX="540.0" layoutY="462.0" prefHeight="25.0" prefWidth="222.0" />
+      <TextField fx:id="fb2Field" layoutX="540.0" layoutY="462.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="priceField" layoutX="589.0" layoutY="391.0" prefHeight="25.0" prefWidth="94.0" />
       <Label layoutX="589.0" layoutY="371.0" text="Price*" />
       <Label layoutX="46.0" layoutY="515.0" text="*Required field" />
@@ -109,5 +109,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
+      <Button layoutX="219.0" layoutY="464.0" mnemonicParsing="false" onAction="#uploadFormatOnClick" text="Upload " />
+      <Button layoutX="463.0" layoutY="464.0" mnemonicParsing="false" onAction="#uploadFormatOnClick" text="Upload " />
+      <Button layoutX="692.0" layoutY="463.0" mnemonicParsing="false" onAction="#uploadFormatOnClick" text="Upload " />
    </children>
 </AnchorPane>

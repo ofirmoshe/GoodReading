@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
@@ -61,6 +63,7 @@ public class AddBookController extends SystemController {
 	private boolean[][] checkSubjects;
 	private boolean[] checkAuthors;
 	private byte[] bimg = null;
+	private byte[] format=null;
 
 	@FXML
 	private TextField titleField;
@@ -121,6 +124,23 @@ public class AddBookController extends SystemController {
 		}
 	}
 
+	public void uploadFormatOnClick() {
+		try {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("E-Book Files", "*.doc", "*.pdf", "*.fb2"),
+					new ExtensionFilter("All Files", "*.*"));
+			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
+			if (selectedFile != null) {
+				Path path=selectedFile.toPath();
+				format = Files.readAllBytes(path);
+				pdfField.setText(selectedFile.getPath());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} 
+	
 	public void addBookOnClick() {
 		// ClientUI.instance.getHostServices().showDocument(docField.getText());
 		Object[] o = new Object[13];
@@ -210,7 +230,7 @@ public class AddBookController extends SystemController {
 		if (pdfField.getText().equals("") && docField.getText().equals("") && fb2Field.getText().equals(""))
 			mustFlag = true;
 		else {
-			o[10] = pdfField.getText();
+			o[10] = format;
 			o[11] = docField.getText();
 			o[12] = fb2Field.getText();
 		}

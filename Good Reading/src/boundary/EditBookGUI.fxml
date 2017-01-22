@@ -117,9 +117,9 @@
                      </children>
                   </AnchorPane>
                   <Button layoutX="116.0" layoutY="251.0" mnemonicParsing="false" onAction="#changeImageOnClick" text="Change Image" />
-                  <TextField fx:id="formatField" layoutX="326.0" layoutY="276.0" prefHeight="25.0" prefWidth="255.0" />
-                  <Button layoutX="647.0" layoutY="276.0" mnemonicParsing="false" onAction="#removeFormatOnClick" text="Remove" />
-                  <Button layoutX="595.0" layoutY="276.0" mnemonicParsing="false" onAction="#saveFormatOnClick" text="Save" />
+                  <TextField fx:id="formatField" layoutX="326.0" layoutY="276.0" prefHeight="25.0" prefWidth="218.0" />
+                  <Button layoutX="616.0" layoutY="278.0" mnemonicParsing="false" onAction="#removeFormatOnClick" text="Remove" />
+                  <Button layoutX="552.0" layoutY="278.0" mnemonicParsing="false" onAction="#uploadFormatOnClick" prefHeight="23.0" prefWidth="61.0" text="Upload" />
                   <TextField fx:id="titleField" layoutX="220.0" layoutY="21.0" prefHeight="36.0" prefWidth="149.0" />
                   <ComboBox fx:id="authorComboBox" layoutX="251.0" layoutY="78.0" prefHeight="25.0" prefWidth="129.0" />
                   <ComboBox fx:id="fieldComboBox" layoutX="452.0" layoutY="78.0" prefHeight="25.0" prefWidth="165.0" />

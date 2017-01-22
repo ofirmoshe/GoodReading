@@ -27,6 +27,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
@@ -49,8 +51,11 @@ public class EditBookController extends SystemController {
 	public static int book_id;
 	private Book book;
 	private byte[] bimg;
+	private byte[] pdfData;
 	private String pdfPath;
+	private byte[] docData;
 	private String docPath;
+	private byte[] fb2Data;
 	private String fb2Path;
 	private Field[] fields;
 	private boolean[] checkFields;
@@ -128,32 +133,52 @@ public class EditBookController extends SystemController {
 		}
 	}
 
-	public void saveFormatOnClick() {
+	public void uploadFormatOnClick() {
+		Path path;
 		String f = formatBox.getSelectionModel().getSelectedItem();
-		switch (f) {
-		case "pdf":
-			pdfPath = formatField.getText();
-			break;
-		case "doc":
-			docPath = formatField.getText();
-			break;
-		case "fb2":
-			fb2Path = formatField.getText();
-			break;
+		try {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Resource File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("E-Book Files", "*.doc", "*.pdf", "*.fb2"),
+					new ExtensionFilter("All Files", "*.*"));
+			File selectedFile = fileChooser.showOpenDialog(ClientUI.primaryStage);
+			if (selectedFile != null) {
+				path=selectedFile.toPath();
+				switch (f) {
+				case "pdf":
+					pdfData = Files.readAllBytes(path);
+					pdfPath = path.toString();
+					break;
+				case "doc":
+					docData = Files.readAllBytes(path);
+					docPath = path.toString();
+					break;
+				case "fb2":
+					fb2Data = Files.readAllBytes(path);
+					fb2Path = path.toString();
+					break;
+				}
+				formatField.setPromptText(path.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
+		
+		
 	}
 
 	public void removeFormatOnClick() {
 		String f = formatBox.getSelectionModel().getSelectedItem();
 		switch (f) {
 		case "pdf":
-			pdfPath = "";
+			pdfData = null;
 			break;
 		case "doc":
-			docPath = "";
+			docData = null;
 			break;
 		case "fb2":
-			fb2Path = "";
+			fb2Data = null;
 			break;
 		}
 		formatField.setText("");
@@ -271,12 +296,12 @@ public class EditBookController extends SystemController {
 			alert.showAndWait();
 			return;
 		}
-		if (pdfPath.equals("") && docPath.equals("") && fb2Path.equals(""))
+		if (pdfData==null && docData==null && fb2Data==null)
 			mustFlag = true;
 		else {
-			o[10] = pdfPath;
-			o[11] = docPath;
-			o[12] = fb2Path;
+			o[10] = pdfData;
+			o[11] = docData;
+			o[12] = fb2Data;
 		}
 		if (mustFlag) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -347,30 +372,36 @@ public class EditBookController extends SystemController {
 					formats.add("fb2");
 					formatBox.setItems(formats);
 					formatBox.getSelectionModel().selectFirst();
-					formatField.setText(book.getPdf());
-					if (book.getPdf() == null)
-						pdfPath = "";
+					if(book.getPdf()!=null)
+					{
+						pdfPath="pdf format exists";
+						formatField.setPromptText(pdfPath);
+					}
 					else
-						pdfPath = book.getPdf();
-					if (book.getDoc() == null)
-						docPath = "";
+					{
+						pdfPath="pdf format doesn't exist";
+						formatField.setPromptText(pdfPath);
+					}
+					if(book.getDoc()!=null)
+						docPath="doc format exists";
 					else
-						docPath = book.getDoc();
-					if (book.getFb2() == null)
-						fb2Path = "";
+						docPath="doc format doesn't exist";
+					if(book.getFb2()!=null)
+						fb2Path="fb2 format exists";
 					else
-						fb2Path = book.getFb2();
+						fb2Path="fb2 format doesn't exist";
+
 					formatBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 						public void changed(ObservableValue ov, Number value, Number new_value) {
 							switch (new_value.intValue()) {
 							case 0:
-								formatField.setText(pdfPath);
+								formatField.setPromptText(pdfPath);
 								break;
 							case 1:
-								formatField.setText(docPath);
+								formatField.setPromptText(docPath);
 								break;
 							case 2:
-								formatField.setText(fb2Path);
+								formatField.setPromptText(fb2Path);
 								break;
 							}
 						}

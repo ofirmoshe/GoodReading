@@ -279,7 +279,6 @@ public class SearchBookController extends SystemController {
 					book_subjects.setLayoutY(72);
 				}
 				Label sum = new Label(books[y].getSummary());
-				;
 				sum.setPrefSize(600, 40);
 				sum.setLayoutX(120);
 				sum.setLayoutY(90);

@@ -5,7 +5,7 @@ License Type: Academic
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="i_book.Book" table="Book" lazy="false">
+	<class name="i_book.Book" table="Book" lazy="true">
 		<id name="ID" column="ID" type="integer" unsaved-value="0">
 			<generator class="native">
 			</generator>
@@ -15,9 +15,10 @@ License Type: Academic
 		<property name="summary" column="Summary" type="text" not-null="false" lazy="false"/>
 		<property name="table_of_contents" column="Table_of_contents" type="text" not-null="false" lazy="false"/>
 		<property name="image" column="Image" type="byte[]" not-null="false" lazy="false"/>
-		<property name="pdf" column="Pdf" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="doc" column="Doc" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="fb2" column="Fb2" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="pdf" column="Pdf" not-null="false" lazy="false"
+			type="byte[]"/>
+		<property name="doc" column="Doc" type="byte[]" not-null="false" lazy="false"/>
+		<property name="fb2" column="Fb2" type="byte[]" not-null="false" lazy="false"/>
 		<property name="price" column="Price" type="float" not-null="true" lazy="false"/>
 		<property name="status" column="Status" type="string" length="255" not-null="false" lazy="false"/>
 		<set name="ORM_View" lazy="true" cascade="save-update,lock" inverse="true">

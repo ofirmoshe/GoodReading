@@ -489,11 +489,11 @@ public class Book implements Serializable{
 	
 	private byte[] image;
 	
-	private String pdf;
+	private byte[] pdf;
 	
-	private String doc;
+	private byte[] doc;
 	
-	private String fb2;
+	private byte[] fb2;
 	
 	private float price;
 	
@@ -565,27 +565,27 @@ public class Book implements Serializable{
 		return image;
 	}
 	
-	public void setPdf(String value) {
+	public void setPdf(byte[] value) {
 		this.pdf = value;
 	}
 	
-	public String getPdf() {
+	public byte[] getPdf() {
 		return pdf;
 	}
 	
-	public void setDoc(String value) {
+	public void setDoc(byte[] value) {
 		this.doc = value;
 	}
 	
-	public String getDoc() {
+	public byte[] getDoc() {
 		return doc;
 	}
 	
-	public void setFb2(String value) {
+	public void setFb2(byte[] value) {
 		this.fb2 = value;
 	}
 	
-	public String getFb2() {
+	public byte[] getFb2() {
 		return fb2;
 	}
 	

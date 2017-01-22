@@ -50,6 +50,7 @@ public abstract class SystemController extends AbstractController {
 
 	public void goBackOnClick() {
 		if (ClientUI.user instanceof User) {
+			Client.refresh();
 			ClientUI.goBack();
 		}
 		if (ClientUI.user instanceof Employee) {
