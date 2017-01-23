@@ -241,7 +241,6 @@ public class Server extends AbstractServer {
 				}
 				session.beginTransaction();
 				Date d = new Date();
-				@SuppressWarnings("deprecation")
 				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 				String today = formatter.format(d);
 				Views_Date v = Views_Date.loadViews_DateByQuery("Date='" + today + "' AND BookID='" + b.getID() + "'",
@@ -252,7 +251,8 @@ public class Server extends AbstractServer {
 					stmt.executeUpdate(sql);
 				} else {
 					Statement stmt = con.createStatement();
-					String sql = "UPDATE views_date " + "SET ViewCount='" + (v.getViewCount()+1) + "' WHERE Date='"+ today + "' AND BookID='" + b.getID()+"'";
+					String sql = "UPDATE views_date " + "SET ViewCount='" + (v.getViewCount() + 1) + "' WHERE Date='"
+							+ today + "' AND BookID='" + b.getID() + "'";
 					stmt.executeUpdate(sql);
 				}
 				session.getTransaction().commit();
@@ -940,10 +940,13 @@ public class Server extends AbstractServer {
 		case 2:
 			try {
 				Object[] o = (Object[]) msg.getMsg();
-				session.beginTransaction();
 				Book b = Book.loadBookByORMID((int) o[13]);
 				String status = b.getStatus();
-				b.deleteAndDissociate();
+				Views_Date[] views = b.view.toArray();
+				Statement stmt = con.createStatement();
+				String sql = "DELETE FROM book WHERE ID=" + b.getID();
+				stmt.execute(sql);
+				session.beginTransaction();
 				Book newBook = Book.createBook();
 				newBook.setTitle((String) o[0]);
 				newBook.setLanguage((String) o[1]);
@@ -969,8 +972,8 @@ public class Server extends AbstractServer {
 				newBook.setStatus(status);
 				newBook.save();
 				session.getTransaction().commit();
-				Statement stmt = con.createStatement();
-				String sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
+				stmt = con.createStatement();
+				sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
 				stmt.executeUpdate(sql);
 				Author[] authors = (Author[]) o[4];
 				for (int i = 0; i < authors.length; i++) {
@@ -996,18 +999,28 @@ public class Server extends AbstractServer {
 				if (!words.equals("")) {
 					String[] keywords = (String[]) words.split(" ");
 					for (int i = 0; i < keywords.length; i++) {
-						Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
-						if (kw == null) {
-							session.beginTransaction();
-							kw = Keyword.createKeyword();
-							kw.setWord(keywords[i]);
-							kw.save();
-							session.getTransaction().commit();
+						if (!keywords[i].equals("")) {
+							Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
+							if (kw == null) {
+								session.beginTransaction();
+								kw = Keyword.createKeyword();
+								kw.setWord(keywords[i]);
+								kw.save();
+								session.getTransaction().commit();
+							}
+							stmt = con.createStatement();
+							sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + (int) o[13] + ")";
+							stmt.executeUpdate(sql);
 						}
-						stmt = con.createStatement();
-						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + (int) o[13] + ")";
-						stmt.executeUpdate(sql);
 					}
+				}
+				for (int i = 0; i < views.length; i++) {
+					stmt = con.createStatement();
+					DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+					String today = formatter.format(views[i].getDate());
+					sql = "INSERT INTO views_date " + "VALUES ('" + today + "', '" + b.getID() + "', '"
+							+ views[i].getViewCount() + "')";
+					stmt.executeUpdate(sql);
 				}
 				msg.setMsg("s");
 				client.sendToClient(msg);
@@ -1025,13 +1038,13 @@ public class Server extends AbstractServer {
 			break;
 		case 3:
 			try {
-				session.beginTransaction();
 				Book b = Book.loadBookByORMID((int) msg.getMsg());
-				b.delete();
-				session.getTransaction().commit();
+				Statement stmt = con.createStatement();
+				String sql = "DELETE FROM book WHERE ID=" + b.getID();
+				stmt.execute(sql);
 				msg.setMsg("s");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				// TODO ]Auto-generated catch blockS
 				e.printStackTrace();
 				session.getTransaction().rollback();
 				msg.setMsg("f");
@@ -1059,6 +1072,7 @@ public class Server extends AbstractServer {
 			}
 
 		}
+
 	}
 
 	private void librarianHomepageMessageHandler(Message msg, ConnectionToClient client) {
