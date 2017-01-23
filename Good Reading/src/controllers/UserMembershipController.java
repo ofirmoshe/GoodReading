@@ -22,12 +22,11 @@ public class UserMembershipController extends SystemController {
 
 	public void initialize() {
 		super.initialize();
-		nameLabel.setText(ClientUI.user.getFname()+" "+ClientUI.user.getLname()+",");
-		startDateLabel.setText("Since: "+ClientUI.member.getS_date().toString());
-		endDateLabel.setText("Until: "+ClientUI.member.getE_date().toString());
+		nameLabel.setText(ClientUI.user.getFname() + " " + ClientUI.user.getLname() + ",");
+		startDateLabel.setText("Since: " + ClientUI.member.getS_date().toString());
+		endDateLabel.setText("Until: " + ClientUI.member.getE_date().toString());
 	}
 
-	
 	@Override
 	public void handleMessage(Message msg) {
 	}

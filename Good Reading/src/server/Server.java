@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -32,6 +34,7 @@ import i_book.Subject;
 import i_book.User;
 import i_book.User_Book;
 import i_book.User_Membership;
+import i_book.Views_Date;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -236,7 +239,23 @@ public class Server extends AbstractServer {
 					if (um[um.length - 1].getE_date().after(new Date()))
 						canDownload = "yes";
 				}
-
+				session.beginTransaction();
+				Date d = new Date();
+				@SuppressWarnings("deprecation")
+				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				String today = formatter.format(d);
+				Views_Date v = Views_Date.loadViews_DateByQuery("Date='" + today + "' AND BookID='" + b.getID() + "'",
+						"BookID");
+				if (v == null) {
+					Statement stmt = con.createStatement();
+					String sql = "INSERT INTO views_date " + "VALUES ('" + today + "', '" + b.getID() + "', '1')";
+					stmt.executeUpdate(sql);
+				} else {
+					Statement stmt = con.createStatement();
+					String sql = "UPDATE views_date " + "SET ViewCount='" + (v.getViewCount()+1) + "' WHERE Date='"+ today + "' AND BookID='" + b.getID()+"'";
+					stmt.executeUpdate(sql);
+				}
+				session.getTransaction().commit();
 				o = new Object[7];
 				o[0] = a;
 				o[1] = f;
@@ -248,6 +267,7 @@ public class Server extends AbstractServer {
 				msg.setMsg(o);
 				client.sendToClient(msg);
 			} catch (Exception e) {
+				session.getTransaction().rollback();
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

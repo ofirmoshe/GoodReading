@@ -86,10 +86,15 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void membershipOnClick() {
-		if(ClientUI.member==null)
+
+		if (ClientUI.member == null) {
 			ClientUI.setScene("MembershipsGUI.fxml");
-		else
+		}
+
+		else {
+			System.out.println(ClientUI.member.getUserId());
 			ClientUI.setScene("UserMembershipGUI.fxml");
+		}
 	}
 
 	public void toggleMenuOnHover() {

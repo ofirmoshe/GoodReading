@@ -171,13 +171,12 @@ public class LoginController extends AbstractController {
 					System.out.println(u.getStatus());
 					return;
 				}
-				if(a[2]!=null)
-					ClientUI.member=(User_Membership)a[2];
+				ClientUI.member = (User_Membership) a[2];
 				ClientUI.setScene("UserHomepageGUI.fxml");
 			}
-			if (ClientUI.user instanceof Employee){
-				Employee emp = (Employee)ClientUI.user;
-				switch(emp.getPosition()){
+			if (ClientUI.user instanceof Employee) {
+				Employee emp = (Employee) ClientUI.user;
+				switch (emp.getPosition()) {
 				case "Librarian":
 					ClientUI.setScene("LibrarianHomepageGUI.fxml");
 					break;
