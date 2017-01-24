@@ -58,8 +58,7 @@
                         <Font name="System Bold" size="25.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="userReportField" layoutX="378.0" layoutY="319.0" prefHeight="25.0" prefWidth="86.0" promptText="Username" />
-                  <Button fx:id="userReportButton" layoutX="472.0" layoutY="319.0" mnemonicParsing="false" onAction="#getUserReportOnClick" text="Report" />
+                  <Button fx:id="manageUserButton" layoutX="381.0" layoutY="319.0" mnemonicParsing="false" onAction="#manageUserOnClick" prefHeight="25.0" prefWidth="143.0" text="User Management" />
                   <Button layoutX="378.0" layoutY="278.0" mnemonicParsing="false" onAction="#bookReportOnClick" prefHeight="25.0" prefWidth="146.0" text="Book Reports" />
                </children></AnchorPane>
          </content>

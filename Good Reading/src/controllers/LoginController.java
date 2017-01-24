@@ -189,8 +189,7 @@ public class LoginController extends AbstractController {
 				Employee emp = (Employee) ClientUI.user;
 				switch (emp.getPosition()) {
 				case "Librarian":
-					//ClientUI.setScene("LibrarianHomepageGUI.fxml");
-					ClientUI.setScene("SearchUserGUI.fxml");
+					ClientUI.setScene("LibrarianHomepageGUI.fxml");
 					break;
 				case "Library Manager":
 					ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
@@ -200,6 +199,8 @@ public class LoginController extends AbstractController {
 					break;
 				case "Editor":
 					ClientUI.setScene("ManageReviewGUI.fxml");
+				case "Manager":
+					ClientUI.setScene("ManagerHomepageGUI.fxml");
 				}
 			}
 		}

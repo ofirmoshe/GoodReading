@@ -13,6 +13,7 @@ import client.Client;
 import common.Message;
 import i_book.Author;
 import i_book.Book;
+import i_book.Employee;
 import i_book.Field;
 import i_book.Review;
 import i_book.Subject;
@@ -56,7 +57,7 @@ public class SearchUserController extends SystemController {
 	private String[] query = new String[3];
 	private GridPane grid = null;
 	private User[] users;
-	private ArrayList<User> usersByQuery=new ArrayList<User>();
+	private ArrayList<User> usersByQuery = new ArrayList<User>();
 
 	@FXML
 	private TextField idField;
@@ -77,7 +78,7 @@ public class SearchUserController extends SystemController {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}	
 		scrollAnchor.setPrefHeight(200);
 	}
 
@@ -88,15 +89,15 @@ public class SearchUserController extends SystemController {
 	public void searchOnEnterPressed() {
 		usersByQuery.clear();
 		scrollAnchor.getChildren().remove(grid);
-		int queryCounter=0;
+		int queryCounter = 0;
 		query[0] = idField.getText();
 		query[1] = firstNameField.getText();
 		query[2] = lastNameField.getText();
-		if (!query[0].equals("")) 
+		if (!query[0].equals(""))
 			queryCounter++;
-		if (!query[1].equals("")) 
+		if (!query[1].equals(""))
 			queryCounter++;
-		if (!query[2].equals("")) 
+		if (!query[2].equals(""))
 			queryCounter++;
 		if (users.length != 0) {
 
@@ -116,12 +117,12 @@ public class SearchUserController extends SystemController {
 					// Search By First Name
 					if (users[i].getLname().toLowerCase().contains(query[2].toLowerCase()))
 						counter[i]++;
-				}	
+				}
 			}
-			for(int i=0; i<counter.length; i++)
-				if(counter[i]==queryCounter)
+			for (int i = 0; i < counter.length; i++)
+				if (counter[i] == queryCounter)
 					usersByQuery.add(users[i]);
-		
+
 			setUsersGrid();
 		}
 	}
@@ -143,7 +144,7 @@ public class SearchUserController extends SystemController {
 		case 1:
 			if (msg.getMsg() != null) {
 				users = (User[]) msg.getMsg();
-				for(int i=0; i<users.length;i++)
+				for (int i = 0; i < users.length; i++)
 					usersByQuery.add(users[i]);
 				Platform.runLater(new Runnable() {
 					@Override
@@ -210,12 +211,20 @@ public class SearchUserController extends SystemController {
 			ap.setPrefHeight(80);
 			ap.setPrefWidth(900);
 			ap.setUserData(y);
+			ap.setCursor(Cursor.HAND);
 			ap.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent event) {
 					int y = (int) ap.getUserData();
-						ManageUserController.user = usersByQuery.get(y);
-						ClientUI.setScene("ManageUserGUI.fxml");
+					if (ClientUI.user instanceof Employee){
+						if (!((Employee) ClientUI.user).getPosition().equals("Manager")) {
+							ManageUserController.user = usersByQuery.get(y);
+							ClientUI.setScene("ManageUserGUI.fxml");
+						} else {
+							UserReportController.userID = usersByQuery.get(y).getID();
+							ClientUI.setScene("UserReportGUI.fxml");
+						}
+					}
 					event.consume();
 				}
 			});

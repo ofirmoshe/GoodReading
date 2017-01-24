@@ -29,6 +29,10 @@ public class LibrarianHomepageController extends SystemController {
 	public void addBookOnClick() {
 		ClientUI.setScene("AddNewBookGUI.fxml");
 	}
+	
+	public void manageUserOnClick() {
+		ClientUI.setScene("SearchUserGUI.fxml");
+	}
 
 	public void inventoryOnClick() {
 		ClientUI.setScene("InventoryManagementGUI.fxml");

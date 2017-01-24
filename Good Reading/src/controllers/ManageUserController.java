@@ -3,8 +3,10 @@ package controllers;
 import java.io.IOException;
 import java.util.Date;
 
+import boundary.ClientUI;
 import client.Client;
 import common.Message;
+import i_book.Employee;
 import i_book.Membership;
 import i_book.User;
 import i_book.User_Membership;
@@ -49,34 +51,33 @@ public class ManageUserController extends SystemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (user.getStatus().equals("blocked"))
+		if (user.getStatus().equals("banned"))
 			blockedCheckbox.setSelected(true);
-
 	}
 
 	public void editUserOnClick() {
 		Object[] o = new Object[7];
 		boolean mustFlag = false;
-		if (fnameField.equals(""))
+		if (fnameField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[0] = fnameField.getText();
-		if (lnameField.equals(""))
+		if (lnameField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[1] = lnameField.getText();
-		if (idField.equals(""))
+		if (idField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[2] = idField.getText();
-		if (passField.equals(""))
+		if (passField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[3] = passField.getText();
 		o[4] = payField.getText();
-		o[5] = memberCheckbox.isSelected();
-		o[6] = blockedCheckbox.isSelected();
-		if (mustFlag) {
+		if(memberCheckbox.isVisible()) o[5] = memberCheckbox.isSelected();
+		if(blockedCheckbox.isVisible())o[6] = blockedCheckbox.isSelected();
+		if (mustFlag == true) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("One or more required fields are empty.");
 			alert.showAndWait();
@@ -117,22 +118,33 @@ public class ManageUserController extends SystemController {
 
 			break;
 		case 2:
-			 um = (User_Membership[])msg.getMsg();
-			 Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						if (um.length != 0) {
-							if (um[um.length - 1].getE_date().after(new Date())) {
-								// Membership is blocked
-								memberCheckbox.setVisible(true);
-								memberCheckbox.setText("Owns membership until: " + um[um.length - 1].getE_date().toString());
-								if (um[um.length - 1].getStatus().equals("blocked"))
-									memberCheckbox.setSelected(false);
-							}
-						};
+			um = (User_Membership[]) msg.getMsg();
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					if (um.length != 0) {
+						if (um[um.length - 1].getE_date().after(new Date())) {
+							// Membership is blocked
+							memberCheckbox.setVisible(true);
+						
+							memberCheckbox
+									.setText("Owns membership until: " + um[um.length - 1].getE_date().toString());
+							if (um[um.length - 1].getStatus().equals("blocked"))
+								memberCheckbox.setSelected(false);
+							
+						}
 					}
-				});
-				
+					;
+					if (ClientUI.user instanceof Employee)
+						if (((Employee) ClientUI.user).getPosition().equals("Librarian")
+								|| ((Employee) ClientUI.user).getPosition().equals("Library Employee")) {
+							memberCheckbox.setVisible(false);
+							blockedCheckbox.setVisible(false);
+						}
+				}
+			});
+
+			break;
 		}
 	}
 }

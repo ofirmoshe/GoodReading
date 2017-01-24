@@ -49,11 +49,11 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void goBackOnClick() {
-		if (ClientUI.user instanceof User) {
-			Client.refresh();
+		//if (ClientUI.user instanceof User) {
+			//Client.refresh();
 			ClientUI.goBack();
-		}
-		if (ClientUI.user instanceof Employee) {
+		//}
+		/*if (ClientUI.user instanceof Employee) {
 			Employee emp = (Employee) ClientUI.user;
 			switch (emp.getPosition()) {
 			case "Librarian":
@@ -65,7 +65,7 @@ public abstract class SystemController extends AbstractController {
 			case "Library Employee":
 				ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
 			}
-		}
+		}*/
 	}
 
 	public void goBackOnHover() {
@@ -182,8 +182,9 @@ public abstract class SystemController extends AbstractController {
 	public void logoOnClick() {
 		if (ClientUI.user instanceof User) {
 			ClientUI.setScene("UserHomepageGUI.fxml");
+			return;
 		}
-		if (ClientUI.user instanceof Employee) {
+		else if (ClientUI.user instanceof Employee) {
 			Employee emp = (Employee) ClientUI.user;
 			switch (emp.getPosition()) {
 			case "Librarian":
@@ -194,6 +195,9 @@ public abstract class SystemController extends AbstractController {
 				break;
 			case "Library Employee":
 				ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
+				break;
+			case "Manager":
+				ClientUI.setScene("ManagerHomepageGUI.fxml");
 			}
 		}
 	}

@@ -81,10 +81,10 @@ public class UserHomepageController extends SystemController {
 	 */
 	public void initialize() {
 		super.initialize();
-		// initBookGrid();
+		//initBookGrid();
 		setBookGrid();
 		Client.refresh();
-		Message msg = new Message("user homepage",1);
+		Message msg = new Message("user homepage", 1);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
@@ -129,8 +129,8 @@ public class UserHomepageController extends SystemController {
 		if (books.length < 5) {
 			length = 1;
 			width = books.length;
-		}else if(books.length%5==0){
-			length= books.length/5;
+		} else if (books.length % 5 == 0) {
+			length = books.length / 5;
 		}
 		for (int y = 0; y < length; y++) {
 			for (int x = 0; x < width; x++) {
@@ -217,9 +217,9 @@ public class UserHomepageController extends SystemController {
 
 	@Override
 	public void handleMessage(Message msg) {
-		switch(msg.getFunc()){
+		switch (msg.getFunc()) {
 		case 1:
-			books = (Book[])msg.getMsg();
+			books = (Book[]) msg.getMsg();
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {

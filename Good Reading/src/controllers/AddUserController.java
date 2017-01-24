@@ -30,19 +30,19 @@ public class AddUserController extends SystemController {
 	public void addUserOnClick() {
 		Object[] o = new Object[5];
 		boolean mustFlag = false;
-		if (fnameField.equals(""))
+		if (fnameField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[0] = fnameField.getText();
-		if (lnameField.equals(""))
+		if (lnameField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[1] = lnameField.getText();
-		if (idField.equals(""))
+		if (idField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[2] = idField.getText();
-		if (passField.equals(""))
+		if (passField.getText().equals(""))
 			mustFlag = true;
 		else
 			o[3] = passField.getText();

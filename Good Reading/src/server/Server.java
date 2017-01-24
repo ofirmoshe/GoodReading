@@ -115,10 +115,9 @@ public class Server extends AbstractServer {
 			break;
 		case "manage user":
 			manageUserMessageHandler(m, client);
-		}		
+			break;
+		}
 	}
-
-
 
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
@@ -311,13 +310,12 @@ public class Server extends AbstractServer {
 		case 3:
 			Object[] o = (Object[]) msg.getMsg();
 			try {
-				session.getTransaction().commit();
 				session.beginTransaction();
 				int bookID = (int) o[0];
 				String userID = (String) o[1];
 				User_Book ub = User_Book.loadUser_BookByQuery("BookID=" + bookID + " AND GeneralUserID=" + userID,
 						"BookID");
-				if (ub == null) // user is membership and he is downloading this
+				if (ub == null) // user is a member and he is downloading this
 								// book for the first time.
 				{
 					ub = User_Book.createUser_Book();
@@ -949,6 +947,7 @@ public class Server extends AbstractServer {
 				Object[] o = (Object[]) msg.getMsg();
 				Book b = Book.loadBookByORMID((int) o[13]);
 				String status = b.getStatus();
+				User_Book[] ub = b.user_Books.toArray();
 				Views_Date[] views = b.view.toArray();
 				Statement stmt = con.createStatement();
 				String sql = "DELETE FROM book WHERE ID=" + b.getID();
@@ -1333,27 +1332,12 @@ public class Server extends AbstractServer {
 	private void userReportMessageHandler(Message m, ConnectionToClient client) {
 		switch (m.getFunc()) {
 		case 1:
-			User u = null;
 			try {
-				u = User.loadUserByORMID((String) m.getMsg());
-			} catch (Exception e) {
-				m.setMsg("f");
-				m.setFunc(2);
-				try {
-					client.sendToClient(m);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				return;
-			}
-			try {
+				User u = User.loadUserByORMID((String) m.getMsg());
 				User_Book[] ub = u.user_Books.toArray();
 				Book[] books = new Book[ub.length];
-
 				for (int i = 0; i < ub.length; i++)
 					books[i] = ub[i].getBook();
-
 				Author[][] a = new Author[books.length][];
 				Field[][] f = new Field[books.length][];
 				Subject[][] s = new Subject[books.length][];
@@ -1363,6 +1347,7 @@ public class Server extends AbstractServer {
 					s[i] = books[i].subject.toArray();
 				}
 				Object[] o = new Object[4];
+				System.out.println(a[0][0].getName());
 				o[0] = books;
 				o[1] = a;
 				o[2] = f;
@@ -1377,8 +1362,7 @@ public class Server extends AbstractServer {
 
 	}
 
-	private void searchUserMessageHandler(Message msg, ConnectionToClient client)
-	{
+	private void searchUserMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
 			try {
@@ -1391,33 +1375,37 @@ public class Server extends AbstractServer {
 			break;
 		}
 	}
-	
+
 	private void manageUserMessageHandler(Message msg, ConnectionToClient client) {
 		// TODO Auto-generated method stub
-		switch(msg.getFunc()){
+		switch (msg.getFunc()) {
 		case 1:
-			Object[] o= (Object[])msg.getMsg();
-			String uid = (String)o[2];
+			Object[] o = (Object[]) msg.getMsg();
+			String uid = (String) o[2];
 			try {
 				session.beginTransaction();
 				User u = User.loadUserByORMID(uid);
-				u.setFname((String)o[0]);
-				u.setLname((String)o[1]);
-				u.setPassword((String)o[3]);
-				u.setPaymentInfo((String)o[4]);
+				u.setFname((String) o[0]);
+				u.setLname((String) o[1]);
+				u.setPassword((String) o[3]);
+				u.setPaymentInfo((String) o[4]);
 				User_Membership[] um = u.user_Memberships.toArray();
-				if (um[um.length - 1].getE_date().after(new Date())){
-				if((boolean)o[5]==true)
-					um[um.length-1].setStatus("active");
-				else 
-					um[um.length-1].setStatus("blocked");
+				if (um.length != 0) {
+					if (um[um.length - 1].getE_date().after(new Date())) {
+						if (o[5] != null)
+							if ((boolean) o[5] == true)
+								um[um.length - 1].setStatus("active");
+							else
+								um[um.length - 1].setStatus("blocked");
+					}
+					if (o[6] != null)
+						if ((boolean) o[6] == true)
+							u.setStatus("banned");
+						else if (u.getStatus().equals("banned"))
+							u.setStatus("offline");
+					um[um.length - 1].save();
 				}
-				if ((boolean)o[6]==true)
-					u.setStatus("banned");
-				else if(u.getStatus().equals("banned"))
-					u.setStatus("offline");
 				u.save();
-				um[um.length-1].save();
 				session.getTransaction().commit();
 				msg.setMsg("s");
 			} catch (PersistentException e) {
@@ -1433,7 +1421,7 @@ public class Server extends AbstractServer {
 			break;
 		case 2:
 			try {
-				User u = User.loadUserByORMID((String)msg.getMsg());
+				User u = User.loadUserByORMID((String) msg.getMsg());
 				User_Membership[] um = u.user_Memberships.toArray();
 				msg.setMsg(um);
 				msg.setFunc(2);
@@ -1449,6 +1437,7 @@ public class Server extends AbstractServer {
 			}
 		}
 	}
+
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}

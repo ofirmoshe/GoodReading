@@ -128,7 +128,7 @@ public class BookPageController extends SystemController {
 				BufferedImage read;
 				read = ImageIO.read(in);
 				img = SwingFXUtils.toFXImage(read, null);
-			}else
+			} else
 				img = new Image(GraphicsImporter.class.getResource("loading_book.jpg").toString());
 			bookImage.setImage(img);
 			bookImage.setFitWidth(180);
@@ -156,61 +156,61 @@ public class BookPageController extends SystemController {
 		// if user owns the book
 		if (formatAnchor.isVisible()) {
 			String f = (String) formatBox.getSelectionModel().getSelectedItem();
-            FileChooser fileChooser = new FileChooser();
-            File file=null;
+			FileChooser fileChooser = new FileChooser();
+			File file = null;
 			switch (f) {
 			case "pdf":
-	            fileChooser.setTitle("Save Book");
-	            fileChooser.setInitialFileName(currBook.getTitle()+" downloaded by GoodReading");
-	            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.pdf"));
-	            file = fileChooser.showSaveDialog(ClientUI.primaryStage);
-	            if (file != null) {
-	                try {
-	                	OutputStream out = new FileOutputStream(file);
-	                	out.write(currBook.getPdf());
-	                	out.close();
-	                } catch (IOException ex) {
-	                    System.out.println(ex.getMessage());
-	                }	     
-	            }
-		       
+				fileChooser.setTitle("Save Book");
+				fileChooser.setInitialFileName(currBook.getTitle() + " downloaded by GoodReading");
+				fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.pdf"));
+				file = fileChooser.showSaveDialog(ClientUI.primaryStage);
+				if (file != null) {
+					try {
+						OutputStream out = new FileOutputStream(file);
+						out.write(currBook.getPdf());
+						out.close();
+					} catch (IOException ex) {
+						System.out.println(ex.getMessage());
+					}
+				}
+
 				break;
 			case "doc":
 				fileChooser.setTitle("Save Book");
-	            fileChooser.setInitialFileName(currBook.getTitle()+" downloaded by GoodReading");
-	            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.doc"));
-	            file = fileChooser.showSaveDialog(ClientUI.primaryStage);
-	            if (file != null) {
-	                try {
-	                	OutputStream out = new FileOutputStream(file);
-	                	out.write(currBook.getDoc());
-	                	out.close();
-	                } catch (IOException ex) {
-	                    System.out.println(ex.getMessage());
-	                }	     
-	            }
+				fileChooser.setInitialFileName(currBook.getTitle() + " downloaded by GoodReading");
+				fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.doc"));
+				file = fileChooser.showSaveDialog(ClientUI.primaryStage);
+				if (file != null) {
+					try {
+						OutputStream out = new FileOutputStream(file);
+						out.write(currBook.getDoc());
+						out.close();
+					} catch (IOException ex) {
+						System.out.println(ex.getMessage());
+					}
+				}
 				break;
 			case "fb2":
 				fileChooser.setTitle("Save Book");
-	            fileChooser.setInitialFileName(currBook.getTitle()+" downloaded by GoodReading");
-	            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.fb2"));
-	            file = fileChooser.showSaveDialog(ClientUI.primaryStage);
-	            if (file != null) {
-	                try {
-	                	OutputStream out = new FileOutputStream(file);
-	                	out.write(currBook.getFb2());
-	                	out.close();
-	                } catch (IOException ex) {
-	                    System.out.println(ex.getMessage());
-	                }	     
-	            }
+				fileChooser.setInitialFileName(currBook.getTitle() + " downloaded by GoodReading");
+				fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.fb2"));
+				file = fileChooser.showSaveDialog(ClientUI.primaryStage);
+				if (file != null) {
+					try {
+						OutputStream out = new FileOutputStream(file);
+						out.write(currBook.getFb2());
+						out.close();
+					} catch (IOException ex) {
+						System.out.println(ex.getMessage());
+					}
+				}
 				break;
 			}
 			// if it's a first download, change status in user_book table.
-			Object[] m=new Object[2];
-			m[0]=currBook.getID();
-			m[1]=ClientUI.user.getID();
-			Message msg=new Message("book page", 3, m);
+			Object[] m = new Object[2];
+			m[0] = currBook.getID();
+			m[1] = ClientUI.user.getID();
+			Message msg = new Message("book page", 3, m);
 			try {
 				Client.instance.sendToServer(msg);
 			} catch (IOException e) {
@@ -218,7 +218,7 @@ public class BookPageController extends SystemController {
 				e.printStackTrace();
 			}
 			return;
-			
+
 		}
 		// user does not own the book -> move to payment request
 		BookPaymentController.book = currBook;
@@ -270,12 +270,12 @@ public class BookPageController extends SystemController {
 			tf.setPrefWidth(540);
 			ap.getChildren().add(tf);
 			reviewGrid.add(ap, 0, y);
-			double revHeight = rev.getText().length()/4.5+50;
-			if(tf.getBoundsInLocal().getHeight()+50>revHeight)
-				revHeight=tf.getBoundsInLocal().getHeight()*1.15+50;
+			double revHeight = rev.getText().length() / 4.5 + 50;
+			if (tf.getBoundsInLocal().getHeight() + 50 > revHeight)
+				revHeight = tf.getBoundsInLocal().getHeight() * 1.15 + 50;
 			rect.setHeight(revHeight);
 			ap.setPrefHeight(revHeight);
-			gridHeight = gridHeight+revHeight;
+			gridHeight = gridHeight + revHeight;
 		}
 		reviewAnchor.setPrefHeight(gridHeight);
 		reviewAnchor.getChildren().add(reviewGrid);
@@ -292,78 +292,79 @@ public class BookPageController extends SystemController {
 	 */
 	@Override
 	public void handleMessage(Message msg) {
-		switch (msg.getFunc()) {
-		case 1:
-			Object[] m = (Object[]) msg.getMsg();
-			authors = (Author[]) m[0];
-			fields = (Field[]) m[1];
-			subjects = (Subject[]) m[2];
-			reviews = (Review[]) m[3];
-			usernames = (String[]) m[4];
-			canReview = (String) m[5];
-			canDownload = (String)m[6];
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					String s = "by " + authors[0].getName();
-					for (int i = 1; i < authors.length; i++)
-						s = s + ", " + authors[i].getName();
-					authorLabel.setText(s);
-					s = fields[0].getField();
-					for (int i = 1; i < fields.length; i++)
-						s = s + ", " + fields[i].getField();
-					fieldLabel.setText(s);
-					if (subjects.length != 0) {
-						s = subjects[0].getSub();
-						for (int i = 1; i < subjects.length; i++)
-							s = s + ", " + subjects[i].getSub();
-						subjectLabel.setText(s);
-					} else
-						subjectLabel.setText("");
-					if (!canReview.equals("yes")) {
-						scrollAnchor.setPrefHeight(438);
-						addReviewText.setVisible(false);
-						addReviewLabel.setVisible(false);
-						addReviewButton.setVisible(false);
-						if (canReview.equals("waiting")) {
-							reviewSentLabel.setText("Your review is waiting to be approved.");
-							reviewSentLabel.setVisible(true);
-						}
-					}
-					if (reviews.length != 0)
-						setReviewGrid();
-					if (canDownload.equals("yes")) {
-						priceAnchor.setVisible(false);
-						ObservableList<String> formats = FXCollections.observableArrayList();
-						if (currBook.getPdf() != null)
-							formats.add("pdf");
-						if (currBook.getDoc() != null)
-							formats.add("doc");
-						if (currBook.getFb2() != null)
-							formats.add("fb2");
-						formatBox.setItems(formats);
-						formatBox.getSelectionModel().selectFirst();
-						formatAnchor.setVisible(true);
-					}
-				}
-
-			});
-			break;
-
-		case 2:
-			if (msg.getMsg().equals("s")) {
+		if (msg.getCont().equals("book page")) {
+			switch (msg.getFunc()) {
+			case 1:
+				Object[] m = (Object[]) msg.getMsg();
+				authors = (Author[]) m[0];
+				fields = (Field[]) m[1];
+				subjects = (Subject[]) m[2];
+				reviews = (Review[]) m[3];
+				usernames = (String[]) m[4];
+				canReview = (String) m[5];
+				canDownload = (String) m[6];
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-						addReviewText.setVisible(false);
-						addReviewLabel.setVisible(false);
-						reviewSentLabel.setText("Thank you for the review!");
-						reviewSentLabel.setVisible(true);
-						addReviewButton.setVisible(false);
+						String s = "by " + authors[0].getName();
+						for (int i = 1; i < authors.length; i++)
+							s = s + ", " + authors[i].getName();
+						authorLabel.setText(s);
+						s = fields[0].getField();
+						for (int i = 1; i < fields.length; i++)
+							s = s + ", " + fields[i].getField();
+						fieldLabel.setText(s);
+						if (subjects.length != 0) {
+							s = subjects[0].getSub();
+							for (int i = 1; i < subjects.length; i++)
+								s = s + ", " + subjects[i].getSub();
+							subjectLabel.setText(s);
+						} else
+							subjectLabel.setText("");
+						if (!canReview.equals("yes")) {
+							scrollAnchor.setPrefHeight(438);
+							addReviewText.setVisible(false);
+							addReviewLabel.setVisible(false);
+							addReviewButton.setVisible(false);
+							if (canReview.equals("waiting")) {
+								reviewSentLabel.setText("Your review is waiting to be approved.");
+								reviewSentLabel.setVisible(true);
+							}
+						}
+						if (reviews.length != 0)
+							setReviewGrid();
+						if (canDownload.equals("yes")) {
+							priceAnchor.setVisible(false);
+							ObservableList<String> formats = FXCollections.observableArrayList();
+							if (currBook.getPdf() != null)
+								formats.add("pdf");
+							if (currBook.getDoc() != null)
+								formats.add("doc");
+							if (currBook.getFb2() != null)
+								formats.add("fb2");
+							formatBox.setItems(formats);
+							formatBox.getSelectionModel().selectFirst();
+							formatAnchor.setVisible(true);
+						}
 					}
+
 				});
+				break;
+
+			case 2:
+				if (msg.getMsg().equals("s")) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							addReviewText.setVisible(false);
+							addReviewLabel.setVisible(false);
+							reviewSentLabel.setText("Thank you for the review!");
+							reviewSentLabel.setVisible(true);
+							addReviewButton.setVisible(false);
+						}
+					});
+				}
 			}
 		}
 	}
-
 }

@@ -82,7 +82,6 @@ public class UserReportController extends SystemController {
 			book_authors = (Author[][]) o[1];
 			book_fields = (Field[][]) o[2];
 			book_subjects = (Subject[][]) o[3];
-
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -105,16 +104,6 @@ public class UserReportController extends SystemController {
 				}
 			});
 			break;
-		case 2:
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("User Report");
-					alert.setContentText("User not exist.");
-					alert.showAndWait();
-				}
-			});
 		}
 	}
 
@@ -157,15 +146,19 @@ public class UserReportController extends SystemController {
 				ap.getChildren().add(title);
 				title.setLayoutX(120);
 				title.setLayoutY(10);
-				String s = "by " + book_authors[y][0].getName();
-				for (int i = 1; i < book_authors[y].length; i++)
-					s = s + ", " + book_authors[y][i].getName();
-				Label book_authors = new Label(s);
-				book_authors.setTextFill(Color.BLACK);
-				book_authors.setFont(Font.font("System", 13));
-				ap.getChildren().add(book_authors);
-				book_authors.setLayoutX(120);
-				book_authors.setLayoutY(33);
+				String s = "";
+				if (book_authors[y].length != 0) {
+					s = "by " + book_authors[y][0].getName();
+					for (int i = 1; i < book_authors[y].length; i++)
+						s = s + ", " + book_authors[y][i].getName();
+					Label book_authors = new Label(s);
+					book_authors.setTextFill(Color.BLACK);
+					book_authors.setFont(Font.font("System", 13));
+					ap.getChildren().add(book_authors);
+					book_authors.setLayoutX(120);
+					book_authors.setLayoutY(33);
+				}else
+					System.out.println("hi");
 				s = book_fields[y][0].getField();
 				for (int i = 1; i < book_fields[y].length; i++)
 					s = s + ", " + book_fields[y][i].getField();
