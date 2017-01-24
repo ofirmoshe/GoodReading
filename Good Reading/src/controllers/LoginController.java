@@ -6,10 +6,12 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
@@ -168,7 +170,16 @@ public class LoginController extends AbstractController {
 			if (ClientUI.user instanceof User) {
 				User u = (User) ClientUI.user;
 				if (u.getStatus().equals("online") || u.getStatus().equals("banned")) {
-					System.out.println(u.getStatus());
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setContentText("You are BANNED!!");
+							alert.showAndWait();
+							
+						}
+					});
+					
 					return;
 				}
 				ClientUI.member = (User_Membership) a[2];
@@ -178,7 +189,8 @@ public class LoginController extends AbstractController {
 				Employee emp = (Employee) ClientUI.user;
 				switch (emp.getPosition()) {
 				case "Librarian":
-					ClientUI.setScene("LibrarianHomepageGUI.fxml");
+					//ClientUI.setScene("LibrarianHomepageGUI.fxml");
+					ClientUI.setScene("SearchUserGUI.fxml");
 					break;
 				case "Library Manager":
 					ClientUI.setScene("LibraryManagerHomepageGUI.fxml");

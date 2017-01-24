@@ -110,8 +110,15 @@ public class Server extends AbstractServer {
 		case "user report":
 			userReportMessageHandler(m, client);
 			break;
-		}
+		case "search user":
+			searchUserMessageHandler(m, client);
+			break;
+		case "manage user":
+			manageUserMessageHandler(m, client);
+		}		
 	}
+
+
 
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
@@ -1281,6 +1288,7 @@ public class Server extends AbstractServer {
 					d.setDate(d.getDate() + pr.getMembership().getDays());
 					um.setE_date(d);
 					um.setUser(pr.getUser());
+					um.setStatus("active");
 					um.save();
 				}
 				pr.setStatus("approved");
@@ -1369,6 +1377,78 @@ public class Server extends AbstractServer {
 
 	}
 
+	private void searchUserMessageHandler(Message msg, ConnectionToClient client)
+	{
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				User[] users = User.listUserByQuery("ID>0", "ID");
+				msg.setMsg(users);
+				client.sendToClient(msg);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			break;
+		}
+	}
+	
+	private void manageUserMessageHandler(Message msg, ConnectionToClient client) {
+		// TODO Auto-generated method stub
+		switch(msg.getFunc()){
+		case 1:
+			Object[] o= (Object[])msg.getMsg();
+			String uid = (String)o[2];
+			try {
+				session.beginTransaction();
+				User u = User.loadUserByORMID(uid);
+				u.setFname((String)o[0]);
+				u.setLname((String)o[1]);
+				u.setPassword((String)o[3]);
+				u.setPaymentInfo((String)o[4]);
+				User_Membership[] um = u.user_Memberships.toArray();
+				if (um[um.length - 1].getE_date().after(new Date())){
+				if((boolean)o[5]==true)
+					um[um.length-1].setStatus("active");
+				else 
+					um[um.length-1].setStatus("blocked");
+				}
+				if ((boolean)o[6]==true)
+					u.setStatus("banned");
+				else if(u.getStatus().equals("banned"))
+					u.setStatus("offline");
+				u.save();
+				um[um.length-1].save();
+				session.getTransaction().commit();
+				msg.setMsg("s");
+			} catch (PersistentException e) {
+				msg.setMsg("f");
+				e.printStackTrace();
+			}
+			try {
+				client.sendToClient(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case 2:
+			try {
+				User u = User.loadUserByORMID((String)msg.getMsg());
+				User_Membership[] um = u.user_Memberships.toArray();
+				msg.setMsg(um);
+				msg.setFunc(2);
+			} catch (PersistentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				client.sendToClient(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}
