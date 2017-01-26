@@ -3,6 +3,7 @@ package controllers;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
@@ -31,9 +32,9 @@ import javafx.stage.Stage;
 public class HistogramReportController extends SystemController {
 	@FXML
 	private AnchorPane anchor;
-	@FXML 
+	@FXML
 	private DatePicker SinceDate;
-	@FXML 
+	@FXML
 	private DatePicker UntilDate;
 	public static Book book;
 	private Views_Date[] views;
@@ -46,7 +47,7 @@ public class HistogramReportController extends SystemController {
 
 	public void initialize() {
 		super.initialize();
-		endDate= new Date();
+		endDate = new Date();
 		UntilDate.setValue(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(endDate);
@@ -60,13 +61,15 @@ public class HistogramReportController extends SystemController {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setHistogram() {
-		if(!anchor.getChildren().isEmpty())anchor.getChildren().remove(bc);
-		startDate=java.sql.Date.valueOf(SinceDate.getValue());
-		endDate=java.sql.Date.valueOf(UntilDate.getValue());
+		if (!anchor.getChildren().isEmpty())
+			anchor.getChildren().remove(bc);
+		startDate = java.sql.Date.valueOf(SinceDate.getValue());
+		endDate = java.sql.Date.valueOf(UntilDate.getValue());
 		xAxis = new CategoryAxis();
 		yAxis = new NumberAxis();
-		int count=0;
+		int count = 0;
 		bc = new BarChart<String, Number>(xAxis, yAxis);
 		bc.setTitle("Book Views & Downloads By Date Report");
 		xAxis.setLabel("Date");
@@ -75,49 +78,36 @@ public class HistogramReportController extends SystemController {
 		bc.setPrefSize(900, 400);
 		XYChart.Series series1 = new XYChart.Series();
 		XYChart.Series series2 = new XYChart.Series();
-		series1.setName("Views");	
-		//int days =daysBetween(startDate, endDate);
-		long days=endDate.getTime()-startDate.getTime();
-		int d=Math.abs((int) TimeUnit.DAYS.convert(days, TimeUnit.MILLISECONDS));
-		System.out.println(d);
-		for (int i = d; i >=0; i--) {
+		series1.setName("Views");
+		long days = endDate.getTime() - startDate.getTime();
+		int d = Math.abs((int) TimeUnit.DAYS.convert(days, TimeUnit.MILLISECONDS));
+		for (int i = d; i >= 0; i--) {
 			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 			String date = formatter.format(endDate);
 			series1.getData().add(new XYChart.Data(date, 0));
 			series2.getData().add(new XYChart.Data(date, 0));
 			for (int j = 0; j < views.length; j++) {
 				String cdate = formatter.format(views[j].getDate());
-				if (date.equals(cdate)) 
-					series1.getData().add(new XYChart.Data(date, views[j].getViewCount()));				
+				if (date.equals(cdate))
+					series1.getData().add(new XYChart.Data(date, views[j].getViewCount()));
 			}
-			for (int j=0; j<downloads.length; j++)
-			{
+			for (int j = 0; j < downloads.length; j++) {
 				String cdate = formatter.format(downloads[j].getpDate());
-				if (date.equals(cdate)) 
-						count++;
+				if (date.equals(cdate))
+					count++;
 			}
 			series2.getData().add(new XYChart.Data(date, count));
-			count=0;
+			count = 0;
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(endDate);
 			cal.add(Calendar.DATE, -1);
 			endDate = cal.getTime();
 		}
-		
+
 		series2.setName("Downloads");
 		bc.getData().addAll(series1, series2);
 		anchor.getChildren().add(bc);
 	}
-	
-	public static long daysBetween(Calendar startDate, Calendar endDate) {  
-		  Calendar date = (Calendar) startDate.clone();  
-		  long daysBetween = 0;  
-		  while (date.before(endDate)) {  
-		    date.add(Calendar.DAY_OF_MONTH, 1);  
-		    daysBetween++;  
-		  }  
-		  return daysBetween;  
-		}  
 
 	@Override
 	public void handleMessage(Message msg) {
@@ -132,7 +122,6 @@ public class HistogramReportController extends SystemController {
 					setHistogram();
 				}
 			});
-
 			break;
 		}
 	}

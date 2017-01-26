@@ -99,6 +99,9 @@ public class SearchBookController extends SystemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if(ClientUI.user instanceof Employee){
+			menuAnchor.setVisible(false);
+		}
 		scrollAnchor.setPrefHeight(200);
 		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
 		optionBox.getSelectionModel().selectFirst();

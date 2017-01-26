@@ -84,8 +84,8 @@
       <Label layoutX="287.0" layoutY="440.0" text="doc" />
       <Label layoutX="541.0" layoutY="439.0" text="fb2" />
       <TextField fx:id="fb2Field" layoutX="540.0" layoutY="462.0" prefHeight="25.0" prefWidth="150.0" />
-      <TextField fx:id="priceField" layoutX="589.0" layoutY="391.0" prefHeight="25.0" prefWidth="94.0" />
-      <Label layoutX="589.0" layoutY="371.0" text="Price*" />
+      <TextField fx:id="priceField" layoutX="759.0" layoutY="389.0" prefHeight="25.0" prefWidth="94.0" />
+      <Label layoutX="759.0" layoutY="369.0" text="Price*" />
       <Label layoutX="46.0" layoutY="515.0" text="*Required field" />
       <AnchorPane layoutX="806.0" layoutY="31.0" onMouseEntered="#goBackOnHover" onMouseExited="#goBackOffHover" onMouseMoved="#goBackOnHover" onMouseReleased="#goBackOnClick">
          <children>
@@ -112,5 +112,7 @@
       <Button layoutX="219.0" layoutY="464.0" mnemonicParsing="false" onAction="#uploadPDFOnClick" text="Upload " />
       <Button layoutX="463.0" layoutY="464.0" mnemonicParsing="false" onAction="#uploadDOCOnClick" text="Upload " />
       <Button layoutX="692.0" layoutY="463.0" mnemonicParsing="false" onAction="#uploadFB2OnClick" text="Upload " />
+      <Label layoutX="553.0" layoutY="369.0" text="New author" />
+      <TextField fx:id="newAuthorField" layoutX="553.0" layoutY="389.0" prefHeight="25.0" prefWidth="166.0" />
    </children>
 </AnchorPane>

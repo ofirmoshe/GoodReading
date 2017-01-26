@@ -25,7 +25,7 @@ public abstract class SystemController extends AbstractController {
 	@FXML
 	private AnchorPane toggleMenuAnchor;
 	@FXML
-	private AnchorPane menuAnchor;
+	protected AnchorPane menuAnchor;
 	@FXML
 	private Label arrowLabel;
 	@FXML

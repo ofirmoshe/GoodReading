@@ -49,7 +49,7 @@
          <content>
           <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="900.0">
                <children>
-                  <Label fx:id="posLabel" layoutX="360.0" layoutY="49.0" text="Library Manager">
+                  <Label fx:id="posLabel" layoutX="394.0" layoutY="49.0" text=" Manager">
                      <font>
                         <Font name="System Bold" size="25.0" />
                      </font>

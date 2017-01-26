@@ -17,7 +17,7 @@
    <children>
       <ImageView fitHeight="600.0" fitWidth="900.0">
          <image>
-            <Image url="@../Graphics/bg_with_logo.png" />
+            <Image url="@../graphics/bg_with_logo.png" />
          </image>
       </ImageView>
       <AnchorPane layoutY="-1.0" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
@@ -50,7 +50,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </ImageView>
-                  <Label fx:id="loginLabel" layoutX="23.0" layoutY="3.0" prefHeight="21.0" prefWidth="59.0" text="login" textFill="WHITE">
+                  <Label fx:id="loginLabel" layoutX="24.0" layoutY="3.0" prefHeight="21.0" prefWidth="59.0" text="login" textFill="WHITE">
                      <font>
                         <Font name="Calibri" size="18.0" />
                      </font>
@@ -84,6 +84,7 @@
                   <Image url="@../graphics/Red_X.png" />
                </image>
             </ImageView>
+            <ProgressBar fx:id="loadingBar" layoutX="386.0" layoutY="448.0" prefHeight="18.0" prefWidth="152.0" progress="0.0" visible="false" />
          </children>
       </AnchorPane>
    </children>

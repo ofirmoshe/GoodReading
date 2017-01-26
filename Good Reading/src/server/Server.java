@@ -125,15 +125,21 @@ public class Server extends AbstractServer {
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
-			/*
-			 * User u = (User) msg.getMsg(); u.setStatus("offline"); try {
-			 * PersistentTransaction t = session.beginTransaction();
-			 * session.update(u); t.commit(); t = session.beginTransaction();
-			 * session.evict(u); t.commit(); session =
-			 * IBookIncPersistentManager.instance().getSession(); } catch
-			 * (PersistentException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); } break;
-			 */
+			try {
+				User u = (User) msg.getMsg();
+				session.beginTransaction();
+				u.setStatus("offline");
+				u.save();
+				session.getTransaction().commit();
+				/*
+				 * t = session.beginTransaction(); session.evict(u); t.commit();
+				 * session = IBookIncPersistentManager.instance().getSession();
+				 */
+			} catch (Exception e) { // TODO Auto-generated catch block
+				e.printStackTrace();
+				session.getTransaction().rollback();
+			}
+			break;
 		}
 	}
 
@@ -150,7 +156,7 @@ public class Server extends AbstractServer {
 			GeneralUser login = (GeneralUser) msg.getMsg();
 			GeneralUser u = null;
 			try {
-				u = GeneralUser.loadGeneralUserByORMID(session, login.getID());
+				u = GeneralUser.loadGeneralUserByORMID(login.getID());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				a[1] = "wrong username";
@@ -183,15 +189,20 @@ public class Server extends AbstractServer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				/*
-				 * if (u instanceof User) { User user = (User) u; if
-				 * (user.getStatus().equals("offline")) {
-				 * user.setStatus("online"); try { PersistentTransaction t =
-				 * session.beginTransaction(); session.update(user); t.commit();
-				 * t = session.beginTransaction(); session.evict(user);
-				 * t.commit(); } catch (PersistentException e) { // TODO
-				 * Auto-generated catch block e.printStackTrace(); } } }
-				 */
+				if (u instanceof User) {
+					User user = (User) u;
+					if (user.getStatus().equals("offline")) {
+						try {
+							session.beginTransaction();
+							user.setStatus("online");
+							user.save();
+							session.getTransaction().commit();
+						} catch (Exception e) {
+							e.printStackTrace();
+							session.getTransaction().rollback();
+						}
+					}
+				}
 				return;
 			}
 			a[1] = "wrong password";
@@ -701,6 +712,8 @@ public class Server extends AbstractServer {
 				newBook.setTable_of_contents((String) o[8]);
 				newBook.setPrice((float) o[9]);
 				newBook.setStatus("visible");
+				String[] newauthor = null;
+				boolean authorFlag = true;
 				// PDF
 				byte[] format = (byte[]) o[10];
 				if (format != null) {
@@ -716,14 +729,41 @@ public class Server extends AbstractServer {
 				if (format != null) {
 					newBook.setFb2(format);
 				}
+
 				newBook.save();
 				session.getTransaction().commit();
+				if (!((String) o[13]).equals("")) {
+					String author = (String) o[13];
+					newauthor = (String[]) author.split(", ");
+					Author a = new Author();
+					for (int i = 0; i < newauthor.length; i++) {
+						a = Author.loadAuthorByQuery("Name=" + "'" + newauthor[i] + "'", "ID");
+						if (a == null) {
+							session.beginTransaction();
+							a = Author.createAuthor();
+							a.setName(newauthor[i]);
+							a.save();
+							session.getTransaction().commit();
+						}
+						Statement stmt = con.createStatement();
+						String sql = "INSERT INTO author_book " + "VALUES (" + a.getID() + ", " + newBook.getID() + ")";
+						stmt.execute(sql);
+					}
+				}
 				Author[] authors = (Author[]) o[4];
 				for (int i = 0; i < authors.length; i++) {
-					Statement stmt = con.createStatement();
-					String sql = "INSERT INTO author_book " + "VALUES (" + authors[i].getID() + ", " + newBook.getID()
-							+ ")";
-					stmt.executeUpdate(sql);
+					if (newauthor.length != 0) {
+						for (int j = 0; j < newauthor.length; j++)
+							if (authors[i].getName().equals(newauthor[j]))
+								authorFlag = false;
+						break;
+					}
+					if (authorFlag) {
+						Statement stmt = con.createStatement();
+						String sql = "INSERT INTO author_book " + "VALUES (" + authors[i].getID() + ", "
+								+ newBook.getID() + ")";
+						stmt.executeUpdate(sql);
+					}
 				}
 				Field[] fields = (Field[]) o[2];
 				for (int i = 0; i < fields.length; i++) {
@@ -770,6 +810,7 @@ public class Server extends AbstractServer {
 
 			break;
 		}
+
 	}
 
 	private void inventoryManagementMessageHandler(Message msg, ConnectionToClient client) {
@@ -971,45 +1012,42 @@ public class Server extends AbstractServer {
 				if (format != null) {
 					b.setFb2(format);
 				}
-				b.save();		
+				b.save();
 				session.getTransaction().commit();
 				Statement stmt = con.createStatement();
 				String sql = "DELETE FROM author_book WHERE BookID=" + b.getID();
-				stmt.execute(sql);			
-				Author[] SelectedAuthors=(Author[])o[4];
-				for(int i=0; i<SelectedAuthors.length; i++)
-				{
+				stmt.execute(sql);
+				Author[] SelectedAuthors = (Author[]) o[4];
+				for (int i = 0; i < SelectedAuthors.length; i++) {
 					stmt = con.createStatement();
 					sql = "INSERT INTO author_book " + "VALUES (" + SelectedAuthors[i].getID() + ", " + b.getID() + ")";
 					stmt.execute(sql);
 				}
 				stmt = con.createStatement();
 				sql = "DELETE FROM book_field WHERE BookID=" + b.getID();
-				stmt.execute(sql);			
-				Field[] SelectedFields=(Field[])o[2];
-				for(int i=0; i<SelectedFields.length; i++)
-				{
+				stmt.execute(sql);
+				Field[] SelectedFields = (Field[]) o[2];
+				for (int i = 0; i < SelectedFields.length; i++) {
 					stmt = con.createStatement();
 					sql = "INSERT INTO book_field " + "VALUES (" + b.getID() + ", " + SelectedFields[i].getID() + ")";
 					stmt.execute(sql);
 				}
 				stmt = con.createStatement();
 				sql = "DELETE FROM book_subject WHERE BookID=" + b.getID();
-				stmt.execute(sql);			
-				Subject[] SelectedSubjects=(Subject[])o[3];
-				for(int i=0; i<SelectedSubjects.length; i++)
-				{
+				stmt.execute(sql);
+				Subject[] SelectedSubjects = (Subject[]) o[3];
+				for (int i = 0; i < SelectedSubjects.length; i++) {
 					stmt = con.createStatement();
-					sql = "INSERT INTO book_subject " + "VALUES (" + b.getID() + ", " + SelectedSubjects[i].getID() + ")";
+					sql = "INSERT INTO book_subject " + "VALUES (" + b.getID() + ", " + SelectedSubjects[i].getID()
+							+ ")";
 					stmt.execute(sql);
 				}
 				String words = (String) o[5];
 				if (!words.equals("")) {
 					String[] keywords = (String[]) words.split(" ");
 					sql = "DELETE FROM keyword_book WHERE BookID=" + b.getID();
-					stmt.execute(sql);			
-					for(int i=0; i<keywords.length; i++)
-					{
+					stmt.execute(sql);
+					for (int i = 0; i < keywords.length; i++) {
 						stmt = con.createStatement();
 						Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
 						if (kw == null) {
@@ -1018,10 +1056,10 @@ public class Server extends AbstractServer {
 							kw.setWord(keywords[i]);
 							kw.save();
 						}
-					sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + b.getID() + ")";
-					stmt.execute(sql);
-				}
+						sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + b.getID() + ")";
+						stmt.execute(sql);
 					}
+				}
 				msg.setMsg("s");
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -1035,8 +1073,8 @@ public class Server extends AbstractServer {
 					e1.printStackTrace();
 				}
 			}
-				break;
-				
+			break;
+
 		case 3:
 			try {
 				Book b = Book.loadBookByORMID((int) msg.getMsg());
@@ -1433,26 +1471,26 @@ public class Server extends AbstractServer {
 	}
 
 	private void histogramReportMessageHandler(Message msg, ConnectionToClient client) {
-	 switch(msg.getFunc()){
-	 case 1:
-		 try {
-			Book book = Book.loadBookByORMID((int)msg.getMsg());
-			Views_Date[] vd = book.view.toArray();
-			User_Book[] ub = book.user_Books.toArray();
-			Object[] o=new Object[2];
-			o[0]=vd;
-			o[1]=ub;
-			msg.setMsg(o);
-			client.sendToClient(msg);
-		} catch (Exception e) {
-			e.printStackTrace();
+		switch (msg.getFunc()) {
+		case 1:
+			try {
+				Book book = Book.loadBookByORMID((int) msg.getMsg());
+				Views_Date[] vd = book.view.toArray();
+				User_Book[] ub = book.user_Books.toArray();
+				Object[] o = new Object[2];
+				o[0] = vd;
+				o[1] = ub;
+				msg.setMsg(o);
+				client.sendToClient(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
 		}
-		 
-		 break;
-	 }
-		
+
 	}
-	
+
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}

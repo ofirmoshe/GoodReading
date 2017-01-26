@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import boundary.ClientUI;
 import client.Client;
 import common.Message;
+import graphics.GraphicsImporter;
 import i_book.Author;
 import i_book.Book;
 import i_book.Field;
@@ -91,6 +92,8 @@ public class AddBookController extends SystemController {
 	private TextField docField;
 	@FXML
 	private TextField fb2Field;
+	@FXML
+	private TextField newAuthorField;
 
 	public void initialize() {
 		super.initialize();
@@ -102,6 +105,16 @@ public class AddBookController extends SystemController {
 			e.printStackTrace();
 		}
 		subjectChecklist.setPrefHeight(1);
+		Image img = new Image(GraphicsImporter.class.getResource("no_image.jpg").toString());
+		BufferedImage bImage = SwingFXUtils.fromFXImage(img, null);
+		ByteArrayOutputStream s = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(bImage, "jpg", s);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		bimg = s.toByteArray();
 	}
 
 	public void uploadImageOnClick() {
@@ -176,7 +189,7 @@ public class AddBookController extends SystemController {
 	} 
 	public void addBookOnClick() {
 		// ClientUI.instance.getHostServices().showDocument(docField.getText());
-		Object[] o = new Object[13];
+		Object[] o = new Object[14];
 		boolean mustFlag = false;
 		if (!titleField.getText().equals(""))
 			o[0] = titleField.getText();
@@ -266,6 +279,7 @@ public class AddBookController extends SystemController {
 			o[10] = formats[0];
 			o[11] = formats[1];
 			o[12] = formats[2];
+			o[13]=newAuthorField.getText();
 		}
 		if (mustFlag) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -315,6 +329,7 @@ public class AddBookController extends SystemController {
 						alert.setTitle("Add Book Succeed");
 						alert.setContentText("New book was added to Good Reading");
 						alert.showAndWait();
+						logoOnClick();
 					}
 				});
 			}

@@ -2,14 +2,18 @@ package controllers;
 
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.BlurType;
@@ -41,6 +45,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -75,6 +85,8 @@ public class LoginController extends AbstractController {
 	public Label loginLabel;
 	@FXML
 	private AnchorPane mainAnchor;
+	@FXML
+	private ProgressBar loadingBar;
 
 	/**
 	 * This method initializes the controller.
@@ -100,6 +112,7 @@ public class LoginController extends AbstractController {
 	 * @throws Exception
 	 */
 	public void loginOnClick() throws Exception {
+		loading();
 		wrongHost.setVisible(false);
 		wrongUser.setVisible(false);
 		wrongPass.setVisible(false);
@@ -121,6 +134,34 @@ public class LoginController extends AbstractController {
 			wrongHost.setVisible(true);
 		}
 
+	}
+	
+	public void loading(){
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				loadingBar.setVisible(true);
+				Task<Void> sleeper = new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						try {
+							Thread.sleep(20);
+						} catch (InterruptedException e) {
+						}
+						return null;
+					}
+				};
+				sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+					@Override
+					public void handle(WorkerStateEvent event) {
+						loadingBar.setProgress(loadingBar.getProgress()+0.01);
+						if(loadingBar.getProgress()<1)
+							loading();
+					}
+				});
+				new Thread(sleeper).start();
+			}
+		});
 	}
 
 	/**
@@ -159,27 +200,39 @@ public class LoginController extends AbstractController {
 				});
 				return;
 			}
-			Platform.runLater(new Runnable() {
+			/*Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
 					loginLabel.setText("loading");
 					loginLabel.setTranslateX(-7);
 				}
-			});
+			});*/
 			ClientUI.user = (GeneralUser) a[1];
 			if (ClientUI.user instanceof User) {
 				User u = (User) ClientUI.user;
-				if (u.getStatus().equals("online") || u.getStatus().equals("banned")) {
+				if (u.getStatus().equals("online")) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setContentText("You are already ONLINE.");
+							alert.showAndWait();
+
+						}
+					});
+					return;
+				}
+				else if (u.getStatus().equals("banned")) {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							Alert alert = new Alert(AlertType.WARNING);
 							alert.setContentText("You are BANNED!!");
 							alert.showAndWait();
-							
+
 						}
 					});
-					
+
 					return;
 				}
 				ClientUI.member = (User_Membership) a[2];
@@ -211,4 +264,11 @@ public class LoginController extends AbstractController {
 		return "Login Controller";
 	}
 
+}
+
+class MyTimeTask extends TimerTask {
+
+	public void run() {
+		// write your code here
+	}
 }
