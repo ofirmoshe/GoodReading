@@ -49,23 +49,7 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void goBackOnClick() {
-		//if (ClientUI.user instanceof User) {
-			//Client.refresh();
-			ClientUI.goBack();
-		//}
-		/*if (ClientUI.user instanceof Employee) {
-			Employee emp = (Employee) ClientUI.user;
-			switch (emp.getPosition()) {
-			case "Librarian":
-				ClientUI.setScene("LibrarianHomepageGUI.fxml");
-				break;
-			case "Library Manager":
-				ClientUI.setScene("LibraryManagerHomepageGUI.fxml");
-				break;
-			case "Library Employee":
-				ClientUI.setScene("LibraryEmployeeHomepageGUI.fxml");
-			}
-		}*/
+		ClientUI.goBack();
 	}
 
 	public void goBackOnHover() {
@@ -172,6 +156,7 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void logoutOnClick() throws IOException {
+		ClientUI.pageStack.clear();
 		ClientUI.setScene("LoginGUI.fxml");
 		if (ClientUI.user instanceof User) {
 			Message msg = new Message("system", 1, ClientUI.user);
@@ -180,11 +165,13 @@ public abstract class SystemController extends AbstractController {
 	}
 
 	public void logoOnClick() {
+		// ClientUI.pageStack.clear();
+		for (int i = 0; i < ClientUI.pageStack.size(); i++)
+			ClientUI.pageStack.pop();
 		if (ClientUI.user instanceof User) {
 			ClientUI.setScene("UserHomepageGUI.fxml");
 			return;
-		}
-		else if (ClientUI.user instanceof Employee) {
+		} else if (ClientUI.user instanceof Employee) {
 			Employee emp = (Employee) ClientUI.user;
 			switch (emp.getPosition()) {
 			case "Librarian":

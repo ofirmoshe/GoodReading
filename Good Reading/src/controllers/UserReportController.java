@@ -73,6 +73,10 @@ public class UserReportController extends SystemController {
 		}
 	}
 
+	public void histogramOnClick()
+	{
+		ClientUI.setScene("HistogramReportGUI.fxml");
+	}
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {
@@ -180,7 +184,6 @@ public class UserReportController extends SystemController {
 					book_subjects.setLayoutY(72);
 				}
 				Label sum = new Label(books[y].getSummary());
-				;
 				sum.setPrefSize(600, 40);
 				sum.setLayoutX(120);
 				sum.setLayoutY(90);

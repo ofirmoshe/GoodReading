@@ -22,16 +22,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -285,18 +288,20 @@ public class SearchBookController extends SystemController {
 				sum.setWrapText(true);
 				ap.getChildren().add(sum);
 				if (what.equals("book report")) {
-					Button searchButton = new Button("Search Report");
+					Button searchButton = new Button("Get Report");
 					searchButton.setLayoutX(740);
 					searchButton.setLayoutY(20);
 					searchButton.setPrefWidth(120);
 					searchButton.setTextAlignment(TextAlignment.CENTER);
+					searchButton.setUserData(y);
+					searchButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent e) {
+						HistogramReportController.book=books[(int)searchButton.getUserData()];
+						ClientUI.setScene("HistogramReportGUI.fxml");
+					}
+						});
 					ap.getChildren().add(searchButton);
-					Button purchaseButton = new Button("Purchase Report");
-					purchaseButton.setLayoutX(740);
-					purchaseButton.setLayoutY(50);
-					purchaseButton.setPrefWidth(120);
-					purchaseButton.setTextAlignment(TextAlignment.CENTER);
-					ap.getChildren().add(purchaseButton);
 					Label pop = new Label("Popularity Ranks:");
 					pop.setFont(Font.font("System",FontWeight.BOLD, 14));
 					pop.setLayoutY(140);

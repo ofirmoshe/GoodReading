@@ -116,6 +116,9 @@ public class Server extends AbstractServer {
 		case "manage user":
 			manageUserMessageHandler(m, client);
 			break;
+		case "histogram report":
+			histogramReportMessageHandler(m, client);
+			break;
 		}
 	}
 
@@ -944,90 +947,81 @@ public class Server extends AbstractServer {
 			break;
 		case 2:
 			try {
+				session.beginTransaction();
 				Object[] o = (Object[]) msg.getMsg();
 				Book b = Book.loadBookByORMID((int) o[13]);
-				String status = b.getStatus();
-				User_Book[] ub = b.user_Books.toArray();
-				Views_Date[] views = b.view.toArray();
-				Statement stmt = con.createStatement();
-				String sql = "DELETE FROM book WHERE ID=" + b.getID();
-				stmt.execute(sql);
-				session.beginTransaction();
-				Book newBook = Book.createBook();
-				newBook.setTitle((String) o[0]);
-				newBook.setLanguage((String) o[1]);
-				newBook.setImage((byte[]) o[6]);
-				newBook.setSummary((String) o[7]);
-				newBook.setTable_of_contents((String) o[8]);
-				newBook.setPrice((float) o[9]);
+				b.setTitle((String) o[0]);
+				b.setLanguage((String) o[1]);
+				b.setImage((byte[]) o[6]);
+				b.setSummary((String) o[7]);
+				b.setTable_of_contents((String) o[8]);
+				b.setPrice((float) o[9]);
 				// PDF
 				byte[] format = (byte[]) o[10];
 				if (format != null) {
-					newBook.setPdf(format);
+					b.setPdf(format);
 				}
 				// DOC
 				format = (byte[]) o[11];
 				if (format != null) {
-					newBook.setDoc(format);
+					b.setDoc(format);
 				}
 				// FB2
 				format = (byte[]) o[12];
 				if (format != null) {
-					newBook.setFb2(format);
+					b.setFb2(format);
 				}
-				newBook.setStatus(status);
-				newBook.save();
+				b.save();		
 				session.getTransaction().commit();
+				Statement stmt = con.createStatement();
+				String sql = "DELETE FROM author_book WHERE BookID=" + b.getID();
+				stmt.execute(sql);			
+				Author[] SelectedAuthors=(Author[])o[4];
+				for(int i=0; i<SelectedAuthors.length; i++)
+				{
+					stmt = con.createStatement();
+					sql = "INSERT INTO author_book " + "VALUES (" + SelectedAuthors[i].getID() + ", " + b.getID() + ")";
+					stmt.execute(sql);
+				}
 				stmt = con.createStatement();
-				sql = "UPDATE book " + "SET ID=" + (int) o[13] + " WHERE ID=" + newBook.getID();
-				stmt.executeUpdate(sql);
-				Author[] authors = (Author[]) o[4];
-				for (int i = 0; i < authors.length; i++) {
+				sql = "DELETE FROM book_field WHERE BookID=" + b.getID();
+				stmt.execute(sql);			
+				Field[] SelectedFields=(Field[])o[2];
+				for(int i=0; i<SelectedFields.length; i++)
+				{
 					stmt = con.createStatement();
-					sql = "INSERT INTO author_book " + "VALUES (" + authors[i].getID() + ", " + b.getID() + ")";
-					stmt.executeUpdate(sql);
+					sql = "INSERT INTO book_field " + "VALUES (" + b.getID() + ", " + SelectedFields[i].getID() + ")";
+					stmt.execute(sql);
 				}
-				Field[] fields = (Field[]) o[2];
-				for (int i = 0; i < fields.length; i++) {
+				stmt = con.createStatement();
+				sql = "DELETE FROM book_subject WHERE BookID=" + b.getID();
+				stmt.execute(sql);			
+				Subject[] SelectedSubjects=(Subject[])o[3];
+				for(int i=0; i<SelectedSubjects.length; i++)
+				{
 					stmt = con.createStatement();
-					sql = "INSERT INTO book_field " + "VALUES (" + b.getID() + ", " + fields[i].getID() + ")";
-					stmt.executeUpdate(sql);
-				}
-				Subject[] subjects = (Subject[]) o[3];
-				if (subjects.length != 0) {
-					for (int i = 0; i < subjects.length; i++) {
-						stmt = con.createStatement();
-						sql = "INSERT INTO book_subject " + "VALUES (" + b.getID() + ", " + subjects[i].getID() + ")";
-						stmt.executeUpdate(sql);
-					}
+					sql = "INSERT INTO book_subject " + "VALUES (" + b.getID() + ", " + SelectedSubjects[i].getID() + ")";
+					stmt.execute(sql);
 				}
 				String words = (String) o[5];
 				if (!words.equals("")) {
 					String[] keywords = (String[]) words.split(" ");
-					for (int i = 0; i < keywords.length; i++) {
-						if (!keywords[i].equals("")) {
-							Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
-							if (kw == null) {
-								session.beginTransaction();
-								kw = Keyword.createKeyword();
-								kw.setWord(keywords[i]);
-								kw.save();
-								session.getTransaction().commit();
-							}
-							stmt = con.createStatement();
-							sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + (int) o[13] + ")";
-							stmt.executeUpdate(sql);
+					sql = "DELETE FROM keyword_book WHERE BookID=" + b.getID();
+					stmt.execute(sql);			
+					for(int i=0; i<keywords.length; i++)
+					{
+						stmt = con.createStatement();
+						Keyword kw = Keyword.loadKeywordByQuery("Word=" + "'" + keywords[i] + "'", "ID");
+						if (kw == null) {
+							session.beginTransaction();
+							kw = Keyword.createKeyword();
+							kw.setWord(keywords[i]);
+							kw.save();
 						}
+					sql = "INSERT INTO keyword_book " + "VALUES (" + kw.getID() + ", " + b.getID() + ")";
+					stmt.execute(sql);
+				}
 					}
-				}
-				for (int i = 0; i < views.length; i++) {
-					stmt = con.createStatement();
-					DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-					String today = formatter.format(views[i].getDate());
-					sql = "INSERT INTO views_date " + "VALUES ('" + today + "', '" + b.getID() + "', '"
-							+ views[i].getViewCount() + "')";
-					stmt.executeUpdate(sql);
-				}
 				msg.setMsg("s");
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -1041,7 +1035,8 @@ public class Server extends AbstractServer {
 					e1.printStackTrace();
 				}
 			}
-			break;
+				break;
+				
 		case 3:
 			try {
 				Book b = Book.loadBookByORMID((int) msg.getMsg());
@@ -1347,7 +1342,6 @@ public class Server extends AbstractServer {
 					s[i] = books[i].subject.toArray();
 				}
 				Object[] o = new Object[4];
-				System.out.println(a[0][0].getName());
 				o[0] = books;
 				o[1] = a;
 				o[2] = f;
@@ -1438,6 +1432,27 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	private void histogramReportMessageHandler(Message msg, ConnectionToClient client) {
+	 switch(msg.getFunc()){
+	 case 1:
+		 try {
+			Book book = Book.loadBookByORMID((int)msg.getMsg());
+			Views_Date[] vd = book.view.toArray();
+			User_Book[] ub = book.user_Books.toArray();
+			Object[] o=new Object[2];
+			o[0]=vd;
+			o[1]=ub;
+			msg.setMsg(o);
+			client.sendToClient(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+		 break;
+	 }
+		
+	}
+	
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}
