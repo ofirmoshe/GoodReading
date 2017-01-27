@@ -52,12 +52,13 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button layoutX="146.0" layoutY="13.0" mnemonicParsing="false" onAction="#registerOnClick" prefHeight="25.0" prefWidth="142.0" text="Register New User" />
+            <Button layoutX="162.0" layoutY="13.0" mnemonicParsing="false" onAction="#registerOnClick" prefHeight="25.0" prefWidth="142.0" text="Register New User" />
             <Label fx:id="posLabel" layoutX="356.0" layoutY="25.0" text="Library Employee">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
+            <Button layoutX="162.0" layoutY="42.0" mnemonicParsing="false" onAction="#userManagementOnClick" prefHeight="25.0" prefWidth="142.0" text="Users Management" />
          </children>
       </AnchorPane>
       <ScrollPane layoutY="254.0" prefHeight="346.0" prefWidth="900.0">

@@ -63,7 +63,7 @@ public class AddUserController extends SystemController {
 	}
 
 	@Override
-	public void handleMessage(Message msg) {
+	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {
 		case 1:
 			if (msg.getMsg().equals("s")) {

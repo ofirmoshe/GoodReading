@@ -327,7 +327,7 @@ public class EditBookController extends SystemController {
 	}
 
 	@Override
-	public void handleMessage(Message msg) {
+	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {
 		case 1:
 			Object[] ob = (Object[]) msg.getMsg();
@@ -344,7 +344,7 @@ public class EditBookController extends SystemController {
 					if (kw.length != 0)
 						s = kw[0].getWord();
 					for (int i = 1; i < kw.length; i++)
-						s = s + " " + kw[i].getWord();
+						s = s + ", " + kw[i].getWord();
 					keywordField.setText(s);
 					Image img;
 					if (book.getImage() != null) {

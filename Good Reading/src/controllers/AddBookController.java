@@ -238,7 +238,7 @@ public class AddBookController extends SystemController {
 		for (int i = 0; i < checkAuthors.length; i++)
 			if (checkAuthors[i])
 				count++;
-		if (count == 0)
+		if (count == 0 && newAuthorField.getText().equals(""))
 			mustFlag = true;
 		Author[] selectedAuthors = new Author[count];
 		index = 0;
@@ -300,6 +300,7 @@ public class AddBookController extends SystemController {
 
 	@Override
 	public void handleMessage(Message msg) {
+		super.handleMessage(msg);
 		switch (msg.getFunc()) {
 		case 1:
 			Object[] ob = (Object[]) msg.getMsg();

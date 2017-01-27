@@ -232,7 +232,7 @@ public class BookPageController extends SystemController {
 			o[0] = currBook.getID();
 			o[1] = ClientUI.user.getID();
 			o[2] = addReviewText.getText();
-			Message msg = new Message("book page", 2, o);
+			Message msg = new Message("book page", 10, o);
 			try {
 				Client.instance.sendToServer(msg);
 			} catch (IOException e) {
@@ -351,7 +351,7 @@ public class BookPageController extends SystemController {
 				});
 				break;
 
-			case 2:
+			case 10:
 				if (msg.getMsg().equals("s")) {
 					Platform.runLater(new Runnable() {
 						@Override

@@ -49,13 +49,13 @@
          <content>
           <AnchorPane fx:id="scrollAnchor" minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="900.0">
                <children>
-                  <Label fx:id="posLabel" layoutX="394.0" layoutY="49.0" text=" Manager">
+                  <Label fx:id="posLabel" layoutX="394.0" layoutY="52.0" text=" Manager">
                      <font>
                         <Font name="System Bold" size="25.0" />
                      </font>
                   </Label>
-                  <Button fx:id="manageUserButton" layoutX="378.0" layoutY="207.0" mnemonicParsing="false" onAction="#userReportOnClick" prefHeight="25.0" prefWidth="144.0" text="User Report" />
-                  <Button layoutX="377.0" layoutY="156.0" mnemonicParsing="false" onAction="#bookReportOnClick" prefHeight="25.0" prefWidth="146.0" text="Book Reports" />
+                  <Button fx:id="manageUserButton" layoutX="378.0" layoutY="194.0" mnemonicParsing="false" onAction="#userReportOnClick" prefHeight="25.0" prefWidth="144.0" text="User Report" />
+                  <Button layoutX="377.0" layoutY="153.0" mnemonicParsing="false" onAction="#bookReportOnClick" prefHeight="25.0" prefWidth="146.0" text="Book Reports" />
                </children></AnchorPane>
          </content>
       </ScrollPane>

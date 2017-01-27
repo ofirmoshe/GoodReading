@@ -7,13 +7,17 @@ import client.Client;
 import common.Message;
 import graphics.GraphicsImporter;
 import i_book.Employee;
+import i_book.GeneralUser;
 import i_book.User;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -186,6 +190,29 @@ public abstract class SystemController extends AbstractController {
 			case "Manager":
 				ClientUI.setScene("ManagerHomepageGUI.fxml");
 			}
+		}
+	}
+
+	public void handleMessage(Message msg) {
+		switch (msg.getFunc()) {
+		case 10:
+			GeneralUser user = ClientUI.user;
+			if (user instanceof Employee) {
+				if (((Employee) user).getPosition().equals("Editor")
+						|| ((Employee) user).getPosition().equals("Librarian")
+						|| ((Employee) user).getPosition().equals("Library Manager")) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setHeaderText("New Review Submitted");
+							alert.setContentText("Go to Review Management to check it.");
+							alert.showAndWait();
+						}
+					});
+				}
+			}
+			break;
 		}
 	}
 

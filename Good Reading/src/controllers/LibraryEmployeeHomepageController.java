@@ -81,7 +81,7 @@ public class LibraryEmployeeHomepageController extends SystemController {
 		}
 	}
 
-	public void handleMessage(Message msg) {
+	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {
 		case 1:
 			if (msg.getMsg() != null) {
@@ -117,6 +117,11 @@ public class LibraryEmployeeHomepageController extends SystemController {
 		}
 	}
 
+	public void userManagementOnClick()
+	{
+		ClientUI.setScene("SearchUserGUI.fxml");
+	}
+	
 	public void registerOnClick() {
 		ClientUI.setScene("AddNewUserGUI.fxml");
 	}

@@ -112,7 +112,6 @@ public class LoginController extends AbstractController {
 	 * @throws Exception
 	 */
 	public void loginOnClick() throws Exception {
-		loading();
 		wrongHost.setVisible(false);
 		wrongUser.setVisible(false);
 		wrongPass.setVisible(false);
@@ -135,8 +134,8 @@ public class LoginController extends AbstractController {
 		}
 
 	}
-	
-	public void loading(){
+
+	public void loading() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -154,8 +153,8 @@ public class LoginController extends AbstractController {
 				sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 					@Override
 					public void handle(WorkerStateEvent event) {
-						loadingBar.setProgress(loadingBar.getProgress()+0.01);
-						if(loadingBar.getProgress()<1)
+						loadingBar.setProgress(loadingBar.getProgress() + 0.01);
+						if (loadingBar.getProgress() < 1)
 							loading();
 					}
 				});
@@ -200,13 +199,6 @@ public class LoginController extends AbstractController {
 				});
 				return;
 			}
-			/*Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					loginLabel.setText("loading");
-					loginLabel.setTranslateX(-7);
-				}
-			});*/
 			ClientUI.user = (GeneralUser) a[1];
 			if (ClientUI.user instanceof User) {
 				User u = (User) ClientUI.user;
@@ -221,8 +213,7 @@ public class LoginController extends AbstractController {
 						}
 					});
 					return;
-				}
-				else if (u.getStatus().equals("banned")) {
+				} else if (u.getStatus().equals("banned")) {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -235,6 +226,13 @@ public class LoginController extends AbstractController {
 
 					return;
 				}
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						loading();
+					}
+				});
+
 				ClientUI.member = (User_Membership) a[2];
 				ClientUI.setScene("UserHomepageGUI.fxml");
 			}

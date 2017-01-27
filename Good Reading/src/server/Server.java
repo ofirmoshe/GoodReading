@@ -127,14 +127,9 @@ public class Server extends AbstractServer {
 		case 1:
 			try {
 				User u = (User) msg.getMsg();
-				session.beginTransaction();
-				u.setStatus("offline");
-				u.save();
-				session.getTransaction().commit();
-				/*
-				 * t = session.beginTransaction(); session.evict(u); t.commit();
-				 * session = IBookIncPersistentManager.instance().getSession();
-				 */
+				Statement stmt = con.createStatement();
+				String sql = "UPDATE generaluser " + "SET Status='offline' WHERE ID='" + u.getID() + "'";
+				stmt.executeUpdate(sql);
 			} catch (Exception e) { // TODO Auto-generated catch block
 				e.printStackTrace();
 				session.getTransaction().rollback();
@@ -193,10 +188,9 @@ public class Server extends AbstractServer {
 					User user = (User) u;
 					if (user.getStatus().equals("offline")) {
 						try {
-							session.beginTransaction();
-							user.setStatus("online");
-							user.save();
-							session.getTransaction().commit();
+							Statement stmt = con.createStatement();
+							String sql = "UPDATE generaluser " + "SET Status='online' WHERE ID='" + u.getID() + "'";
+							stmt.executeUpdate(sql);
 						} catch (Exception e) {
 							e.printStackTrace();
 							session.getTransaction().rollback();
@@ -260,21 +254,25 @@ public class Server extends AbstractServer {
 						canDownload = "yes";
 				}
 				session.beginTransaction();
+				Views_Date v;
 				Date d = new Date();
 				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 				String today = formatter.format(d);
-				Views_Date v = Views_Date.loadViews_DateByQuery("Date='" + today + "' AND BookID='" + b.getID() + "'",
-						"BookID");
-				if (v == null) {
-					Statement stmt = con.createStatement();
+				Statement stmt = con.createStatement();
+				ResultSet result = null;
+				result = stmt.executeQuery("select ViewCount from views_date where Date='"+today+"' AND BookID='"+b.getID()+"'");
+				if (!result.isBeforeFirst()) {
+					stmt = con.createStatement();
 					String sql = "INSERT INTO views_date " + "VALUES ('" + today + "', '" + b.getID() + "', '1')";
 					stmt.executeUpdate(sql);
 				} else {
-					Statement stmt = con.createStatement();
-					String sql = "UPDATE views_date " + "SET ViewCount='" + (v.getViewCount() + 1) + "' WHERE Date='"
+					result.next();
+					stmt = con.createStatement();
+					String sql = "UPDATE views_date " + "SET ViewCount='" + (result.getInt(1) + 1) + "' WHERE Date='"
 							+ today + "' AND BookID='" + b.getID() + "'";
 					stmt.executeUpdate(sql);
 				}
+
 				session.getTransaction().commit();
 				o = new Object[7];
 				o[0] = a;
@@ -292,7 +290,7 @@ public class Server extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-		case 2:
+		case 10:
 			try {
 				Object[] o = (Object[]) msg.getMsg();
 				Book b = Book.loadBookByORMID((int) o[0]);
@@ -307,7 +305,7 @@ public class Server extends AbstractServer {
 				rev.save();
 				session.getTransaction().commit();
 				msg.setMsg("s");
-				client.sendToClient(msg);
+				sendToAllClients(msg);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -349,6 +347,7 @@ public class Server extends AbstractServer {
 			}
 
 		}
+
 	}
 
 	public void searchBookMessageHandler(Message msg, ConnectionToClient client) {
@@ -1044,7 +1043,7 @@ public class Server extends AbstractServer {
 				}
 				String words = (String) o[5];
 				if (!words.equals("")) {
-					String[] keywords = (String[]) words.split(" ");
+					String[] keywords = (String[]) words.split(", ");
 					sql = "DELETE FROM keyword_book WHERE BookID=" + b.getID();
 					stmt.execute(sql);
 					for (int i = 0; i < keywords.length; i++) {
