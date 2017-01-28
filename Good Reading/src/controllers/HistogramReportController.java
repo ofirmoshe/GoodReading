@@ -28,7 +28,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
+/**
+ * 
+ * @author Ofir
+ * Histogram Report Controller: produces a views and downloads report to a specific book, by dates.
+ */
 public class HistogramReportController extends SystemController {
 	@FXML
 	private AnchorPane anchor;
@@ -45,13 +49,22 @@ public class HistogramReportController extends SystemController {
 	private Date startDate;
 	private Date endDate;
 
+	/** 
+	 * 
+	 *  This method initializes the controller. 
+	 *  On default, the report is produced over the last 7 days.
+	 *  It sets new endDate variable to today's date, and startDate to the date 7 days ago, also displays them at the DatePickers.
+	 *  Then, it sends a message to the server, asking it to send all of the views by date and downloads records for this book.
+	 *  
+	 */
+	
 	public void initialize() {
 		super.initialize();
 		endDate = new Date();
 		UntilDate.setValue(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(endDate);
-		cal.add(Calendar.DATE, -14);
+		cal.add(Calendar.DATE, -7);
 		startDate = cal.getTime();
 		SinceDate.setValue(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		try {
@@ -61,7 +74,21 @@ public class HistogramReportController extends SystemController {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+	/**
+	 * 
+	 * This method sets the histogram with the book views and downloads data, between the dates: startDate and endDate, the values of the DatePickers.
+	 * @param xAxis the picked dates.
+	 * @param yAxis the views or downloads count, per date.
+	 * @param bc the BarChart.
+	 * 
+	 * For each date in xAxis, it matches:
+	 * 1. View count in yAxis.
+	 * 2. Download count in yAxis.
+	 * 
+	 * If there are not any views or downloads for a book in a date, it displays 0 count.
+	 * 
+	 */
 	public void setHistogram() {
 		if (!anchor.getChildren().isEmpty())
 			anchor.getChildren().remove(bc);
@@ -108,7 +135,16 @@ public class HistogramReportController extends SystemController {
 		bc.getData().addAll(series1, series2);
 		anchor.getChildren().add(bc);
 	}
-
+	/**
+	 * This method implements AbstractController's method. It handles message
+	 * from server.
+	 * 
+	 * @param msg
+	 *            case 1: 
+	 *				The message is the views by date array and the downloads array. 
+	 *				This case just initialize the variables views, downloads with the data brought by the server.
+	 */        
+	
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {
