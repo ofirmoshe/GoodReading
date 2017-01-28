@@ -23,6 +23,7 @@ public abstract class AbstractController {
 
 	/**
 	 * This method saves the current controller when initialized.
+	 * The extending controllers call this initializer and updates the current controller to be itself.
 	 */
 	public void initialize() {
 		instance = this;

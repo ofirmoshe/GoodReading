@@ -63,8 +63,8 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="fieldLabel" layoutX="228.0" layoutY="59.0" text="Field Name" />
-                  <Label fx:id="authorLabel" layoutX="228.0" layoutY="42.0" text="By Author Name" />
+                  <Label fx:id="fieldLabel" layoutX="228.0" layoutY="59.0" />
+                  <Label fx:id="authorLabel" layoutX="228.0" layoutY="42.0" />
                   <AnchorPane layoutX="673.0" layoutY="38.0" onMouseReleased="#getBookOnClick">
                      <children>
                         <ImageView fitHeight="42.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
@@ -82,7 +82,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </AnchorPane>
-                  <AnchorPane fx:id="priceAnchor" layoutX="701.0" layoutY="14.0">
+                  <AnchorPane fx:id="priceAnchor" layoutX="701.0" layoutY="14.0" visible="false">
                      <children>
                         <Label text="Price: ">
                            <font>
@@ -96,7 +96,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="subjectLabel" layoutX="228.0" layoutY="76.0" text="Subject Name" />
+                  <Label fx:id="subjectLabel" layoutX="228.0" layoutY="76.0" />
                   <Label layoutX="221.0" layoutY="229.0" text="Reviews">
                      <font>
                         <Font name="System Bold" size="14.0" />
@@ -129,13 +129,17 @@
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <TextArea fx:id="addReviewText" layoutX="220.0" layoutY="396.0" prefHeight="74.0" prefWidth="583.0" wrapText="true" />
-                  <Label fx:id="addReviewLabel" layoutX="221.0" layoutY="368.0" text="Add new review">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="addReviewButton" layoutX="726.0" layoutY="487.0" mnemonicParsing="false" onAction="#addReview" prefHeight="14.0" prefWidth="72.0" text="Send" />
+                  <AnchorPane fx:id="addReviewAnchor" layoutX="220.0" layoutY="368.0" visible="false">
+                     <children>
+                        <TextArea fx:id="addReviewText" layoutY="28.0" prefHeight="74.0" prefWidth="583.0" wrapText="true" />
+                        <Label fx:id="addReviewLabel" layoutX="1.0" text="Add new review">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="addReviewButton" layoutX="506.0" layoutY="119.0" mnemonicParsing="false" onAction="#addReview" prefHeight="14.0" prefWidth="72.0" text="Send" />
+                     </children>
+                  </AnchorPane>
                   <Label fx:id="reviewSentLabel" layoutX="397.0" layoutY="390.0" prefHeight="21.0" prefWidth="239.0" text="Your review is waiting to be approved." visible="false">
                      <font>
                         <Font size="13.0" />

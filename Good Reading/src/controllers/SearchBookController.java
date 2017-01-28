@@ -311,10 +311,11 @@ public class SearchBookController extends SystemController {
 					pop.setLayoutX(120);
 					pop.setTextFill(Color.CRIMSON);
 					ap.getChildren().add(pop);
-					String r = "Absolute- #"+ranks[books[y].getID()];
+					String r = "Absolute- #"+ranks[books[y].getID()]+" of "+ranks[0];
 					for (int i = 0; i < book_fields[y].length; i++)
 						r = r + ", In " + book_fields[y][i].getField()+"- #"
-								+fieldRanks[book_fields[y][i].getID()-1][books[y].getID()];
+								+fieldRanks[book_fields[y][i].getID()-1][books[y].getID()]
+										+" of "+fieldRanks[book_fields[y][i].getID()-1][0];
 					Label rankLabel = new Label(r);
 					rankLabel.setFont(Font.font("System", 12));
 					rankLabel.setLayoutY(142);

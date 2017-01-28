@@ -531,6 +531,7 @@ public class Server extends AbstractServer {
 					}
 				});
 				int[] ranks = new int[books[books.length - 1].getID() + 1];
+				ranks[0]=books.length;
 				for (int i = 0; i < books.length; i++) {
 					ranks[purchases[i][0]] = i + 1;
 				}
@@ -549,6 +550,7 @@ public class Server extends AbstractServer {
 							return Integer.compare(o2[1], o1[1]);
 						}
 					});
+					fieldRanks[i][0]= fbooks.length;
 					for (int j = 0; j < fbooks.length; j++)
 						fieldRanks[i][purchases[j][0]] = j + 1;
 				}

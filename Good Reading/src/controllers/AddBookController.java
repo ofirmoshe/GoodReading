@@ -52,10 +52,15 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
+/**
+ * Add Book Controller is the controller of the add book page.
+ * 
+ * @author ofirmoshe
+ *
+ */
 public class AddBookController extends SystemController {
 
-	private Author[] authors;
+	private Author[] authors; 
 	public static Field[] fields;
 	public static Subject[][] subjects;
 	private int currSubCount;
@@ -94,14 +99,17 @@ public class AddBookController extends SystemController {
 	private TextField fb2Field;
 	@FXML
 	private TextField newAuthorField;
-
+	/**
+	 * Initializing the add book page.
+	 * At first, it sends a message to the server, in order to receive the authors, fields and subjects available on database.
+	 * After that being done, it sets a default "no-image" image for a book on @param bimg parameter.
+	 */
 	public void initialize() {
 		super.initialize();
 		Message msg = new Message("add book", 1);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		subjectChecklist.setPrefHeight(1);
@@ -111,12 +119,15 @@ public class AddBookController extends SystemController {
 		try {
 			ImageIO.write(bImage, "jpg", s);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		bimg = s.toByteArray();
 	}
-
+	/** 
+	 * This event is being called whenever the 'Upload Image' button is clicked.
+	 * It displays an open dialog, allowing the user to choose an image from its PC.
+	 * Then, we save the input image at bimg parameter.
+	 */
 	public void uploadImageOnClick() {
 		try {
 			FileChooser fileChooser = new FileChooser();
@@ -137,6 +148,11 @@ public class AddBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This event is being called whenever the 'Upload' button is pressed.
+	 * It displays an open dialog, allowing the user to choose a PDF file from its PC.
+	 * Then, we save the input file at formats[0] parameter and update path TextField to the file's path.
+	 */
 	public void uploadPDFOnClick() {
 		try {
 			FileChooser fileChooser = new FileChooser();
@@ -154,6 +170,11 @@ public class AddBookController extends SystemController {
 		}
 	} 
 	
+	/**
+	 * This event is being called whenever the 'Upload' button is pressed.
+	 * It displays an open dialog, allowing the user to choose a DOC file from its PC.
+	 * Then, we save the input file at formats[1] parameter and update path TextField to the file's path.
+	 */
 	public void uploadDOCOnClick() {
 		try {
 			FileChooser fileChooser = new FileChooser();
@@ -171,6 +192,11 @@ public class AddBookController extends SystemController {
 		}
 	} 
 	
+	/**
+	 * This event is being called whenever the 'Upload' button is pressed.
+	 * It displays an open dialog, allowing the user to choose a FB2 file from its PC.
+	 * Then, we save the input file at formats[2] parameter and update path TextField to the file's path.
+	 */
 	public void uploadFB2OnClick() {
 		try {
 			FileChooser fileChooser = new FileChooser();
@@ -187,8 +213,15 @@ public class AddBookController extends SystemController {
 			e.printStackTrace();
 		}
 	} 
+	
+	/**
+	 * This event is being called whenever the 'Add Book' button is pressed.
+	 * The method immediately checks that the required input fields (title, language, fields, author, price) are not empty using the mustFlag boolean parameter.
+	 * In case that one or more of the fields are empty, it displays a popup message, alerts the issue. 
+	 * Else, it fills up an Object array with the new book data and sends it to the server, requesting to add that new book to the database.
+	 */
+	
 	public void addBookOnClick() {
-		// ClientUI.instance.getHostServices().showDocument(docField.getText());
 		Object[] o = new Object[14];
 		boolean mustFlag = false;
 		if (!titleField.getText().equals(""))
@@ -293,11 +326,22 @@ public class AddBookController extends SystemController {
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * This method implements AbstractController's method. It handles message
+	 * from server, and displays the book's data.
+	 * 
+	 * @param msg
+	 *            case 1: 
+	 *              The message is an object array. index 0- contains a
+	 *            	fields array index 1- contains a subjects array index 2- contains
+	 *            	an authors array.
+	 *            case 2:
+	 *            	The message is a string, indicates a success ("s") or failure ("f") of adding book method.
+	 *            	It shows an appropriate popup message for each of these options.
+	 *            	 */
 	@Override
 	public void handleMessage(Message msg) {
 		super.handleMessage(msg);
@@ -336,7 +380,11 @@ public class AddBookController extends SystemController {
 			}
 		}
 	}
-
+	/**
+	 * This method initializes the fields and authors checkboxes.
+	 * @param o
+	 * 	Array of fields or of authors.
+	 */
 	public void setCheckboxes(Object[] o) {
 		for (int i = 0; i < o.length; i++) {
 			CheckBox cb = new CheckBox();
@@ -390,7 +438,9 @@ public class AddBookController extends SystemController {
 			}
 		}
 	}
-
+	/**
+	 * This method initializes the subjects checkbox, based on the checked fields.
+	 */
 	public void setSubjects() {
 		if (subjectGrid != null)
 			subjectChecklist.getChildren().remove(subjectGrid);

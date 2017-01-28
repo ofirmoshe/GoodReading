@@ -9,7 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-
+/** 
+ * Add User Controller. 
+ * @author guyzi
+ *
+ */
 public class AddUserController extends SystemController {
 
 	@FXML
