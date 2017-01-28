@@ -46,6 +46,12 @@ import i_book.Field;
 import i_book.Keyword;
 import i_book.Subject;
 
+/**
+ * Edit book controller is the controller of the edit book page, where librarians
+ * can edit all the book's data, and library manager can hide the book.
+ * @author guyzi
+ *
+ */
 public class EditBookController extends SystemController {
 
 	public static int book_id;
@@ -99,6 +105,12 @@ public class EditBookController extends SystemController {
 	@FXML
 	private Label hideLabel;
 
+	/**
+	 * This method initializes the page, and sends a message to the server to get all the 
+	 * book's data. If the the employee is library manager it would display the 'hide book'
+	 * button.
+	 * 
+	 */
 	public void initialize() {
 		super.initialize();
 		formatField.setEditable(false);
@@ -115,6 +127,11 @@ public class EditBookController extends SystemController {
 			hideButton.setVisible(true);
 	}
 
+	/**
+	 * This method is called when the change image button is click.
+	 * The method opens a file chooser window for the user to choose an image to
+	 * replace the current image of the book.
+	 */
 	public void changeImageOnClick() {
 		try {
 			FileChooser fileChooser = new FileChooser();
@@ -135,6 +152,11 @@ public class EditBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method is called when the upload button near the format field is pressed.
+	 * The method opens a file chooser window for the user to choose a file to upload
+	 * according to the format he has chosen in the format choice box.
+	 */
 	public void uploadFormatOnClick() {
 		Path path;
 		String f = formatBox.getSelectionModel().getSelectedItem();
@@ -168,6 +190,10 @@ public class EditBookController extends SystemController {
 
 	}
 
+	/**
+	 * This method is called when the remove button near the format field is pressed.
+	 * The method removes the chosen format according to the selection in the format choice box.
+	 */
 	public void removeFormatOnClick() {
 		String f = formatBox.getSelectionModel().getSelectedItem();
 		switch (f) {
@@ -189,6 +215,11 @@ public class EditBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method is called when the "Remove This Book" button is pressed.
+	 * The method displays a confirmation message to the user and according to his choice
+	 * stops or proceeds to notify the server to remove the specified book. 
+	 */
 	public void removeBookOnClick() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Edit Book");
@@ -209,6 +240,11 @@ public class EditBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method is called when the "hide book" button is pressed.
+	 * The method notify the server to hide or to show the book (by changing is status)
+	 * according to the book's current status.
+	 */
 	public void hideBookOnClick() {
 		Message msg = new Message("edit book", 4, book_id);
 		try {
@@ -223,6 +259,12 @@ public class EditBookController extends SystemController {
 			hideLabel.setText("Hide Book");
 	}
 
+	/**
+	 * This method is called when the "Save All Changes" button is pressed.
+	 * The method collects all the input the user entered, checks validation of 
+	 * the input, and if valid sends to the server all the new data to replace the old
+	 * data with.
+	 */
 	public void editBookOnClick() {
 		Object[] o = new Object[14];
 		boolean mustFlag = false;
@@ -325,7 +367,33 @@ public class EditBookController extends SystemController {
 		}
 
 	}
-
+	
+	/**
+	 * This method implements AbstractController's method. It handles messages
+	 * from server.
+	 * 
+	 * @param msg
+	 *            case 1: 
+	 *              The message is an object array. 
+	 *              index 0- field array.
+	 *              index 1- subject matrix (organized by fields).
+	 *              index 2- author array.
+	 *              index 3- contains the book's field array.
+	 *              index 4 -  contains the book's subject matrix (organized by fields)
+	 *           	index 5 - the book's author array.
+	 *           	index 6- the book (contains all the book's 'dry' data).
+	 *           	The method displays all this data to the user.
+	 *           case 2:
+	 *           	The message is a string. if it's "s" the method displays an 
+	 *           	"edit successful" message to the user, else it displays an
+	 *           	"edit failed"  message to the user.
+	 *           case 3:
+	 *           	The message is a string. if it's "s" the method displays an 
+	 *           	"remove successful" message to the user, else it displays an
+	 *           	"remove failed"  message to the user.
+	 *           
+	 * 
+	 */
 	@Override
 	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {
@@ -499,7 +567,10 @@ public class EditBookController extends SystemController {
 			break;
 		}
 	}
-
+	/**
+	 * This method sets the field check combo box with all the fields in DB, 
+	 * and checks the book's fields.
+	 */
 	public void setFieldBox() {
 		ObservableList<String> olf = FXCollections.observableArrayList();
 		for (int i = 0; i < fields.length; i++) {
@@ -523,6 +594,10 @@ public class EditBookController extends SystemController {
 		scrollAnchor.getChildren().add(fieldBox);
 	}
 
+	/**
+	 * This method sets the author check combo box with all the authors in DB, 
+	 * and checks the book's authors. 
+	 */
 	public void setAuthorBox() {
 		ObservableList<String> ola = FXCollections.observableArrayList();
 		for (int i = 0; i < authors.length; i++) {
@@ -540,6 +615,10 @@ public class EditBookController extends SystemController {
 		scrollAnchor.getChildren().add(authorBox);
 	}
 
+	/**
+	 * This method sets sets the subject check combo box with all the subjects of the 
+	 * chosen field, and checks the book's subjects.
+	 */
 	public void setSubjectBox() {
 		ObservableList<Integer> cf = fieldBox.getCheckModel().getCheckedIndices();
 		ObservableList<String> ols = FXCollections.observableArrayList();

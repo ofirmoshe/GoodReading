@@ -88,7 +88,8 @@ public class SearchBookController extends SystemController {
 	private ChoiceBox<String> subjectBox;
 
 	/**
-	 * This method initializes the controller.
+	 * This method initializes the page and sends a message to the server
+	 * to get all the fields, subjects and ranks.
 	 */
 	public void initialize() {
 		super.initialize();
@@ -113,7 +114,8 @@ public class SearchBookController extends SystemController {
 
 	/**
 	 * This method is called when the search button is clicked, or when Enter
-	 * key is pressed. Sends the input query to the server.
+	 * key is pressed. The method collects all the input entered by the user,
+	 * composing a query (string array) and sends it to the server.
 	 */
 	public void searchOnEnterPressed() {
 		query[0] = optionBox.getSelectionModel().getSelectedItem();
@@ -142,9 +144,13 @@ public class SearchBookController extends SystemController {
 	 *            case 1: The message is an object array. index 0 - Book array.
 	 *            index 1 - Author matrix, each index is an array of
 	 *            book_authors of the matching book in the book array. index 2 -
-	 *            book_fields matrix. index 3 - Subject matrix. If the book
+	 *            book_fields matrix. index 3 - book_subjects matrix. If the book
 	 *            array is empty, no result message is displayed, else the book
 	 *            grid is set according to this data.
+	 *            case 2: The message is an object array. index 0 - fields array.
+	 *            index 1 - subject array. index 2 - ranks array (absolute ranks organized
+	 *            by book id). index 3 - ranks in fields, for each field there is an array
+	 *            of it's books ranks organized by book id.
 	 */
 	@Override
 	public void handleMessage(Message msg) { super.handleMessage(msg);
@@ -193,6 +199,11 @@ public class SearchBookController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method sets the field choice box with all the fields in DB, and an
+	 * Change Listener that sets the subject choice box with the subject
+	 * of the chosen field.
+	 */
 	public void setFieldBox() {
 		ObservableList<String> olf = FXCollections.observableArrayList();
 		olf.add("None");
@@ -218,7 +229,10 @@ public class SearchBookController extends SystemController {
 
 	/**
 	 * This method sets the book grid with books, and event handlers for each
-	 * book. The book grid is added to the scroll anchor.
+	 * book according to a string variable that indicates for what use the user
+	 * searches books. For example if what="book report" each result would display the book
+	 * ranks and a button that would redirect to the book report page.
+	 *  The book grid is added to the scroll anchor.
 	 */
 	public void setBookGrid() {
 		try {

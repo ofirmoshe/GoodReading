@@ -27,10 +27,19 @@ public class AddUserController extends SystemController {
 	@FXML
 	private TextField payField;
 
+	/**
+	 * This method initializes the page.
+	 */
 	public void initialize() {
 		super.initialize();
 	}
 
+	/**
+	 * This method is called when the "add user" button is pressed.
+	 * The method collects all the input the user entered and checks validation.
+	 * if not valid the method displays a "check input" message to the user, if valid 
+	 * the method sends all the data to the server to be added as a new user.
+	 */
 	public void addUserOnClick() {
 		Object[] o = new Object[5];
 		boolean mustFlag = false;
@@ -66,6 +75,16 @@ public class AddUserController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method implements AbstractController's method. It handles message
+	 * from server, and displays the book's data.
+	 * 
+	 * @param msg
+	 *            	The message is a string, indicates a success ("s") or failure ("f") of adding book method.
+	 *            	It shows an appropriate popup message for each of these options. Also indicates
+	 *           	if the user already exists ("e").
+	 *            	 
+	 */
 	@Override
 	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {

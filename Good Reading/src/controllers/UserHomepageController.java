@@ -76,12 +76,12 @@ public class UserHomepageController extends SystemController {
 	private ScrollPane scrollPane;
 
 	/**
-	 * This method initializes the controller and the book grid to the initial
-	 * grid (loading).
+	 * This method initializes the page, refreshes the client so it will get the
+	 * most updated data, and sends a message to the server to get the book
+	 * list.
 	 */
 	public void initialize() {
 		super.initialize();
-		//initBookGrid();
 		setBookGrid();
 		Client.refresh();
 		Message msg = new Message("user homepage", 1);
@@ -91,31 +91,6 @@ public class UserHomepageController extends SystemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * This method is called when the mouse enter the main anchor of the page,
-	 * and sets the book grid.
-	 */
-	public void mainAnchorOnEnter() {
-		// setBookGrid();
-	}
-
-	/**
-	 * This method initializes the book grid and adds it to the scroll anchor.
-	 */
-	public void initBookGrid() {
-		initGrid = new GridPane();
-		for (int y = 0; y < 2; y++) {
-			for (int x = 0; x < 5; x++) {
-				Image img = new Image(GraphicsImporter.class.getResource("loading_book.jpg").toString());
-				ImageView iv = new ImageView(img);
-				iv.setFitWidth(180);
-				iv.setFitHeight(270);
-				initGrid.add(iv, x, y);
-			}
-		}
-		scrollAnchor.getChildren().add(initGrid);
 	}
 
 	/**
@@ -215,6 +190,10 @@ public class UserHomepageController extends SystemController {
 		scrollAnchor.getChildren().add(grid);
 	}
 
+	/**
+	 * This method handles messages from server. It gets the book list and sets
+	 * the book grid with it.
+	 */
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {

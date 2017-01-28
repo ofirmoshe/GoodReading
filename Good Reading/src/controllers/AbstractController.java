@@ -38,11 +38,4 @@ public abstract class AbstractController {
 	 */
 	public abstract void handleMessage(Message msg);
 
-	/**
-	 * This method is overriding "toString" method.
-	 */
-	public String toString() {
-		return "Abstract Controller";
-	}
-
 }
