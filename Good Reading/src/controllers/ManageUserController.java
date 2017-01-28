@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.IOException;
+
+
 import java.util.Date;
 
 import boundary.ClientUI;
@@ -17,6 +19,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
+
+/**
+ * @author Ofir
+ * Manage User Controller; Associated to the ManageUserGUI.fxml file. 
+ * Basically, allows edit, update and delete user's information.
+ * This page displays different functionalities to different positions (eg. librarian can not block user).
+ */
 
 public class ManageUserController extends SystemController {
 	public static User user;
@@ -35,7 +44,16 @@ public class ManageUserController extends SystemController {
 	@FXML
 	private CheckBox memberCheckbox;
 	private User_Membership[] um;
-
+	
+	/** 
+	 * 
+	 *  This method initializes the controller, it uses a public static variable named user,
+	 *  which initialized right after a specific user gets picked on the user-search list.
+	 *  Using that user variable, we fill up the fields with the current user's information (first+last name, id (uneditable), password (hidden), payment info and status).
+	 *  Next, the method requests to get the user's membership information, if exists. It will get the information at handleMessage function.
+	 *  
+	 */
+	
 	public void initialize() {
 		super.initialize();
 		fnameField.setText(user.getFname());
@@ -48,13 +66,19 @@ public class ManageUserController extends SystemController {
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (user.getStatus().equals("banned"))
 			blockedCheckbox.setSelected(true);
 	}
-
+	/** 
+	 * 
+	 * This method called right after the 'Edit User' button is pressed.
+	 * First, The method immediately checks that the required input fields (first name, last name, id, password) are not empty using the mustFlag boolean parameter.
+	 * In case that one or more of the fields are empty, it displays a popup message, alerts the issue. 
+	 * Else, it fills up an Object array with the user data and sends it to the server, requesting to update that user in database.
+	 * 
+	 */
 	public void editUserOnClick() {
 		Object[] o = new Object[7];
 		boolean mustFlag = false;
@@ -87,11 +111,26 @@ public class ManageUserController extends SystemController {
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * This method implements AbstractController's method. It handles message
+	 * from server.
+	 * 
+	 * @param msg
+	 *            case 1: 
+	 *				The message is string, tells if the user data changes were saved successfully.
+	 *				if it was, it displays a popup message informing the success.
+	 *				else, it shows an error message, asking the user to try again.
+	 *            case 2: 
+	 *            	The message is an array of user's memberships. 
+	 *            	In case that there is an active membership to the user,
+	 *            	it displays a checkbox to the screen, including the membership start and end date.
+	 *            	It will be displayed to the employee if his position is librarian or librarian employee.
+	 */
+	
 	@Override
 	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {

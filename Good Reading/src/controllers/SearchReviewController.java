@@ -45,9 +45,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * Search book controller is the controller of the search book page.
+ * Search review controller is the controller of the search review page.
  * 
- * @author guyzi
+ * @author Ofir
  *
  */
 public class SearchReviewController extends SystemController {
@@ -71,6 +71,8 @@ public class SearchReviewController extends SystemController {
 
 	/**
 	 * This method initializes the controller.
+	 * It also sets a scrollAnchor, which the review results will be displayed on.
+	 * 
 	 */
 	public void initialize() {
 		super.initialize();
@@ -80,8 +82,8 @@ public class SearchReviewController extends SystemController {
 	}
 
 	/**
-	 * This method is called when the search button is clicked, or when Enter
-	 * key is pressed. Sends the input query to the server.
+	 * This method is called when the search button is clicked, or when Enter key is pressed. 
+	 * Sends the input query (title, author, keyword(s)) to the server.
 	 */
 	public void searchOnEnterPressed() {
 		query[0] = optionBox.getSelectionModel().getSelectedItem();
@@ -92,7 +94,6 @@ public class SearchReviewController extends SystemController {
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -101,12 +102,11 @@ public class SearchReviewController extends SystemController {
 	 * This method implements the abstract controller method.
 	 * 
 	 * @param msg
-	 *            case 1: The message is an object array. index 0 - Book array.
-	 *            index 1 - Author matrix, each index is an array of
-	 *            book_authors of the matching book in the book array. index 2 -
-	 *            book_fields matrix. index 3 - Subject matrix. If the book
-	 *            array is empty, no result message is displayed, else the book
-	 *            grid is set according to this data.
+	 *            case 1: The message is a string array. index 0 - Reviews text array.
+	 *            index 1 - Book titles array.
+	 *            index 2 - Review authors names array.
+	 *            If the review array is empty, no reviews message is displayed, 
+	 *            else the reviews grid is set according to this data.
 	 */
 	@Override
 	public void handleMessage(Message msg) {
@@ -144,8 +144,9 @@ public class SearchReviewController extends SystemController {
 	}
 
 	/**
-	 * This method sets the book grid with books, and event handlers for each
-	 * book. The book grid is added to the scroll anchor.
+	 * This method sets the reviews grid with reviews (Review author name, Book title, Review Text)
+	 * and control buttons (edit, approve, deny) for each review. 
+	 * The review grid is added to the scroll anchor.
 	 */
 	public void setReviewGrid() {
 		grid = new GridPane();

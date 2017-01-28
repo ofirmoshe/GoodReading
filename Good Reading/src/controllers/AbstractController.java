@@ -23,7 +23,8 @@ public abstract class AbstractController {
 
 	/**
 	 * This method saves the current controller when initialized.
-	 * The extending controllers call this initializer and updates the current controller to be itself.
+	 * The extending controllers call this initializer and updates the current controller instance to be itself.
+	 * The Client class uses that instance variable at handleMessageFromServer method, and routing the message to its correct destination.
 	 */
 	public void initialize() {
 		instance = this;
