@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InventoryManagementController">
+<AnchorPane fx:id="mainAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InventoryManagementController">
    <children>
       <ImageView>
          <image>
@@ -50,7 +50,7 @@
       <Label layoutX="125.0" layoutY="177.0" text="Add Author Name" />
       <AnchorPane fx:id="chooseFieldAnchor" layoutX="480.0" layoutY="254.0" visible="false">
          <children>
-            <Label text="Choos Fileld for this subject" />
+            <Label text="Choose Fileld for this subject" />
             <ChoiceBox fx:id="cb" layoutY="22.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
@@ -95,11 +95,17 @@
       <TextField fx:id="subjectField" layoutX="126.0" layoutY="288.0" onInputMethodTextChanged="#subjectOnInput" onKeyPressed="#subjectOnInput" onKeyReleased="#subjectOnInput" onKeyTyped="#subjectOnInput" prefHeight="25.0" prefWidth="150.0" />
       <Label layoutX="129.0" layoutY="262.0" text="Add Subject Name" />
       <CheckBox fx:id="newFieldCheck" layoutX="143.0" layoutY="329.0" mnemonicParsing="false" text="Do you want to add this subject for new Field?" textFill="#030303" visible="false" />
-      <Label layoutX="149.0" layoutY="384.0" text="Remove Author" />
-      <Label layoutX="530.0" layoutY="386.0" text="Remove Field" />
-      <Label layoutX="341.0" layoutY="386.0" text="Remove Subject" />
-      <ComboBox fx:id="authorComboBox" layoutX="116.0" layoutY="421.0" prefWidth="150.0" />
-      <ComboBox fx:id="subjectComboBox" layoutX="309.0" layoutY="421.0" prefWidth="150.0" />
-      <ComboBox fx:id="fieldComboBox" layoutX="499.0" layoutY="421.0" prefWidth="150.0" />
+      <Label layoutX="200.0" layoutY="363.0" text="Update Author" />
+      <Label layoutX="205.0" layoutY="417.0" text="Update Field" />
+      <Label layoutX="198.0" layoutY="468.0" text="Update Subject" />
+      <ComboBox fx:id="authorComboBox" layoutX="286.0" layoutY="359.0" prefWidth="150.0" />
+      <ComboBox fx:id="subjectComboBox" layoutX="286.0" layoutY="465.0" prefWidth="150.0" />
+      <ComboBox fx:id="fieldComboBox" layoutX="286.0" layoutY="413.0" prefWidth="150.0" />
+      <Label layoutX="449.0" layoutY="363.0" text="To" />
+      <TextField fx:id="newAuthorName" layoutX="474.0" layoutY="359.0" />
+      <TextField fx:id="newFieldName" layoutX="474.0" layoutY="413.0" />
+      <Label layoutX="449.0" layoutY="417.0" text="To" />
+      <Label layoutX="449.0" layoutY="469.0" text="To" />
+      <TextField fx:id="newSubjectName" layoutX="474.0" layoutY="465.0" />
    </children>
 </AnchorPane>

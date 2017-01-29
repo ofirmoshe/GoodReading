@@ -28,7 +28,7 @@ CREATE TABLE `author` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `author` (
 
 LOCK TABLES `author` WRITE;
 /*!40000 ALTER TABLE `author` DISABLE KEYS */;
-INSERT INTO `author` VALUES (1,'JK Rowling'),(2,'Matthew Iden'),(3,'John Green'),(4,'Amy Ewing'),(5,'Miriam Pascal'),(6,'W. Bruce Cameron'),(7,'Jodi Picoult'),(8,'Ann Patchett'),(9,'Nicholas Sparks'),(10,'James Luceno'),(11,'George Orwell'),(12,'Brian Freeman'),(13,'Gilly Macmillan'),(14,'Guy Zion'),(15,'John Lewis'),(16,'Andrew Aydin'),(17,'Nate Powell'),(18,'Ofri Zion'),(19,'Ram Oren'),(20,'Noy Machlev');
+INSERT INTO `author` VALUES (1,'JK Rowling'),(2,'Matthew Iden'),(3,'John Green'),(4,'Amy Ewing'),(5,'Miriam Pascal'),(6,'W. Bruce Cameron'),(7,'Jodi Picoult'),(8,'Ann Patchett'),(9,'Nicholas Sparks'),(10,'James Luceno'),(11,'George Orwell'),(12,'Brian Freeman'),(13,'Gilly Macmillan'),(15,'John Lewis'),(16,'Andrew Aydin'),(17,'Nate Powell'),(19,'Ram Oren'),(25,'Amos Oz');
 /*!40000 ALTER TABLE `author` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +65,7 @@ CREATE TABLE `author_book` (
 
 LOCK TABLES `author_book` WRITE;
 /*!40000 ALTER TABLE `author_book` DISABLE KEYS */;
-INSERT INTO `author_book` VALUES (1,1),(1,3),(1,12),(2,2),(4,4),(4,6),(5,5),(7,7),(8,8),(9,9),(10,3),(10,10),(11,11),(12,13),(13,14),(14,6),(15,15),(16,15),(17,15),(19,26);
+INSERT INTO `author_book` VALUES (1,1),(1,3),(1,12),(2,2),(4,4),(4,6),(5,5),(7,7),(8,8),(9,9),(10,3),(10,10),(11,11),(12,13),(13,14),(15,15),(16,15),(17,15),(19,26);
 /*!40000 ALTER TABLE `author_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `book` (
   `Price` float NOT NULL,
   `Status` varchar(255) DEFAULT 'visible',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,7 +172,7 @@ CREATE TABLE `field` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Field` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +181,7 @@ CREATE TABLE `field` (
 
 LOCK TABLES `field` WRITE;
 /*!40000 ALTER TABLE `field` DISABLE KEYS */;
-INSERT INTO `field` VALUES (1,'Literature & Fiction'),(2,'Arts & Photography'),(3,'Biographies & Memoirs'),(4,'Business & Money'),(5,'Christian Books & Bibles'),(6,'Comics & Graphic Novels'),(7,'Computers & Technology'),(8,'Cookbooks, Food & Wine'),(9,'Crafts, Hobbies & Home'),(10,'Education & Teaching'),(11,'Engineering & Transportation'),(12,'Health, Fitness & Dieting'),(13,'History'),(14,'Humor & Entertainment'),(15,'Mystery, Thriller & Suspense'),(16,'Politics & Social Sciences'),(17,'Novel');
+INSERT INTO `field` VALUES (1,'Literature & Fiction'),(2,'Arts & Photography'),(3,'Biographies & Memoirs'),(4,'Business & Money'),(5,'Christian Books & Bibles'),(6,'Comics & Graphic Novels'),(7,'Computers & Technology'),(8,'Cookbooks, Food & Wine'),(9,'Crafts, Hobbies & Home'),(10,'Education & Teaching'),(11,'Engineering & Transportation'),(12,'Health & Dieting'),(13,'History'),(14,'Humor & Entertainment'),(15,'Mystery, Thriller & Suspense'),(16,'Politics & Social Sciences'),(17,'Novel');
 /*!40000 ALTER TABLE `field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +214,7 @@ CREATE TABLE `generaluser` (
 
 LOCK TABLES `generaluser` WRITE;
 /*!40000 ALTER TABLE `generaluser` DISABLE KEYS */;
-INSERT INTO `generaluser` VALUES ('1','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','offline','User'),('10','Sharon','Tidhar','111',5,NULL,NULL,'Manager','12345','offline','Employee'),('15','Sergey','Mazin','15',NULL,NULL,NULL,NULL,'987654','offline','User'),('2','Ofir','Moshe','0101',NULL,NULL,NULL,'Library Employee','2345678','offline','User'),('3','Noy','Machlev','666',NULL,NULL,NULL,NULL,'3456','offline','User'),('4','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User'),('5','Malki','Grossman','777',1,NULL,NULL,'Librarian','','offline','Employee'),('6','Avi','Sofer','000',2,NULL,NULL,'Library Employee','909090','offline','Employee'),('7','Shlomi','Zohar','321',4,NULL,NULL,'Editor','9035985','offline','Employee'),('8','Mendel','Puma','100',3,NULL,NULL,'Library Manager','284923','offline','Employee'),('9','Tzviki','Fushkash','999',NULL,NULL,NULL,NULL,'012311','offline','User');
+INSERT INTO `generaluser` VALUES ('10','Sharon','Tidhar','111',5,NULL,NULL,'Manager','12345','offline','Employee'),('15','Sergey','Mazin','15',NULL,NULL,NULL,NULL,'987654','offline','User'),('206238487','Noy','Machlev','666',NULL,NULL,NULL,NULL,'3456','offline','User'),('206758690','Ofir','Moshe','0101',NULL,NULL,NULL,'Library Employee','2345678','offline','User'),('316215318','Guy','Zion','123',NULL,NULL,NULL,NULL,'123456','online','User'),('316373331','Ofir','Chava','1010',NULL,NULL,NULL,NULL,'456789','offline','User'),('5','Malki','Grossman','777',1,NULL,NULL,'Librarian','','offline','Employee'),('6','Avi','Sofer','000',2,NULL,NULL,'Library Employee','909090','offline','Employee'),('7','Shlomi','Zohar','321',4,NULL,NULL,'Editor','9035985','offline','Employee'),('8','Mendel','Puma','100',3,NULL,NULL,'Library Manager','284923','offline','Employee'),('9','Tzviki','Fushkash','999',NULL,NULL,NULL,NULL,'012311','offline','User');
 /*!40000 ALTER TABLE `generaluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,7 +327,7 @@ CREATE TABLE `paymentrequest` (
 
 LOCK TABLES `paymentrequest` WRITE;
 /*!40000 ALTER TABLE `paymentrequest` DISABLE KEYS */;
-INSERT INTO `paymentrequest` VALUES (59,NULL,NULL,'3','2017-01-10','345678','approved'),(60,NULL,NULL,'1','2017-01-11','123456','approved'),(62,1,NULL,'1','2017-01-18','123456','approved'),(63,1,NULL,'3','2017-01-18','345678','approved'),(64,2,NULL,'4','2017-01-18','456789','approved'),(66,NULL,9,'4','2017-01-18','456789','approved'),(67,NULL,NULL,'4','2017-01-18','456789','approved'),(69,2,NULL,'2','2017-01-19','234567','approved'),(70,NULL,14,'9','2017-01-19','012311','approved'),(71,NULL,NULL,'9','2017-01-19','012311','approved'),(75,NULL,6,'9','2017-01-22','012311','denied'),(76,NULL,6,'9','2017-01-22','012311','denied'),(77,NULL,10,'15','2017-01-25','987654','denied'),(78,1,NULL,'15','2017-01-25','987654','denied'),(79,NULL,15,'15','2017-01-26','987654','approved'),(80,NULL,26,'2','2017-01-27','2345678','approved');
+INSERT INTO `paymentrequest` VALUES (59,NULL,NULL,'206238487','2017-01-10','345678','approved'),(60,NULL,NULL,'316215318','2017-01-11','123456','approved'),(62,1,NULL,'316215318','2017-01-18','123456','approved'),(63,1,NULL,'206238487','2017-01-18','345678','approved'),(64,2,NULL,'316373331','2017-01-18','456789','approved'),(66,NULL,9,'316373331','2017-01-18','456789','approved'),(67,NULL,NULL,'316373331','2017-01-18','456789','approved'),(69,2,NULL,'206758690','2017-01-19','234567','approved'),(70,NULL,14,'9','2017-01-19','012311','approved'),(71,NULL,NULL,'9','2017-01-19','012311','approved'),(75,NULL,6,'9','2017-01-22','012311','denied'),(76,NULL,6,'9','2017-01-22','012311','denied'),(77,NULL,10,'15','2017-01-25','987654','denied'),(78,1,NULL,'15','2017-01-25','987654','denied'),(79,NULL,15,'15','2017-01-26','987654','approved'),(80,NULL,26,'206758690','2017-01-27','2345678','approved');
 /*!40000 ALTER TABLE `paymentrequest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,7 +356,7 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
-INSERT INTO `review` VALUES (4,'I love this book really really!','approved','1',14),(6,'she knew nothing','approved','2',14),(8,'good book, i had fun to read it','approved','9',14),(13,'very aswesome ','approved','3',14),(14,'it is kinda boring','approved','1',11),(17,'I wouldn\'t recommend that','approved','1',13),(18,'I love that author and this book, very good! get it!','approved','1',9),(28,'רם אורן אחלה גבר היה איתי ביסודי אכלנו פיתה יחד','approved','1',26),(29,'nice book!','approved','4',1),(30,'so much darkness in one book!! way to much for me','approved','4',4),(31,'the best book I have ever read! WOW!!!!!!!!!','approved','4',3),(32,'אחלה ספר!','approved','4',26),(34,'oh jodi what marvolous book you had written ;)','approved','1',7);
+INSERT INTO `review` VALUES (4,'I love this book really really!','approved','316215318',14),(6,'she knew nothing','approved','206758690',14),(8,'good book, i had fun to read it','approved','9',14),(13,'very aswesome ','approved','206238487',14),(14,'it is kinda boring','approved','316215318',11),(17,'I wouldn\'t recommend that','approved','316215318',13),(18,'I love that author and this book, very good! get it!','approved','316215318',9),(28,'רם אורן אחלה גבר היה איתי ביסודי אכלנו פיתה יחד','approved','316215318',26),(29,'nice book!','approved','316373331',1),(30,'so much darkness in one book!! way to much for me','approved','316373331',4),(31,'the best book I have ever read! WOW!!!!!!!!!','approved','316373331',3),(32,'אחלה ספר!','approved','316373331',26),(34,'oh jodi what marvolous book you had written ;)','approved','316215318',7);
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,8 +373,8 @@ CREATE TABLE `subject` (
   `FieldID` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FKSubject46610` (`FieldID`),
-  CONSTRAINT `FKSubject46610` FOREIGN KEY (`FieldID`) REFERENCES `field` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FKSubject46610` FOREIGN KEY (`FieldID`) REFERENCES `field` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -413,7 +413,7 @@ CREATE TABLE `user_book` (
 
 LOCK TABLES `user_book` WRITE;
 /*!40000 ALTER TABLE `user_book` DISABLE KEYS */;
-INSERT INTO `user_book` VALUES ('2017-01-26','downloaded',1,'1'),('2017-01-27','downloaded',1,'4'),('2017-01-20','downloaded',2,'1'),('2017-01-27','downloaded',2,'4'),('2017-01-26','downloaded',3,'1'),('2017-01-27','downloaded',3,'4'),('2017-01-27','downloaded',4,'4'),('2017-01-25','downloaded',6,'1'),('2017-01-26','downloaded',7,'1'),('2017-01-27','downloaded',8,'4'),('2017-01-26','downloaded',9,'1'),('2017-01-18','paid',9,'4'),('2017-01-25','downloaded',10,'1'),('2017-01-25','downloaded',11,'1'),('2017-01-25','downloaded',13,'1'),('2017-01-21','downloaded',14,'1'),('2017-01-24','downloaded',14,'2'),('2017-01-24','downloaded',14,'3'),('2017-01-24','downloaded',14,'9'),('2017-01-26','paid',15,'15'),('2017-01-27','downloaded',26,'1'),('2017-01-27','downloaded',26,'2'),('2017-01-27','downloaded',26,'4');
+INSERT INTO `user_book` VALUES ('2017-01-26','downloaded',1,'316215318'),('2017-01-27','downloaded',1,'316373331'),('2017-01-20','downloaded',2,'316215318'),('2017-01-27','downloaded',2,'316373331'),('2017-01-26','downloaded',3,'316215318'),('2017-01-27','downloaded',3,'316373331'),('2017-01-27','downloaded',4,'316373331'),('2017-01-25','downloaded',6,'316215318'),('2017-01-26','downloaded',7,'316215318'),('2017-01-27','downloaded',8,'316373331'),('2017-01-26','downloaded',9,'316215318'),('2017-01-18','paid',9,'316373331'),('2017-01-25','downloaded',10,'316215318'),('2017-01-25','downloaded',11,'316215318'),('2017-01-25','downloaded',13,'316215318'),('2017-01-24','downloaded',14,'206238487'),('2017-01-24','downloaded',14,'206758690'),('2017-01-21','downloaded',14,'316215318'),('2017-01-24','downloaded',14,'9'),('2017-01-26','paid',15,'15'),('2017-01-27','downloaded',26,'206758690'),('2017-01-27','downloaded',26,'316215318'),('2017-01-27','downloaded',26,'316373331');
 /*!40000 ALTER TABLE `user_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -444,7 +444,7 @@ CREATE TABLE `user_membership` (
 
 LOCK TABLES `user_membership` WRITE;
 /*!40000 ALTER TABLE `user_membership` DISABLE KEYS */;
-INSERT INTO `user_membership` VALUES ('2017-01-18','2017-02-17','active',1,'1'),('2017-01-18','2017-02-17','active',1,'3'),('2017-01-18','2018-01-18','active',2,'4');
+INSERT INTO `user_membership` VALUES ('2017-01-18','2017-02-17','active',1,'206238487'),('2017-01-18','2017-02-17','active',1,'316215318'),('2017-01-18','2018-01-18','active',2,'316373331');
 /*!40000 ALTER TABLE `user_membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -484,4 +484,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-28 12:51:02
+-- Dump completed on 2017-01-29 13:15:19

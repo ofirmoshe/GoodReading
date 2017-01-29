@@ -84,17 +84,26 @@ public class InventoryManagementController extends SystemController {
 	@FXML
 	private AnchorPane chooseFieldAnchor;
 	@FXML
-	private ComboBox authorComboBox;
+	private ComboBox<String> authorComboBox;
 	@FXML
 	private CheckComboBox<String> authorBox;
 	@FXML
-	private ComboBox fieldComboBox;
+	private ComboBox<String> fieldComboBox;
 	@FXML
 	private CheckComboBox<String> fieldBox;
 	@FXML
-	private ComboBox subjectComboBox;
+	private ComboBox<String> subjectComboBox;
 	@FXML
 	private CheckComboBox<String> subjectBox;
+	@FXML
+	private AnchorPane mainAnchor;
+	@FXML
+	private TextField newAuthorName;
+	@FXML
+	private TextField newFieldName;
+	@FXML
+	private TextField newSubjectName;
+	
 
 	/**
 	 * This method initializes the controller.
@@ -106,7 +115,6 @@ public class InventoryManagementController extends SystemController {
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -122,7 +130,7 @@ public class InventoryManagementController extends SystemController {
 	public void saveBookInfoOnClick() {
 
 		Message msg;
-
+		
 		if (subjectFlag && !flag && cb.getSelectionModel().getSelectedItem().equals("None")) {
 			Platform.runLater(new Runnable() {
 				@Override
@@ -134,53 +142,30 @@ public class InventoryManagementController extends SystemController {
 				}
 			});
 		} else {
-			Object[] o = new Object[7];
+			Object[] o = new Object[10];
 			o[0] = authorField.getText();
 			o[1] = fieldField.getText();
 			o[2] = subjectField.getText();
 			o[3] = fields[cb.getSelectionModel().getSelectedIndex()];
 			if (field != null)
 				o[3] = field;
-			if (o[0].equals("") && o[1].equals("") && o[2].equals("")) {
+			if (o[0].equals("") && o[1].equals("") && o[2].equals("") && newFieldName.getText().equals("") 
+					&& newSubjectName.getText().equals("") && newAuthorName.getText().equals("")) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("Add Book Information");
 				alert.setContentText("You did not fill any field.");
 				alert.showAndWait();
 				return;
 			}
-			ObservableList<String> sf = fieldBox.getCheckModel().getCheckedItems();
-			Field[] selectedFields = new Field[sf.size()];
-
-			int index = 0;
-			for (int i = 0; i < f.length; i++) {
-				if (sf.contains(f[i].getField())) {
-					selectedFields[index] = f[i];
-					index++;
-				}
-			}
-			o[4] = selectedFields;
-
-			ObservableList<String> ss = subjectBox.getCheckModel().getCheckedItems();
-			Subject[] selectedSubjects = new Subject[ss.size()];
-			int index1 = 0;
-			for (int i = 0; i < subjects.length; i++) {
-				if (ss.contains(subjects[i].getSub())) {
-					selectedSubjects[index] = subjects[i];
-					index1++;
-				}
-			}
-
-			o[5] = selectedSubjects;
-			ObservableList<String> sa = authorBox.getCheckModel().getCheckedItems();
-			Author[] selectedAuthors = new Author[sa.size()];
-			index = 0;
-			for (int i = 0; i < authors.length; i++) {
-				if (sa.contains(authors[i].getName())) {
-					selectedAuthors[index] = authors[i];
-					index++;
-				}
-			}
-			o[6] = selectedAuthors;
+			int fieldIndex = fieldComboBox.getSelectionModel().getSelectedIndex()-1;
+			if(fieldIndex!=-1) o[4]=f[fieldIndex].getID();
+			o[5]=newFieldName.getText();
+			int authorIndex = authorComboBox.getSelectionModel().getSelectedIndex()-1;
+			if(authorIndex!=-1) o[6]=authors[authorIndex].getID();
+			o[7]=newAuthorName.getText();
+			int subjectIndex = subjectComboBox.getSelectionModel().getSelectedIndex()-1;
+			if(subjectIndex!=-1) o[8]=subjects[subjectIndex].getID();
+			o[9]=newSubjectName.getText();
 
 			msg = new Message("inventory management", 2, o);
 			if (flag)
@@ -293,17 +278,16 @@ public class InventoryManagementController extends SystemController {
 				@Override
 				public void run() {
 					f = (Field[]) ob[0];
-					checkFields = new boolean[f.length];
+					fields = (Field[]) ob[0];
 					authors = (Author[]) ob[2];
-					checkAuthors = new boolean[authors.length];
 					subjects = (Subject[]) ob[3];
-					checkSubjects = new boolean[subjects.length];
 					setFieldBox();
 					setAuthorBox();
 					setSubjectBox();
+					setChoiseboxes();
 				}
 			});
-			
+
 		}
 
 		if (msg.getMsg().equals("ad")) {
@@ -350,6 +334,7 @@ public class InventoryManagementController extends SystemController {
 					alert.setTitle("Add Book Information");
 					alert.setContentText("Book information has been updated successfully");
 					alert.showAndWait();
+					logoOnClick();
 				}
 			});
 		}
@@ -365,7 +350,7 @@ public class InventoryManagementController extends SystemController {
 	 *            is a field array that was sent from server. It contains all
 	 *            existing fields in DB.
 	 */
-	public void setChoiseboxes(Object[] o) {
+	public void setChoiseboxes() {
 
 		ObservableList<String> olf = FXCollections.observableArrayList();
 		olf.add("None");
@@ -374,7 +359,6 @@ public class InventoryManagementController extends SystemController {
 		}
 		cb.setItems(olf);
 		cb.getSelectionModel().selectFirst();
-
 	}
 
 	/**
@@ -382,20 +366,24 @@ public class InventoryManagementController extends SystemController {
 	 */
 	public void setFieldBox() {
 		ObservableList<String> olf = FXCollections.observableArrayList();
+		olf.add("None");
 		for (int i = 0; i < f.length; i++) {
 			olf.add(f[i].getField());
 		}
-		fieldBox = new CheckComboBox<String>(olf);
-		for (int i = 0; i < f.length; i++) {
-			if (checkFields[i])
-				fieldBox.getCheckModel().check(i);
-		}
-
-		fieldBox.setPrefSize(fieldComboBox.getPrefWidth(), fieldComboBox.getPrefHeight());
+		fieldComboBox.setItems(olf);
+		fieldComboBox.getSelectionModel().selectFirst();
+		fieldComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			public void changed(ObservableValue ov, Number value, Number new_value) {
+				if(new_value.intValue()==0) 
+					newFieldName.setText("");
+				else newFieldName.setText(f[new_value.intValue()-1].getField());
+			}
+		});
+		/*fieldBox.setPrefSize(fieldComboBox.getPrefWidth(), fieldComboBox.getPrefHeight());
 		fieldBox.setLayoutX(fieldComboBox.getLayoutX());
 		fieldBox.setLayoutY(fieldComboBox.getLayoutY());
 		fieldComboBox.setVisible(false);
-		scrollAnchor.getChildren().add(fieldBox);
+		mainAnchor.getChildren().add(fieldBox);*/
 	}
 
 	/**
@@ -403,19 +391,24 @@ public class InventoryManagementController extends SystemController {
 	 */
 	public void setAuthorBox() {
 		ObservableList<String> ola = FXCollections.observableArrayList();
+		ola.add("None");
 		for (int i = 0; i < authors.length; i++) {
 			ola.add(authors[i].getName());
 		}
-		authorBox = new CheckComboBox<String>(ola);
-		for (int i = 0; i < authors.length; i++) {
-			if (checkAuthors[i])
-				authorBox.getCheckModel().check(i);
-		}
-		authorBox.setPrefSize(authorComboBox.getPrefWidth(), authorComboBox.getPrefHeight());
+		authorComboBox.setItems(ola);
+		authorComboBox.getSelectionModel().selectFirst();
+		authorComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			public void changed(ObservableValue ov, Number value, Number new_value) {
+				if(new_value.intValue()==0) 
+					newAuthorName.setText("");
+				else newAuthorName.setText(authors[new_value.intValue()-1].getName());
+			}
+		});
+		/*authorBox.setPrefSize(authorComboBox.getPrefWidth(), authorComboBox.getPrefHeight());
 		authorBox.setLayoutX(authorComboBox.getLayoutX());
 		authorBox.setLayoutY(authorComboBox.getLayoutY());
 		authorComboBox.setVisible(false);
-		scrollAnchor.getChildren().add(authorBox);
+		mainAnchor.getChildren().add(authorBox);*/
 	}
 
 	/**
@@ -423,19 +416,23 @@ public class InventoryManagementController extends SystemController {
 	 */
 	public void setSubjectBox() {
 		ObservableList<String> ols = FXCollections.observableArrayList();
+		ols.add("None");
 		for (int j = 0; j < subjects.length; j++)
 			ols.add(subjects[j].getSub());
-		subjectBox = new CheckComboBox<String>(ols);
-
-		for (int j = 0; j < subjects.length; j++)
-			if (checkSubjects[j])
-				subjectBox.getCheckModel().check(j);
-
-		subjectBox.setPrefSize(subjectComboBox.getPrefWidth(), subjectComboBox.getPrefHeight());
+		subjectComboBox.setItems(ols);
+		subjectComboBox.getSelectionModel().selectFirst();
+		subjectComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			public void changed(ObservableValue ov, Number value, Number new_value) {
+				if(new_value.intValue()==0) 
+					newSubjectName.setText("");
+				else newSubjectName.setText(subjects[new_value.intValue()-1].getSub());
+			}
+		});
+		/*subjectBox.setPrefSize(subjectComboBox.getPrefWidth(), subjectComboBox.getPrefHeight());
 		subjectBox.setLayoutX(subjectComboBox.getLayoutX());
 		subjectBox.setLayoutY(subjectComboBox.getLayoutY());
 		subjectComboBox.setVisible(false);
-		scrollAnchor.getChildren().add(subjectBox);
+		mainAnchor.getChildren().add(subjectBox);*/
 
 	}
 

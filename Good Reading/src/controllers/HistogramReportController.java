@@ -25,7 +25,9 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 /**
@@ -94,6 +96,13 @@ public class HistogramReportController extends SystemController {
 			anchor.getChildren().remove(bc);
 		startDate = java.sql.Date.valueOf(SinceDate.getValue());
 		endDate = java.sql.Date.valueOf(UntilDate.getValue());
+		if(startDate.after(endDate)){
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Wrong report input");
+			alert.setContentText("Invalid dates. Try again.");
+			alert.showAndWait();
+			return;
+		}
 		xAxis = new CategoryAxis();
 		yAxis = new NumberAxis();
 		int count = 0;

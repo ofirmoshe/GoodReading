@@ -123,11 +123,19 @@ public class SearchBookController extends SystemController {
 		query[3] = langField.getText();
 		query[4] = authorField.getText();
 		query[5] = keywordField.getText();
-		query[6] = "" + fieldBox.getSelectionModel().getSelectedIndex();
+		if(fieldBox.getSelectionModel().getSelectedIndex()!=0)
+			query[6] = "" + fields[fieldBox.getSelectionModel().getSelectedIndex()-1].getID();
+		else
+			query[6]=""+0;
 		query[7] = subjectBox.getSelectionModel().getSelectedItem();
 		if (ClientUI.user instanceof Employee)
 			isManager = "yes";
 		query[8] = isManager;
+		if(query[2].equals("")&& query[3].equals("")&&query[4].equals("")&&query[5].equals("")
+				&&query[6].equals("0")&&query[7].equals("None")){
+			noResults();
+			return;
+		}
 		Message msg = new Message("search book", 1, query);
 		try {
 			Client.instance.sendToServer(msg);
@@ -167,16 +175,7 @@ public class SearchBookController extends SystemController {
 					if (grid != null)
 						scrollAnchor.getChildren().remove(grid);
 					if (books.length == 0) {
-						StackPane sp = new StackPane();
-						sp.setPrefHeight(200);
-						sp.setPrefWidth(900);
-						Label noRes = new Label("Sorry, no results.");
-						noRes.setTextFill(Color.DARKSLATEGRAY);
-						noRes.setFont(Font.font("System", 20));
-						sp.getChildren().add(noRes);
-						StackPane.setAlignment(noRes, Pos.CENTER);
-						scrollAnchor.getChildren().add(sp);
-						scrollAnchor.setPrefHeight(200);
+						noResults();
 						return;
 					}
 					setBookGrid();
@@ -199,6 +198,19 @@ public class SearchBookController extends SystemController {
 		}
 	}
 
+	public void noResults(){
+		StackPane sp = new StackPane();
+		sp.setPrefHeight(200);
+		sp.setPrefWidth(900);
+		Label noRes = new Label("Sorry, no results.");
+		noRes.setTextFill(Color.DARKSLATEGRAY);
+		noRes.setFont(Font.font("System", 20));
+		sp.getChildren().add(noRes);
+		StackPane.setAlignment(noRes, Pos.CENTER);
+		scrollAnchor.getChildren().add(sp);
+		scrollAnchor.setPrefHeight(200);
+	}
+	
 	/**
 	 * This method sets the field choice box with all the fields in DB, and an
 	 * Change Listener that sets the subject choice box with the subject
