@@ -107,6 +107,10 @@ public class ManageReviewController extends SystemController {
 	 *            book_fields matrix. index 3 - Subject matrix. If the book
 	 *            array is empty, no result message is displayed, else the book
 	 *            grid is set according to this data.
+	 *            
+	 *            case 3: shows a successful/failed alert on approving review.
+	 *            
+	 *            case 4: shows a successful/failed alert on deleting review.
 	 */
 	@Override
 	public void handleMessage(Message msg) { super.handleMessage(msg);
@@ -202,8 +206,13 @@ public class ManageReviewController extends SystemController {
 	}
 
 	/**
-	 * This method sets the book grid with books, and event handlers for each
-	 * book. The book grid is added to the scroll anchor.
+	 * This method sets the review grid with reviews, and event handlers for each
+	 * review.
+	 * in case "Edit"  button was pressed the method allow to edit a review and changes the button to "Save" 
+	 * in case "Save" button was pressed the changes are saved , send msg to the server with func=2
+	 * in case "Approve" button was pressed - send msg to the server with func=3
+	 * in case "Deny" button was pressed - send msg to the server with func=4
+	 * The review grid is added to the scroll anchor.
 	 */
 	public void setReviewGrid() {
 		grid = new GridPane();

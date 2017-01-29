@@ -616,7 +616,7 @@ public class EditBookController extends SystemController {
 	}
 
 	/**
-	 * This method sets sets the subject check combo box with all the subjects of the 
+	 * This method sets the subject check combo box with all the subjects of the 
 	 * chosen field, and checks the book's subjects.
 	 */
 	public void setSubjectBox() {

@@ -135,6 +135,10 @@ public class LoginController extends AbstractController {
 
 	}
 
+	/**
+	 * This method is called whenever "login" button is pressed.
+	 * This method sets a loading bar that shows the loading progress until user home page is completely loaded.
+	 */
 	public void loading() {
 		Platform.runLater(new Runnable() {
 			@Override

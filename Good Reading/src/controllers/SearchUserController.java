@@ -131,12 +131,9 @@ public class SearchUserController extends SystemController {
 	 * This method implements the abstract controller method.
 	 * 
 	 * @param msg
-	 *            case 1: The message is an object array. index 0 - Book array.
-	 *            index 1 - Author matrix, each index is an array of
-	 *            book_authors of the matching book in the book array. index 2 -
-	 *            book_fields matrix. index 3 - Subject matrix. If the book
-	 *            array is empty, no result message is displayed, else the book
-	 *            grid is set according to this data.
+	 *            case 1: shows all users that fits search query.
+	 *            
+	 *            in case that there are not results - shows "no results" answer to this query.
 	 */
 	@Override
 	public void handleMessage(Message msg) { super.handleMessage(msg);

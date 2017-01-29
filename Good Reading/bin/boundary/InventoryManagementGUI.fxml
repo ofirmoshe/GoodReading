@@ -76,7 +76,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </AnchorPane>
-      <AnchorPane fx:id="saveImage" layoutX="399.0" layoutY="514.0" onMouseEntered="#saveOnHover" onMouseExited="#saveOffHover" onMouseMoved="#saveOnHover" onMouseReleased="#saveBookInfoOnClick">
+      <AnchorPane fx:id="saveImage" layoutX="410.0" layoutY="552.0" onMouseEntered="#saveOnHover" onMouseExited="#saveOffHover" onMouseMoved="#saveOnHover" onMouseReleased="#saveBookInfoOnClick">
          <children>
             <ImageView fx:id="saveButtonImage">
                <image>
@@ -95,5 +95,11 @@
       <TextField fx:id="subjectField" layoutX="126.0" layoutY="288.0" onInputMethodTextChanged="#subjectOnInput" onKeyPressed="#subjectOnInput" onKeyReleased="#subjectOnInput" onKeyTyped="#subjectOnInput" prefHeight="25.0" prefWidth="150.0" />
       <Label layoutX="129.0" layoutY="262.0" text="Add Subject Name" />
       <CheckBox fx:id="newFieldCheck" layoutX="143.0" layoutY="329.0" mnemonicParsing="false" text="Do you want to add this subject for new Field?" textFill="#030303" visible="false" />
+      <Label layoutX="149.0" layoutY="384.0" text="Remove Author" />
+      <Label layoutX="530.0" layoutY="386.0" text="Remove Field" />
+      <Label layoutX="341.0" layoutY="386.0" text="Remove Subject" />
+      <ComboBox fx:id="authorComboBox" layoutX="116.0" layoutY="421.0" prefWidth="150.0" />
+      <ComboBox fx:id="subjectComboBox" layoutX="309.0" layoutY="421.0" prefWidth="150.0" />
+      <ComboBox fx:id="fieldComboBox" layoutX="499.0" layoutY="421.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

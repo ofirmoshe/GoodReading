@@ -9,7 +9,11 @@ import controllers.AbstractController;
 import controllers.LoginController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
+/**
+ * 
+ * @author Ofir
+ *
+ */
 public class Client extends AbstractClient {
 
 	public static Client instance;
@@ -28,6 +32,9 @@ public class Client extends AbstractClient {
 		AbstractController.instance.handleMessage((Message)msg);
 	}
 	
+	/**
+	 * This method disconnects and connects the client to the server.
+	 */
 	public static void refresh(){
 		try {
 			new Client(Client.host,DEFAULT_PORT);

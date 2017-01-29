@@ -45,7 +45,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
+/**
+ * User Report Controller is the controller for user's report.
+ * @author Ofir
+ *
+ */
 public class UserReportController extends SystemController {
 
 	private Book[] books;
@@ -73,10 +77,24 @@ public class UserReportController extends SystemController {
 		}
 	}
 
+	/**
+	 * This function is called whenever "Get Report" button is pressed
+	 * This method shows book histogram on a new page. (displays "HistogramReprt" page)
+	 */
 	public void histogramOnClick()
 	{
 		ClientUI.setScene("HistogramReportGUI.fxml");
 	}
+	
+	/**
+	 * This method implements the abstract controller method
+	 * 
+	 * @param msg
+	 * 
+	 * The method gets the msg from the server that includes the: books, book's authors, book's fields, book's subject 
+	 * for each book that the user owns.
+	 * in case that there are no results - shows a message.
+	 */
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {
@@ -112,8 +130,8 @@ public class UserReportController extends SystemController {
 	}
 
 	/**
-	 * This method sets the book grid with books, and event handlers for each
-	 * book. The book grid is added to the scroll anchor.
+	 * This method sets the book grid with books that the user owns. 
+	 * The book grid is added to the scroll anchor.
 	 */
 	public void setBookGrid() {
 		try {

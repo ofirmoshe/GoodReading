@@ -23,7 +23,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+/**
+ *  Book payment controller is the controller of the book payment.
+ * 
+ * @author Noy
+ *
+ */
 public class BookPaymentController extends SystemController {
 
 	public static Book book;
@@ -41,6 +46,9 @@ public class BookPaymentController extends SystemController {
 	@FXML
 	private TextField paymentInfoField;
 
+	/**
+	 * This method initializes the controller.
+	 */
 	public void initialize() {
 		super.initialize();
 		currBook = book;
@@ -70,6 +78,10 @@ public class BookPaymentController extends SystemController {
 		paymentInfoField.setText(u.getPaymentInfo());
 	}
 
+	/**
+	 * This function is called whenever "Proceed" button is pressed.
+	 * This method get the payment info from the user and sends the info, the user id and book to the server.
+	 */
 	public void paymentOnClick() {
 		Object[] o = new Object[4];
 		o[0] = ClientUI.user.getID();
@@ -84,6 +96,14 @@ public class BookPaymentController extends SystemController {
 		}
 	}
 
+	/**
+	 * This method implements AbstractController's method. It handles message
+	 * from server, and displays the user data.
+	 * 
+	 * @param msg
+	 *            case 1: 
+	 *             the method check the msg info and presents a proper popup, alert the inform the user. Such as "Please try again","We will try to accept it as soon as we can." ext.
+	 */
 	@Override
 	public void handleMessage(Message msg) {
 		switch (msg.getFunc()) {

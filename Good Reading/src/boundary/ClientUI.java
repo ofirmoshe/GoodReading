@@ -38,6 +38,11 @@ import i_book.User_Membership;
 import i_book.Author;
 import i_book.Book;
 
+/**
+ * ClientUI class  creates a "server-client" connection
+ * @author Noy
+ *
+ */
 public class ClientUI extends Application {
 
 	/* this is the primary stage */
@@ -48,6 +53,10 @@ public class ClientUI extends Application {
 	public static ClientUI instance;
 	public static User_Membership member;
 
+	/**
+	 * This method connects to server. 
+	 * It displays the first page of the system- "login" page.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		instance = this;
@@ -86,6 +95,10 @@ public class ClientUI extends Application {
 
 	}
 
+	/**
+	 * this method displays the requested page.
+	 * @param fxml is the name of the requested page we would like to present.
+	 */
 	public static void setScene(String fxml) {
 		try {
 			pageStack.push(primaryStage.getScene().getRoot());
@@ -97,11 +110,20 @@ public class ClientUI extends Application {
 		}
 	}
 
+	/**
+	 * This method is called whenever "go Back" button is pressed.
+	 * This method bring the user back to the last page they were in.
+	 */
 	public static void goBack() {
 		primaryStage.getScene().setRoot(pageStack.pop());
 
 	}
-
+	
+/**
+ * This method returns an array of all authors in DB.
+ * @param book
+ * @return
+ */
 	public static Author[] getAuthors(Book book) {
 		return book.author.toArray();
 	}

@@ -40,6 +40,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import ocsf.server.*;
 
+/**
+ * This class extends the AbstractServer class 
+ * @author Noy
+ * @author Ofir
+ *
+ */
 public class Server extends AbstractServer {
 
 	final public static int DEFAULT_PORT = 5555;
@@ -51,6 +57,9 @@ public class Server extends AbstractServer {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * This method implements the abstract server method.
+	 */
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		// TODO Auto-generated method stub
@@ -122,6 +131,11 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method sets user status to "offline" when user "logout".
+	 * @param msg
+	 * @param client
+	 */
 	public void systemMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -138,6 +152,15 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "login" controller 
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method check if the user id and password are match and send proper message back to the controller.
+	 * in case of match - set the user status to "online" and check if the user has membership
+	 * returns to controller a list of all the books in BD.
+	 */
 	public void loginMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -211,6 +234,18 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle messages from "book page" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 		case 1: the method gets the book id from the controller and sends back all the book info.
+	 * 				the method increases the views counter for this book in his views_date table (or create new table with the current date)
+	 * 				check if the user owns membership and "allow" download the book without payment request
+	 * 		case 3: check if the book's status is "paid" and changes his status to "download".
+	 * 		case 10: when user adds a review to this book the server sends popup message to the "online" employees in the position 
+	 * 				of reviews management.  
+	 */
 	public void bookPageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -350,6 +385,15 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "search book" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			case 1: the method gets a search query, look for match books ant send message back with the: books, book's fields,
+	 * 					book's subjects and book's authors.
+	 * 			case 2: the method sends back a list of all the books that match the query with total rank and "rank by field". 
+	 */
 	public void searchBookMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -565,6 +609,13 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "user home page" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * This method sends a list of all the "visible" books in DB back to the controller.
+	 */
 	public void userHomepageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -579,6 +630,15 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "book payment" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method gets the user id and load all his payment requests and check if there is already a request for this book
+	 * in case there isn't the method creates a new payment request with status "waiting".
+	 * The method  sends a proper message to the controller.
+	 */
 	public void bookPaymentMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -623,6 +683,15 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "membership payment" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method gets the user id and load all his payment requests and check if there is already a request for this membership
+	 * in case there isn't the method creates a new payment request with status "waiting".
+	 * The method  sends a proper message to the controller.
+	 */
 	private void membershipPaymentMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -667,6 +736,13 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "membership" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method sends back a list of all the memberships in BD.
+	 */
 	private void membershipMessageHandler(Message msg, ConnectionToClient client) {
 		try {
 			Membership[] m = Membership.listMembershipByQuery("ID>0", "ID");
@@ -679,6 +755,15 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "add book" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			case 1: the method sends back lists of all the fields, subjects and authors in BD.
+	 * 			case 2: the method gets the new book info from the controller and creates a new book with this info.
+	 * 					this method adds new author to DB in case "Add New Author" field was not empty.
+	 */
 	public void addBookMessageHandler(Message msg, ConnectionToClient client) {
 
 		switch (msg.getFunc()) {
@@ -686,14 +771,16 @@ public class Server extends AbstractServer {
 			try {
 				Field[] fields = Field.listFieldByQuery("ID>0", "ID");
 				Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
+				Subject[] s = Subject.listSubjectByQuery("ID>0", "ID");
 				Subject[][] subjects = new Subject[fields.length][];
 				for (int i = 0; i < fields.length; i++) {
 					subjects[i] = fields[i].subject.toArray();
 				}
-				Object[] ob = new Object[3];
+				Object[] ob = new Object[4];
 				ob[0] = fields;
 				ob[1] = subjects;
 				ob[2] = authors;
+				ob[3]=s;
 				msg.setMsg(ob);
 				client.sendToClient(msg);
 			} catch (Exception e) {
@@ -814,12 +901,21 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "inventory management" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			the method checks if new inventory data already exists in DB. If not-It adds new data to DB.
+	 * 			the method checks if user inserted new subject and a new field. If so, it check if the user requested to connect between new subject an fields.
+	 * 			The method  sends a proper message to the controller.
+	 */
 	private void inventoryManagementMessageHandler(Message msg, ConnectionToClient client) {
 		Field f = null;
 		boolean af = true;
 		boolean ff = true;
 		boolean sf = true;
-
+		
 		try {
 			Field[] fields = Field.listFieldByQuery("ID>0", "ID");
 			Author[] authors = Author.listAuthorByQuery("ID>0", "ID");
@@ -828,6 +924,9 @@ public class Server extends AbstractServer {
 				subjects[i] = fields[i].subject.toArray();
 			}
 			Object[] o = (Object[]) msg.getMsg();
+			Field[]cf =(Field[])o[4];
+			Subject[]cs =(Subject[])o[5];
+			Author[]ca =(Author[])o[6];
 			for (int i = 0; i < authors.length; i++) {
 				if (authors[i].getName().equals(o[0])) {
 					af = false;
@@ -880,6 +979,31 @@ public class Server extends AbstractServer {
 				s.save();
 			}
 			session.getTransaction().commit();
+			session.beginTransaction();
+			if(cf.length!=0){
+				Field delField;
+				for(int i=0;i<cf.length;i++){
+					delField = Field.loadFieldByORMID(cf[i].getID());
+					delField.delete();
+				}
+			}
+			session.getTransaction().commit();
+			session.beginTransaction();
+			if(cs.length!=0){
+				Subject delSubject;
+				for(int i=0;i<cs.length;i++){
+					delSubject = Subject.loadSubjectByORMID(cs[i].getID());
+					delSubject.delete();
+				}
+			}
+			if(ca.length!=0){
+				Author delAuthor;
+				for(int i=0;i<ca.length;i++){
+					delAuthor = Author.loadAuthorByORMID(ca[i].getID());
+					delAuthor.delete();
+				}
+			}
+			session.getTransaction().commit();
 			msg.setMsg("s");
 			client.sendToClient(msg);
 		} catch (Exception e) {
@@ -896,6 +1020,14 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 *  This method handle the messages from "search review" controller.
+	 * @param msg
+	 * @param client
+	 * 			
+	 * 			case 1: the method sends back an object array that contains results to the query.
+	 * 			The array contains the review, review author and book name for this review.
+	 */
 	private void searchReviewMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -959,6 +1091,20 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "edit book" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			case 1: the method sends back an object array that includes: a list of all authors exists in DB,
+	 * 			a list of all subjects exists in DB,a list of all fields exists in DB and book's keywords.
+	 * 
+	 * 			case 2: the method gets the new info of the book after all the changes and update the changes in DB.
+	 * 
+	 * 			case 3: the method deletes the book from DB.
+	 * 
+	 * 			case 4: the method hides the book by changing the status from "visible" to "hidden".
+	 */
 	private void editBookMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1115,6 +1261,13 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "librarian home page" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method checks if the book exists in DB.
+	 */
 	private void librarianHomepageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1135,6 +1288,16 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "manage review" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			case 1: the method sends back a list of: reviews with status "waiting", the name of the user, the book's title
+	 * 			case 2: the method save the review after the changes.
+	 * 			case 3: the method changes the review's status to "Approve".
+	 * 			case 4: the method deletes the review from DB ("Deny").
+	 */
 	private void manageReviewMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1219,6 +1382,14 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "add user" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method gets user's info check if this user is already exist in DB, 
+	 * if he is not in DB the method creates a new user with this info.
+	 */
 	private void addUserMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1267,6 +1438,17 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "employee home page" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			case 1: the method returns a lists of: payment request with status "waiting", books, memberships and users with request.
+	 * 			case 2: the method check if the request is for book or membership: if it is book the method create new user_book
+	 * 					and if it is membership the method creates new user_membership. the method also changes the payment request
+	 * 					status to "Approve"
+	 * 			case 3: the method deletes the payment request from DB.
+	 */
 	@SuppressWarnings("deprecation")
 	private void employeeHomepageMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
@@ -1356,6 +1538,11 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle messages from "user membership" controller.
+	 * @param msg
+	 * @param client
+	 */
 	private void userMembershipMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1363,6 +1550,13 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "user report" controller.
+	 * @param m
+	 * @param client
+	 * 
+	 * The method returns a lists of: all the user's book and the book's fields, subjects and authors of each book.
+	 */
 	private void userReportMessageHandler(Message m, ConnectionToClient client) {
 		switch (m.getFunc()) {
 		case 1:
@@ -1395,6 +1589,13 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method handle the messages from "search user" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method returns a list of all the users in DB.
+	 */
 	private void searchUserMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1409,6 +1610,16 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "manage user" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * 			case 1: the method gets the user's new info and update the changes on DB.
+	 * 					changes the membership status by the request ("active" to "blocked" or "blocked" to "active")
+	 * 					changes the user status by the request to "banned".
+	 * 			case 2: the method returns a list of all the user_memberships in DB.
+	 */
 	private void manageUserMessageHandler(Message msg, ConnectionToClient client) {
 		// TODO Auto-generated method stub
 		switch (msg.getFunc()) {
@@ -1471,6 +1682,13 @@ public class Server extends AbstractServer {
 		}
 	}
 
+	/**
+	 * This method handle the messages from "histogram report" controller.
+	 * @param msg
+	 * @param client
+	 * 
+	 * The method returns lists of all Views_date and User_book of this book.
+	 */
 	private void histogramReportMessageHandler(Message msg, ConnectionToClient client) {
 		switch (msg.getFunc()) {
 		case 1:
@@ -1492,10 +1710,16 @@ public class Server extends AbstractServer {
 
 	}
 
+	/**
+	 * This method notifies that the server has started to listen.
+	 */
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 
+	/**
+	 * This method notifies that the server has stopped listening.
+	 */
 	protected void serverStopped() {
 		try {
 			session.close();
@@ -1506,6 +1730,10 @@ public class Server extends AbstractServer {
 		System.out.println("Server has stopped listening for connections.");
 	}
 
+	/**
+	 * This is the main method of the server.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		int port = 0; // Port to listen on
 

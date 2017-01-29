@@ -81,6 +81,15 @@ public class LibraryEmployeeHomepageController extends SystemController {
 		}
 	}
 
+	/**
+	 *  This method implements AbstractController's method. It handles message
+	 * from server, and displays the inventory data.
+	 * 
+	 * @param msg
+	 *            case 1: 
+	 *              The message includes: a payment request array, the users and books. It sets the list of all payment request in DB.
+	 * in case that there are no payment request the method presents a proper message that inform the user- "There are not awaiting payment requests at this moment."
+	 */
 	public void handleMessage(Message msg) { super.handleMessage(msg);
 		switch (msg.getFunc()) {
 		case 1:
@@ -117,18 +126,29 @@ public class LibraryEmployeeHomepageController extends SystemController {
 		}
 	}
 
+	/**
+	 * This function is called whenever the "User Management" is pressed.
+	 * This method shows the employee the "search user" page.
+	 */
 	public void userManagementOnClick()
 	{
 		ClientUI.setScene("SearchUserGUI.fxml");
 	}
 	
+	/**
+	 * This function is called whenever the "Add New User" is pressed.
+	 * This method shows the employee the "Add User" page.
+	 */
 	public void registerOnClick() {
 		ClientUI.setScene("AddNewUserGUI.fxml");
 	}
 
 	/**
-	 * This method sets the book grid with books, and event handlers for each
-	 * book. The book grid is added to the scroll anchor.
+	 * This method sets the payment request grid with payment requests, and event handlers for each
+	 * request ("Deny" or "Approve" buttons).
+	 * in case "Approve" was pressed - send msg to server with msg.func = 2
+	 * in case "Dent" was pressed - send msg to server with msg.func = 3
+	 * The payment request grid is added to the scroll anchor.
 	 */
 	public void setPaymentsGrid() {
 		grid = new GridPane();
