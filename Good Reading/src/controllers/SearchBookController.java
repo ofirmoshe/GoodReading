@@ -70,23 +70,24 @@ public class SearchBookController extends SystemController {
 	private int[] ranks;
 	private int[][] fieldRanks;
 	public boolean searchOver=false;
+	public boolean initOver=false;
 
 	@FXML
-	private TextField titleField;
+	public TextField titleField;
 	@FXML
-	private TextField langField;
+	public TextField langField;
 	@FXML
-	private TextField authorField;
+	public TextField authorField;
 	@FXML
-	private ChoiceBox<String> optionBox;
+	public ChoiceBox<String> optionBox;
 	@FXML
-	private AnchorPane scrollAnchor;
+	public AnchorPane scrollAnchor;
 	@FXML
-	private TextField keywordField;
+	public TextField keywordField;
 	@FXML
-	private ChoiceBox<String> fieldBox;
+	public ChoiceBox<String> fieldBox;
 	@FXML
-	private ChoiceBox<String> subjectBox;
+	public ChoiceBox<String> subjectBox;
 
 	/**
 	 * This method initializes the page and sends a message to the server
@@ -104,7 +105,7 @@ public class SearchBookController extends SystemController {
 		if(ClientUI.user instanceof Employee){
 			menuAnchor.setVisible(false);
 		}
-		scrollAnchor.setPrefHeight(200);
+		//scrollAnchor.setPrefHeight(200);
 		optionBox.setItems(FXCollections.observableArrayList("AND", "OR"));
 		optionBox.getSelectionModel().selectFirst();
 		fieldBox.setItems(FXCollections.observableArrayList("None"));
@@ -145,38 +146,6 @@ public class SearchBookController extends SystemController {
 		}
 	}
 
-	public void searchBook(String title,String lang ,String author ,String kw, String field, String subject){
-		/*titleField.setText(title);
-		langField.setText(lang);
-		authorField.setText(author);
-		keywordField.setText(kw);
-		if(!field.equals(""))
-			fieldBox.getSelectionModel().select(field);
-		if(!subject.equals(""))
-			subjectBox.getSelectionModel().select(subject);
-		searchOnEnterPressed();*/
-		try {
-			new Client("localhost", 5555);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		query[0] = "AND";
-		query[2]=title;
-		query[3]=lang;
-		query[4]=author;
-		query[5]=kw;
-		query[6]="0";
-		query[7]="None";
-		query[8] = "no";
-		AbstractController.instance=this;
-		Message msg = new Message("search book", 1, query);
-		try {
-			Client.instance.sendToServer(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * This method implements the abstract controller method.
@@ -222,8 +191,10 @@ public class SearchBookController extends SystemController {
 			Object[] ob = (Object[]) msg.getMsg();
 			fields = (Field[]) ob[0];
 			subjects = (Subject[][]) ob[1];
+			initOver=true;
 			ranks = (int[])ob[2];
 			fieldRanks = (int[][])ob[3];
+			
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {

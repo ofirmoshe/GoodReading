@@ -62,7 +62,7 @@ public abstract class SystemController extends AbstractController {
 	
 	public void initialize() {
 		super.initialize();
-		userLabel.setText(ClientUI.user.getFname() + " " + ClientUI.user.getLname());
+		//userLabel.setText(ClientUI.user.getFname() + " " + ClientUI.user.getLname());
 	}
 	
 	/**
