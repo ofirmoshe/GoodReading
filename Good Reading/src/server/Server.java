@@ -865,7 +865,7 @@ public class Server extends AbstractServer {
 				}
 				Author[] authors = (Author[]) o[4];
 				for (int i = 0; i < authors.length; i++) {
-					authorFlag=true;
+					authorFlag = true;
 					for (int j = 0; j < newauthor.length; j++) {
 						if (authors[i].getName().equals(newauthor[j])) {
 							authorFlag = false;
@@ -1247,22 +1247,20 @@ public class Server extends AbstractServer {
 
 		case 3:
 			try {
-				Book b = Book.loadBookByORMID((int) msg.getMsg());
 				Statement stmt = con.createStatement();
-				String sql = "DELETE FROM book WHERE ID=" + b.getID();
-				stmt.execute(sql);
-				msg.setMsg("s");
+				String sql = "SELECT ID FROM book WHERE ID='" + (int) msg.getMsg()+"'";
+				ResultSet result = stmt.executeQuery(sql);
+				if (!result.isBeforeFirst())
+					msg.setMsg("f");
+				else {
+					sql = "DELETE FROM book WHERE ID=" + (int) msg.getMsg();
+					stmt.execute(sql);
+					msg.setMsg("s");
+				}
+				client.sendToClient(msg);
 			} catch (Exception e) {
-				// TODO ]Auto-generated catch blockS
 				e.printStackTrace();
 				session.getTransaction().rollback();
-				msg.setMsg("f");
-			}
-			try {
-				client.sendToClient(msg);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			break;
 		case 4:

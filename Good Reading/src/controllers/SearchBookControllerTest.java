@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import junit.framework.TestCase;
 
 public class SearchBookControllerTest extends TestCase {
-	SearchBookController instance;
+	public SearchBookController instance;
 	public TextField title;
 	public TextField author;
 	public TextField lang;
@@ -22,8 +22,7 @@ public class SearchBookControllerTest extends TestCase {
 	public ChoiceBox<String> optionBox;
 	public AnchorPane scrollAnchor;
 
-	public SearchBookControllerTest(String name) {
-		super(name);
+	protected void setUp() throws Exception {
 		instance = new SearchBookController();
 		AbstractController.instance = instance;
 		try {
@@ -56,6 +55,7 @@ public class SearchBookControllerTest extends TestCase {
 		instance.subjectBox = subjectBox;
 		instance.fieldBox = fieldBox;
 		instance.optionBox = optionBox;
+		instance.scrollAnchor=scrollAnchor;
 		instance.initialize();
 		while(!instance.initOver)
 			try {
@@ -71,7 +71,7 @@ public class SearchBookControllerTest extends TestCase {
 	}
 
 	public void testSearchBook_false() {
-		setSearchQuery("","jk rowli","","","Literature & Fiction","");
+		setSearchQuery("h","jk rowli","","","Literature & Fiction","");
 		instance.searchOnEnterPressed();
 		while (!instance.searchOver) {
 			try {
@@ -83,10 +83,10 @@ public class SearchBookControllerTest extends TestCase {
 		String[] ActualResult = new String[instance.books.length];
 		for(int i=0; i<instance.books.length; i++)
 			ActualResult[i]=instance.books[i].getTitle();
-		String[] ExpectedResult = new String[3];
-		ExpectedResult[0] = "Fantastic Beasts";
-		ExpectedResult[1] = "The Fault in Our Stars";
-		ExpectedResult[2] = "Harry Potter";
+		String[] ExpectedResult = new String[2];
+		//ExpectedResult[0] = "Fantastic Beasts";
+		ExpectedResult[0] = "The Fault in Our Stars";
+		ExpectedResult[1] = "Harry Potter";
 		Assert.assertArrayEquals(ActualResult, ExpectedResult);
 	}
 

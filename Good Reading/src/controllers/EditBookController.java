@@ -69,7 +69,9 @@ public class EditBookController extends SystemController {
 	private boolean[][] checkSubjects;
 	private Author[] authors;
 	private boolean[] checkAuthors;
-
+	public boolean removeOver = false;
+	public boolean removeSuccess = false;
+	public boolean removeFailed = false;
 	@FXML
 	private TextField titleField;
 	@FXML
@@ -227,13 +229,7 @@ public class EditBookController extends SystemController {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			// ... user chose OK
-			try{
-				Message msg = new Message("edit book", 3, book_id);
-				Client.instance.sendToServer(msg);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			removeBook(book_id);
 		} else {
 			// ... user chose CANCEL or closed the dialog
 			return;
@@ -245,8 +241,13 @@ public class EditBookController extends SystemController {
 	 * test function
 	 */
 	public void removeBook(int id){
-		book_id=id;
-		removeBookOnClick();
+		try{
+			Message msg = new Message("edit book", 3, id);
+			Client.instance.sendToServer(msg);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	/**
@@ -548,7 +549,9 @@ public class EditBookController extends SystemController {
 			}
 			break;
 		case 3:
+			removeOver=true;
 			if (msg.getMsg().equals("s")) {
+				removeSuccess=true;
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -560,8 +563,8 @@ public class EditBookController extends SystemController {
 					}
 
 				});
-
 			} else {
+				removeFailed=true;
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
