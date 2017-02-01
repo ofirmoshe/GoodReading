@@ -171,7 +171,7 @@ public class BookPageController extends SystemController {
 			case "pdf":
 				fileChooser.setTitle("Save Book");
 				fileChooser.setInitialFileName(currBook.getTitle() + " downloaded by GoodReading");
-				fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.pdf"));
+			//	fileChooser.getExtensionFilters().addAll(new ExtensionFilter("GoodReading Book", "*.pdf"));
 				file = fileChooser.showSaveDialog(ClientUI.primaryStage);
 				if (file != null) {
 					try {

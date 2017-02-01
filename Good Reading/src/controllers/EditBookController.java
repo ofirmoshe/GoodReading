@@ -227,17 +227,26 @@ public class EditBookController extends SystemController {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			// ... user chose OK
-			Message msg = new Message("edit book", 3, book_id);
-			try {
+			try{
+				Message msg = new Message("edit book", 3, book_id);
 				Client.instance.sendToServer(msg);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		} else {
 			// ... user chose CANCEL or closed the dialog
 			return;
 		}
+	}
+	
+	/**
+	 * 
+	 * test function
+	 */
+	public void removeBook(int id){
+		book_id=id;
+		removeBookOnClick();
 	}
 
 	/**

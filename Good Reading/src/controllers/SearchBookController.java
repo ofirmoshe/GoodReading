@@ -58,7 +58,7 @@ import javafx.scene.text.TextAlignment;
 public class SearchBookController extends SystemController {
 
 	private String[] query = new String[9];
-	private Book[] books;
+	public Book[] books;
 	private GridPane grid = null;
 	private Author[][] book_authors;
 	private Field[][] book_fields;
@@ -69,6 +69,7 @@ public class SearchBookController extends SystemController {
 	public static String what;
 	private int[] ranks;
 	private int[][] fieldRanks;
+	public boolean searchOver=false;
 
 	@FXML
 	private TextField titleField;
@@ -140,11 +141,43 @@ public class SearchBookController extends SystemController {
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	public void searchBook(String title,String lang ,String author ,String kw, String field, String subject){
+		/*titleField.setText(title);
+		langField.setText(lang);
+		authorField.setText(author);
+		keywordField.setText(kw);
+		if(!field.equals(""))
+			fieldBox.getSelectionModel().select(field);
+		if(!subject.equals(""))
+			subjectBox.getSelectionModel().select(subject);
+		searchOnEnterPressed();*/
+		try {
+			new Client("localhost", 5555);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		query[0] = "AND";
+		query[2]=title;
+		query[3]=lang;
+		query[4]=author;
+		query[5]=kw;
+		query[6]="0";
+		query[7]="None";
+		query[8] = "no";
+		AbstractController.instance=this;
+		Message msg = new Message("search book", 1, query);
+		try {
+			Client.instance.sendToServer(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * This method implements the abstract controller method.
 	 * 
@@ -166,6 +199,8 @@ public class SearchBookController extends SystemController {
 		case 1:
 			Object[] o = (Object[]) msg.getMsg();
 			books = (Book[]) o[0];
+			System.out.println("over");
+			searchOver=true;
 			book_authors = (Author[][]) o[1];
 			book_fields = (Field[][]) o[2];
 			book_subjects = (Subject[][]) o[3];
