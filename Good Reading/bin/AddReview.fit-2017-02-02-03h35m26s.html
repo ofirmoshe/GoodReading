@@ -1,0 +1,116 @@
+<html><head><title>Suite AddReview.fit run at: Thu Feb 02 03:35:29 IST 2017</title>
+	<link rel="stylesheet" type="text/css" href="css/fitnesse.css" media="screen"/>
+ 	<link rel="stylesheet" type="text/css" href="css/fitnesse.css" media="print"/>
+<script language="JavaScript" type="text/javascript">
+var collapsableOpenCss = "collapsable"
+var collapsableClosedCss = "hidden"
+var collapsableOpenImg = "images/collapsableOpen.gif"
+var collapsableClosedImg = "images/collapsableClosed.gif"
+function toggleCollapsable(id){
+var div = document.getElementById(id);
+var img = document.getElementById("img" + id);
+if(div.className.indexOf(collapsableClosedCss) != -1) {
+div.className = collapsableOpenCss;
+img.src = collapsableOpenImg;
+} else {
+div.className = collapsableClosedCss;
+img.src = collapsableClosedImg;
+} }
+</script>
+
+</head>
+<body>
+<div> Suite is: C:/Users/guyzi/git/GoodReading/Good Reading/AcceptanceTest/FitTests/AddReview.fit</div><div class="test_output_name">Name: AddReview.fit</div><div> Suite executed at: Thu Feb 02 03:35:29 IST 2017 Elapsed time: 2 seconds 515 millseconds  </div><table><tr><td></td><td><a href="#-29c973:159fc765101:-8000">AddReview.fit</a></td><td class="fail">2 right, 1 wrong, 0 ignored, 0 exceptions</td></tr></table><div class="test_output_name"><a name="-29c973:159fc765101:-8000"/><p>Test file: AddReview.fit</p></div><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Delete Recipe FIT Test</title>
+	<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
+	<style type="text/css"><!--.style1 {font-family: Arial, Helvetica, sans-serif}-->
+	</style>
+	<meta content="MSHTML 11.00.10570.1001" name="GENERATOR" />
+</head>
+<body>
+<p class="style1">DeleteRecipe Acceptance Test</p>
+
+<p class="style1">A recipe may be deleted from the CoffeeMaker <strong><span style="color: rgb(255, 0, 0);">if it exists </span></strong>in the list of recipes in the CoffeeMaker. The recipe to be deleted is chosen by its name.</p>
+
+<table border="1" cellpadding="5" cellspacing="0" width="765">
+	<tbody>
+		<tr>
+			<td class="style1" colspan="3">fit.ActionFixture</td>
+		</tr>
+		<tr>
+			<td class="style1">start</td>
+			<td class="style1">Fixtures.AddReview</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start review</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set review</td>
+			<td class="style1">bla bla bla</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add review</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set user</td>
+			<td class="style1">316373331</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set book</td>
+			<td class="style1">26</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start review</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set review</td>
+			<td class="style1">BOOOOOM</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add&nbsp;review</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set book</td>
+			<td class="style1">8</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start review</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set&nbsp;review</td>
+			<td class="style1">King!</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add review</td>
+			<td class="style1" class="fail">true <span class="fit_label">expected</span><hr>false <span class="fit_label">actual</span></td>
+		</tr>
+	</tbody>
+</table>
+
+<p><span class="style1"><a href="http://open.ncsu.edu/se/tutorials/coffee_maker/">Return to CoffeeMaker Example</a> </span></p>
+
+<p class="style1">Delete Recipe FIT Test &copy; 2004 Dr. Laurie Williams, Sarah Smith</p>
+</body>
+</html>
+
+</body></html>

@@ -66,11 +66,12 @@ public class SearchBookController extends SystemController {
 	public static Field[] fields;
 	public static Subject[][] subjects;
 	private String isManager = "no";
-	public static String what;
+	public static String what="";
 	private int[] ranks;
 	private int[][] fieldRanks;
 	public boolean searchOver=false;
 	public boolean initOver=false;
+	public boolean emptyQuery=false;
 
 	@FXML
 	public TextField titleField;
@@ -125,8 +126,10 @@ public class SearchBookController extends SystemController {
 		query[3] = langField.getText();
 		query[4] = authorField.getText();
 		query[5] = keywordField.getText();
-		if(fieldBox.getSelectionModel().getSelectedIndex()!=0)
+		if(fieldBox.getSelectionModel().getSelectedIndex()!=0){
+			System.out.println("field box index: "+fieldBox.getSelectionModel().getSelectedIndex());
 			query[6] = "" + fields[fieldBox.getSelectionModel().getSelectedIndex()-1].getID();
+		}
 		else
 			query[6]=""+0;
 		query[7] = subjectBox.getSelectionModel().getSelectedItem();
@@ -135,6 +138,8 @@ public class SearchBookController extends SystemController {
 		query[8] = isManager;
 		if(query[2].equals("")&& query[3].equals("")&&query[4].equals("")&&query[5].equals("")
 				&&query[6].equals("0")&&query[7].equals("None")){
+			searchOver=true;
+			emptyQuery=true;
 			noResults();
 			return;
 		}
@@ -182,7 +187,7 @@ public class SearchBookController extends SystemController {
 						noResults();
 						return;
 					}
-					setBookGrid();
+					//setBookGrid();
 				}
 			});
 			break;

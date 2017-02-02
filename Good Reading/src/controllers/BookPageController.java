@@ -69,31 +69,36 @@ public class BookPageController extends SystemController {
 	private GridPane reviewGrid;
 	private Review[] reviews;
 	private String[] usernames;
-	private String canReview;
+	public String canReview;
 	private String canDownload;
+	public String userID;
+	public int bookID;
+	public boolean initOver=false;
+	public boolean reviewOver=false;
+	public boolean reviewable=false;
 
 	@FXML
-	private ImageView bookImage;
+	public ImageView bookImage;
 	@FXML
-	Label bookNameLabel;
+	public Label bookNameLabel;
 	@FXML
-	Label priceLabel;
+	public Label priceLabel;
 	@FXML
-	TextArea summaryText;
+	public TextArea summaryText;
 	@FXML
-	Label authorLabel;
+	public Label authorLabel;
 	@FXML
 	Label fieldLabel;
 	@FXML
 	Label subjectLabel;
 	@FXML
-	AnchorPane mainAnchor;
+	public AnchorPane mainAnchor;
 	@FXML
-	Label langLabel;
+	public Label langLabel;
 	@FXML
 	AnchorPane reviewAnchor;
 	@FXML
-	TextArea addReviewText;
+	public TextArea addReviewText;
 	@FXML
 	Label reviewSentLabel;
 	@FXML
@@ -107,7 +112,7 @@ public class BookPageController extends SystemController {
 	@FXML
 	ChoiceBox<String> formatBox;
 	@FXML
-	TextArea tableText;
+	public TextArea tableText;
 	@FXML
 	AnchorPane addReviewAnchor;
 
@@ -121,11 +126,18 @@ public class BookPageController extends SystemController {
 		try {
 			mainAnchor.setCursor(Cursor.WAIT);
 			Object[] o = new Object[2];
-			o[0] = book.getID();
-			o[1] = ClientUI.user.getID();
+			if(book!=null)
+				bookID=book.getID();
+			o[0] = bookID;
+			if(ClientUI.user!=null)
+				userID=ClientUI.user.getID();
+			
+			o[1] = userID;
 			Message msg = new Message("book page", 1, o);
 			Client.instance.sendToServer(msg);
+			if (book!=null){
 			currBook = book;
+			
 			Image img;
 			if (book.getImage() != null) {
 				ByteArrayInputStream in = new ByteArrayInputStream(book.getImage());
@@ -148,9 +160,11 @@ public class BookPageController extends SystemController {
 			langLabel.setText(book.getLanguage());
 			summaryText.setText(book.getSummary());
 			tableText.setText(book.getTable_of_contents());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**
@@ -240,10 +254,12 @@ public class BookPageController extends SystemController {
 	 * was written about.
 	 */
 	public void addReview() {
-		if (!addReviewText.getText().equals("")) {
+		System.out.println(addReviewText);
+		System.out.println(canReview);
+		if (!addReviewText.getText().equals("") && canReview.equals("yes")) {
 			Object[] o = new Object[3];
-			o[0] = currBook.getID();
-			o[1] = ClientUI.user.getID();
+			o[0] = bookID;
+			o[1] = userID;
 			o[2] = addReviewText.getText();
 			Message msg = new Message("book page", 10, o);
 			try {
@@ -253,6 +269,12 @@ public class BookPageController extends SystemController {
 				e.printStackTrace();
 			}
 		}
+		else
+		{
+			reviewable=false;
+			reviewOver=true;
+		}
+		
 	}
 
 	/**
@@ -323,8 +345,11 @@ public class BookPageController extends SystemController {
 				reviews = (Review[]) m[3];
 				usernames = (String[]) m[4];
 				canReview = (String) m[5];
+				if(canReview.equals("yes"))
+					reviewable=true;
 				canDownload = (String) m[6];
-				Platform.runLater(new Runnable() {
+				initOver=true;
+				/*Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
 						mainAnchor.setCursor(Cursor.DEFAULT);
@@ -373,12 +398,13 @@ public class BookPageController extends SystemController {
 						}
 					}
 
-				});
+				});*/
 				break;
 
 			case 10:
 				if (msg.getMsg().equals("s")) {
-					Platform.runLater(new Runnable() {
+					reviewOver=true;
+					/*Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							addReviewText.setVisible(false);
@@ -387,7 +413,7 @@ public class BookPageController extends SystemController {
 							reviewSentLabel.setVisible(true);
 							addReviewButton.setVisible(false);
 						}
-					});
+					});*/
 				}
 			}
 		}

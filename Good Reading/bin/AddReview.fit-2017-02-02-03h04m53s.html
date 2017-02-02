@@ -1,0 +1,159 @@
+<html><head><title>Suite AddReview.fit run at: Thu Feb 02 03:04:54 IST 2017</title>
+	<link rel="stylesheet" type="text/css" href="css/fitnesse.css" media="screen"/>
+ 	<link rel="stylesheet" type="text/css" href="css/fitnesse.css" media="print"/>
+<script language="JavaScript" type="text/javascript">
+var collapsableOpenCss = "collapsable"
+var collapsableClosedCss = "hidden"
+var collapsableOpenImg = "images/collapsableOpen.gif"
+var collapsableClosedImg = "images/collapsableClosed.gif"
+function toggleCollapsable(id){
+var div = document.getElementById(id);
+var img = document.getElementById("img" + id);
+if(div.className.indexOf(collapsableClosedCss) != -1) {
+div.className = collapsableOpenCss;
+img.src = collapsableOpenImg;
+} else {
+div.className = collapsableClosedCss;
+img.src = collapsableClosedImg;
+} }
+</script>
+
+</head>
+<body>
+<div> Suite is: C:/Users/guyzi/git/GoodReading/Good Reading/AcceptanceTest/FitTests/AddReview.fit</div><div class="test_output_name">Name: AddReview.fit</div><div> Suite executed at: Thu Feb 02 03:04:54 IST 2017 Elapsed time: 497 millseconds  </div><table><tr><td></td><td><a href="#76312de6:159fc5a516f:-8000">AddReview.fit</a></td><td class="error">0 right, 0 wrong, 0 ignored, 12 exceptions</td></tr></table><div class="test_output_name"><a name="76312de6:159fc5a516f:-8000"/><p>Test file: AddReview.fit</p></div><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Delete Recipe FIT Test</title>
+	<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
+	<style type="text/css"><!--.style1 {font-family: Arial, Helvetica, sans-serif}-->
+	</style>
+	<meta content="MSHTML 11.00.10570.1001" name="GENERATOR" />
+</head>
+<body>
+<p class="style1">DeleteRecipe Acceptance Test</p>
+
+<p class="style1">A recipe may be deleted from the CoffeeMaker <strong><span style="color: rgb(255, 0, 0);">if it exists </span></strong>in the list of recipes in the CoffeeMaker. The recipe to be deleted is chosen by its name.</p>
+
+<table border="1" cellpadding="5" cellspacing="0" width="765">
+	<tbody>
+		<tr>
+			<td class="style1" colspan="3">fit.ActionFixture</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">start<hr><pre><div class="fit_stacktrace">java.lang.ExceptionInInitializerError
+	at Fixtures.AddReview.<init>(AddReview.java:18)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at java.lang.Class.newInstance(Unknown Source)
+	at fit.FixtureClass.newInstance(Unknown Source)
+	at fit.FixtureLoader.instantiateFixture(Unknown Source)
+	at fit.FixtureLoader.instantiateFirstValidFixtureClass(Unknown Source)
+	at fit.FixtureLoader.disgraceThenLoad(Unknown Source)
+	at fit.Fixture.loadFixture(Unknown Source)
+	at fit.ActionFixture.start(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at fit.ActionFixture.doCells(Unknown Source)
+	at fit.Fixture.doRow(Unknown Source)
+	at fit.Fixture.doRows(Unknown Source)
+	at fit.Fixture.doTable(Unknown Source)
+	at fit.Fixture.interpretTables(Unknown Source)
+	at fit.Fixture.doTables(Unknown Source)
+	at fitlibrary.suite.IndependentSuiteRunner.runEachStorytest(IndependentSuiteRunner.java:53)
+	at fitlibrary.suite.IndependentSuiteRunner.runFirstStorytest(IndependentSuiteRunner.java:28)
+	at fitlibrary.suite.BatchFitLibrary.doTables(BatchFitLibrary.java:39)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.luxoft.fitpro.adapters.fit.FitLibraryFitProvider.doTables(FitLibraryFitProvider.java:168)
+	at com.luxoft.fitpro.adapters.fit.FitLibraryFitProvider.generateParseResult(FitLibraryFitProvider.java:96)
+	at com.luxoft.fitpro.adapters.fit.FitLibraryFitProvider.runSingleFITTest(FitLibraryFitProvider.java:78)
+	at com.luxoft.fitpro.adapters.fit.FitLibraryFitProvider.runValidTestFile(FitLibraryFitProvider.java:58)
+	at com.luxoft.fitpro.adapters.fit.FitLibraryFitProvider.runFIT(FitLibraryFitProvider.java:39)
+	at com.luxoft.fitpro.core.testcase.SequentialRunnerStrategy.run(SequentialRunnerStrategy.java:18)
+	at com.luxoft.fitpro.core.tester.RunnerVisitor.runTest(RunnerVisitor.java:59)
+	at com.luxoft.fitpro.core.tester.RunnerVisitor.visit(RunnerVisitor.java:51)
+	at com.luxoft.fitpro.core.testcase.TestFile.accept(TestFile.java:51)
+	at com.luxoft.fitpro.runner.TestCaseRunner.run(TestCaseRunner.java:100)
+	at com.luxoft.fitpro.runner.TestCaseRunner.main(TestCaseRunner.java:55)
+Caused by: java.lang.IllegalStateException: Toolkit not initialized
+	at com.sun.javafx.application.PlatformImpl.runLater(PlatformImpl.java:273)
+	at com.sun.javafx.application.PlatformImpl.runLater(PlatformImpl.java:268)
+	at com.sun.javafx.application.PlatformImpl.setPlatformUserAgentStylesheet(PlatformImpl.java:550)
+	at com.sun.javafx.application.PlatformImpl.setDefaultPlatformUserAgentStylesheet(PlatformImpl.java:512)
+	at javafx.scene.control.Control.<clinit>(Control.java:87)
+	... 40 more
+</div></pre></td>
+			<td class="style1">Fixtures.AddReview</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">press<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">start review</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">enter<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">set review</td>
+			<td class="style1">bla bla bla</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">check<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">add review</td>
+			<td class="style1">false</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">enter<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">set user</td>
+			<td class="style1">316373331</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">enter<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">set book</td>
+			<td class="style1">26</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">press<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">start review</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">check<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">add&nbsp;review</td>
+			<td class="style1">false</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">enter<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">set book</td>
+			<td class="style1">8</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">press<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">start review</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">enter<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">set&nbsp;review</td>
+			<td class="style1">King!</td>
+		</tr>
+		<tr>
+			<td class="style1" class="error">check<hr/> <span class="fit_label">You must start a fixture using the 'start' keyword.</span></td>
+			<td class="style1">add review</td>
+			<td class="style1">true</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><span class="style1"><a href="http://open.ncsu.edu/se/tutorials/coffee_maker/">Return to CoffeeMaker Example</a> </span></p>
+
+<p class="style1">Delete Recipe FIT Test &copy; 2004 Dr. Laurie Williams, Sarah Smith</p>
+</body>
+</html>
+
+</body></html>

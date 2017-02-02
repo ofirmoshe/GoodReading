@@ -22,7 +22,8 @@ public class SearchBookControllerTest extends TestCase {
 	public ChoiceBox<String> optionBox;
 	public AnchorPane scrollAnchor;
 
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
+		System.out.println("set up");
 		instance = new SearchBookController();
 		AbstractController.instance = instance;
 		try {
@@ -43,7 +44,9 @@ public class SearchBookControllerTest extends TestCase {
 		scrollAnchor = new AnchorPane();
 	}
 
-	public void setSearchQuery(String t,String a,String lan,String kw,String field,String sub){
+	public void setSearchQuery(String t, String a, String lan, String kw, String field, String sub) {
+		instance.initOver=false;
+		instance.searchOver=false;
 		title.setText(t);
 		author.setText(a);
 		lang.setText(lan);
@@ -55,23 +58,23 @@ public class SearchBookControllerTest extends TestCase {
 		instance.subjectBox = subjectBox;
 		instance.fieldBox = fieldBox;
 		instance.optionBox = optionBox;
-		instance.scrollAnchor=scrollAnchor;
+		instance.scrollAnchor = scrollAnchor;
 		instance.initialize();
-		while(!instance.initOver)
+		while (!instance.initOver)
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		if(!field.equals(""))
+		if (!field.equals(""))
 			instance.fieldBox.getSelectionModel().select(field);
-		if(!sub.equals(""))
+		if (!sub.equals(""))
 			instance.subjectBox.getSelectionModel().select(sub);
 	}
 
-	public void testSearchBook_false() {
-		setSearchQuery("h","jk rowli","","","Literature & Fiction","");
+	public void testSearchBook_TAF() {
+		setSearchQuery("h", "jk rowli", "", "", "Literature & Fiction", "");
 		instance.searchOnEnterPressed();
 		while (!instance.searchOver) {
 			try {
@@ -81,13 +84,45 @@ public class SearchBookControllerTest extends TestCase {
 			}
 		}
 		String[] ActualResult = new String[instance.books.length];
-		for(int i=0; i<instance.books.length; i++)
-			ActualResult[i]=instance.books[i].getTitle();
+		for (int i = 0; i < instance.books.length; i++)
+			ActualResult[i] = instance.books[i].getTitle();
 		String[] ExpectedResult = new String[2];
-		//ExpectedResult[0] = "Fantastic Beasts";
+		// ExpectedResult[0] = "Fantastic Beasts";
 		ExpectedResult[0] = "The Fault in Our Stars";
 		ExpectedResult[1] = "Harry Potter";
 		Assert.assertArrayEquals(ActualResult, ExpectedResult);
 	}
 
+	public void testSearchBook_AFS() {
+		setSearchQuery("", "jk rowli", "", "", "Literature & Fiction", "Action & Adventure");
+		instance.searchOnEnterPressed();
+		while (!instance.searchOver) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		String[] ActualResult = new String[instance.books.length];
+		for (int i = 0; i < instance.books.length; i++)
+			ActualResult[i] = instance.books[i].getTitle();
+		String[] ExpectedResult = new String[2];
+		ExpectedResult[0] = "Fantastic Beasts";
+		ExpectedResult[1] = "The Fault in Our Stars";
+		// ExpectedResult[2] = "Harry Potter";
+		Assert.assertArrayEquals(ActualResult, ExpectedResult);
+	}
+
+	public void testSearchBook_EmptyStrings() {
+		setSearchQuery("", "", "", "", "", "");
+		instance.searchOnEnterPressed();
+		while (!instance.searchOver) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			assertTrue(instance.emptyQuery);
+		}
+	}
 }

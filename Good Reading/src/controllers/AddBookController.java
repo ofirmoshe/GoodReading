@@ -60,45 +60,47 @@ import javafx.stage.FileChooser.ExtensionFilter;
  */
 public class AddBookController extends SystemController {
 
-	private Author[] authors; 
+	public Author[] authors; 
 	public static Field[] fields;
 	public static Subject[][] subjects;
 	private int currSubCount;
-	private boolean[] checkFields;
+	public boolean[] checkFields;
 	private GridPane subjectGrid = null;
-	private boolean[][] checkSubjects;
-	private boolean[] checkAuthors;
+	public boolean[][] checkSubjects;
+	public boolean[] checkAuthors;
 	private byte[] bimg = null;
-	private byte[][] formats=new byte[3][];
+	public byte[][] formats=new byte[3][];
+	public boolean initOver=false;
+	public boolean addBookOver=false;
 
 	@FXML
-	private TextField titleField;
+	public TextField titleField;
 	@FXML
-	private TextField langField;
+	public TextField langField;
 	@FXML
-	private AnchorPane fieldChecklist;
+	public AnchorPane fieldChecklist;
 	@FXML
-	private AnchorPane subjectChecklist;
+	public AnchorPane subjectChecklist;
 	@FXML
-	private AnchorPane authorChecklist;
+	public AnchorPane authorChecklist;
 	@FXML
-	private TextField imageField;
+	public TextField imageField;
 	@FXML
-	private TextField keywordField;
+	public TextField keywordField;
 	@FXML
-	private TextArea summaryField;
+	public TextArea summaryField;
 	@FXML
-	private TextArea tableField;
+	public TextArea tableField;
 	@FXML
-	private TextField priceField;
+	public TextField priceField;
 	@FXML
-	private TextField pdfField;
+	public TextField pdfField;
 	@FXML
-	private TextField docField;
+	public TextField docField;
 	@FXML
-	private TextField fb2Field;
+	public TextField fb2Field;
 	@FXML
-	private TextField newAuthorField;
+	public TextField newAuthorField;
 	/**
 	 * Initializing the add book page.
 	 * At first, it sends a message to the server, in order to receive the authors, fields and subjects available on database.
@@ -222,22 +224,28 @@ public class AddBookController extends SystemController {
 	 */
 	
 	public void addBookOnClick() {
+		addBookOver=false;
+		System.out.println("on click");
 		Object[] o = new Object[14];
 		boolean mustFlag = false;
 		if (!titleField.getText().equals(""))
 			o[0] = titleField.getText();
+		
 		else
 			mustFlag = true;
+		System.out.println("title: "+titleField.getText());
 		if (!langField.getText().equals(""))
 			o[1] = langField.getText();
 		else
 			mustFlag = true;
+		System.out.println("lang: "+langField.getText());
 		int count = 0;
 		for (int i = 0; i < checkFields.length; i++)
 			if (checkFields[i])
 				count++;
 		if (count == 0)
 			mustFlag = true;
+		System.out.println("#fields selected: "+checkFields.length);
 		Field[] selectedFields = new Field[count];
 		int index = 0;
 		for (int i = 0; i < checkFields.length; i++) {
@@ -255,6 +263,7 @@ public class AddBookController extends SystemController {
 					count++;
 			}
 		}
+		System.out.println("#subject selected: "+count);
 		Subject[] selectedSubjects = new Subject[count];
 		index = 0;
 		for (int i = 0; i < checkSubjects.length; i++) {
@@ -271,8 +280,10 @@ public class AddBookController extends SystemController {
 		for (int i = 0; i < checkAuthors.length; i++)
 			if (checkAuthors[i])
 				count++;
+		System.out.println("#author selected: "+checkAuthors.length);
 		if (count == 0 && newAuthorField.getText().equals(""))
 			mustFlag = true;
+		System.out.println("new author: "+newAuthorField.getText());
 		Author[] selectedAuthors = new Author[count];
 		index = 0;
 		for (int i = 0; i < checkAuthors.length; i++) {
@@ -282,10 +293,14 @@ public class AddBookController extends SystemController {
 			}
 		}
 		o[4] = selectedAuthors;
+		System.out.println(selectedAuthors.length);
 		o[5] = keywordField.getText();
+		System.out.println(o[5].toString());
 		o[6] = bimg;
 		o[7] = summaryField.getText();
+		System.out.println(o[7].toString());
 		o[8] = tableField.getText();
+		System.out.println(o[8].toString());
 		boolean InvalidPrice = false;
 		if (!priceField.getText().equals("")) {
 			try {
@@ -298,37 +313,47 @@ public class AddBookController extends SystemController {
 			}
 		} else
 			mustFlag = true;
+		System.out.println("price: "+priceField.getText());
 		if (InvalidPrice) {
-			Alert alert = new Alert(AlertType.WARNING);
+			addBookOver=true;
+			/*Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Add Book Failed");
 			alert.setHeaderText("Invalid Price");
 			alert.setContentText("Please check you entered a valid price and try again.");
-			alert.showAndWait();
+			alert.showAndWait();*/
 			return;
 		}
+		System.out.println("format " +formats[0].length);
 		if (formats[0]==null && formats[1]==null && formats[2]==null)
 			mustFlag = true;
 		else {
 			o[10] = formats[0];
+			System.out.println("format " +formats[0].length);
 			o[11] = formats[1];
 			o[12] = formats[2];
 			o[13]=newAuthorField.getText();
+			System.out.println("new author to object[]: "+newAuthorField.getText());
 		}
 		if (mustFlag) {
-			Alert alert = new Alert(AlertType.WARNING);
+			System.out.println("error");
+			addBookOver=true;
+			/*Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Add Book Failed");
 			alert.setHeaderText("Can not add book");
 			alert.setContentText("One or more required fields are empty.");
-			alert.showAndWait();
+			alert.showAndWait();*/
 			return;
 		}
+		System.out.println("all cool");
 		Message msg = new Message("add book", 2, o);
 		try {
 			Client.instance.sendToServer(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("sent");
 	}
+
 	/**
 	 * This method implements AbstractController's method. It handles message
 	 * from server, and displays the book's data.
@@ -344,6 +369,7 @@ public class AddBookController extends SystemController {
 	 *            	 */
 	@Override
 	public void handleMessage(Message msg) {
+		System.out.println("handle");
 		super.handleMessage(msg);
 		switch (msg.getFunc()) {
 		case 1:
@@ -357,6 +383,7 @@ public class AddBookController extends SystemController {
 			}
 			authors = (Author[]) ob[2];
 			checkAuthors = new boolean[authors.length];
+			initOver=true;
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -367,6 +394,7 @@ public class AddBookController extends SystemController {
 			break;
 		case 2:
 			if(msg.getMsg().equals("s")){
+				addBookOver=true;
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {

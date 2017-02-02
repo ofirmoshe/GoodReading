@@ -1,0 +1,304 @@
+<html><head><title>Suite AddBook.fit run at: Thu Feb 02 01:09:51 IST 2017</title>
+	<link rel="stylesheet" type="text/css" href="css/fitnesse.css" media="screen"/>
+ 	<link rel="stylesheet" type="text/css" href="css/fitnesse.css" media="print"/>
+<script language="JavaScript" type="text/javascript">
+var collapsableOpenCss = "collapsable"
+var collapsableClosedCss = "hidden"
+var collapsableOpenImg = "images/collapsableOpen.gif"
+var collapsableClosedImg = "images/collapsableClosed.gif"
+function toggleCollapsable(id){
+var div = document.getElementById(id);
+var img = document.getElementById("img" + id);
+if(div.className.indexOf(collapsableClosedCss) != -1) {
+div.className = collapsableOpenCss;
+img.src = collapsableOpenImg;
+} else {
+div.className = collapsableClosedCss;
+img.src = collapsableClosedImg;
+} }
+</script>
+
+</head>
+<body>
+<div> Suite is: C:/Users/guyzi/git/GoodReading/Good Reading/AcceptanceTest/FitTests/AddBook.fit</div><div class="test_output_name">Name: AddBook.fit</div><div> Suite executed at: Thu Feb 02 01:09:51 IST 2017 Elapsed time: 7 seconds 345 millseconds  </div><table><tr><td></td><td><a href="#3679b95a:159fbf0fcc0:-8000">AddBook.fit</a></td><td class="pass">8 right, 0 wrong, 0 ignored, 0 exceptions</td></tr></table><div class="test_output_name"><a name="3679b95a:159fbf0fcc0:-8000"/><p>Test file: AddBook.fit</p></div><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Delete Recipe FIT Test</title>
+	<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
+	<style type="text/css"><!--.style1 {font-family: Arial, Helvetica, sans-serif}-->
+	</style>
+	<meta content="MSHTML 11.00.10570.1001" name="GENERATOR" />
+</head>
+<body>
+<p class="style1">DeleteRecipe Acceptance Test</p>
+
+<p class="style1">A recipe may be deleted from the CoffeeMaker <strong><span style="color: rgb(255, 0, 0);">if it exists </span></strong>in the list of recipes in the CoffeeMaker. The recipe to be deleted is chosen by its name.</p>
+
+<table border="1" cellpadding="5" cellspacing="0" width="765">
+	<tbody>
+		<tr>
+			<td class="style1" colspan="3">fit.ActionFixture</td>
+		</tr>
+		<tr>
+			<td class="style1">start</td>
+			<td class="style1">Fixtures.AddBook</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">test</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">test</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set lang</td>
+			<td class="style1">English</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">50</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add&nbsp;author</td>
+			<td class="style1">Ram Oren</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add field</td>
+			<td class="style1">History</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add subject</td>
+			<td class="style1">Americas</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set summary</td>
+			<td class="style1">bla bla&nbsp; bla</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">true</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">test2</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set lang</td>
+			<td class="style1">English</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">50</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add&nbsp;author</td>
+			<td class="style1">Ram Oren</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add field</td>
+			<td class="style1">History</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">true</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">testInvalidPrice</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set lang</td>
+			<td class="style1">English</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">-50</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add&nbsp;author</td>
+			<td class="style1">Ram Oren</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add field</td>
+			<td class="style1">History</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">testNoAuthor</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set lang</td>
+			<td class="style1">English</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">34</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add field</td>
+			<td class="style1">History</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+		<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">testNoLang</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add author</td>
+			<td class="style1">Oren Ram</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">34</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add field</td>
+			<td class="style1">History</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set title</td>
+			<td class="style1">testNoField</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add author</td>
+			<td class="style1">Oren Ram</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">34</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set lang</td>
+			<td class="style1">English</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+
+<tr>
+			<td class="style1">press</td>
+			<td class="style1">start book</td>
+			<td class="style1">&nbsp;</td>
+		</tr>
+
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add field</td>
+			<td class="style1">History</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">add author</td>
+			<td class="style1">Oren Ram</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set price</td>
+			<td class="style1">34</td>
+		</tr>
+		<tr>
+			<td class="style1">enter</td>
+			<td class="style1">set lang</td>
+			<td class="style1">English</td>
+		</tr>
+		<tr>
+			<td class="style1">check</td>
+			<td class="style1">add book</td>
+			<td class="style1" class="pass">false</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><span class="style1"><a href="http://open.ncsu.edu/se/tutorials/coffee_maker/">Return to CoffeeMaker Example</a> </span></p>
+
+<p class="style1">Delete Recipe FIT Test &copy; 2004 Dr. Laurie Williams, Sarah Smith</p>
+</body>
+</html>
+
+</body></html>
