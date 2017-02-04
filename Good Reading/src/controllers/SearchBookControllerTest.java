@@ -113,6 +113,66 @@ public class SearchBookControllerTest extends TestCase {
 		Assert.assertArrayEquals(ActualResult, ExpectedResult);
 	}
 
+	
+	public void testSearchBook_ALF() {
+		setSearchQuery("", "jk rowli", "Russian", "", "Literature & Fiction", "");
+		instance.searchOnEnterPressed();
+		while (!instance.searchOver) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		String[] ActualResult = new String[instance.books.length];
+		for (int i = 0; i < instance.books.length; i++)
+			ActualResult[i] = instance.books[i].getTitle();
+		String[] ExpectedResult = new String[1];
+		//ExpectedResult[0] = "Fantastic Beasts";
+		//ExpectedResult[1] = "The Fault in Our Stars";
+		ExpectedResult[0] = "Harry Potter";
+		Assert.assertArrayEquals(ActualResult, ExpectedResult);
+	}
+	
+	public void testSearchBook_Lang() {
+		setSearchQuery("", "", "Russian", "", "", "");
+		instance.searchOnEnterPressed();
+		while (!instance.searchOver) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		String[] ActualResult = new String[instance.books.length];
+		for (int i = 0; i < instance.books.length; i++)
+			ActualResult[i] = instance.books[i].getTitle();
+		String[] ExpectedResult = new String[2];
+		ExpectedResult[0] = "Harry Potter";
+		ExpectedResult[1] = "The Night Bird";
+		Assert.assertArrayEquals(ActualResult, ExpectedResult);
+	}
+	
+	
+	public void testSearchBook_Sub() {
+		setSearchQuery("", "", "", "", "", "Dramas & Plays");
+		instance.searchOnEnterPressed();
+		while (!instance.searchOver) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		String[] ActualResult = new String[instance.books.length];
+		for (int i = 0; i < instance.books.length; i++)
+			ActualResult[i] = instance.books[i].getTitle();
+		String[] ExpectedResult = new String[1];
+		ExpectedResult[0] = "Small Great Things";
+		//ExpectedResult[1] = "The Night Bird";
+		Assert.assertArrayEquals(ActualResult, ExpectedResult);
+	}
+	
 	public void testSearchBook_EmptyStrings() {
 		setSearchQuery("", "", "", "", "", "");
 		instance.searchOnEnterPressed();
